@@ -33,10 +33,10 @@ export class DBShoppingCartRepository implements IShoppingCartRepository {
 
     async createShoppingCart() {
         
-        const shoppingCart: ShoppingCart = { id: randomString(8), pokemons: [] };
+        const id = randomString(8);
+        const shoppingCart: ShoppingCart = { id: id, pokemons: [] };
         carts.push(shoppingCart);
 
-        // TODO: return false if it failed to insert for some reason
-        return true;
+        return id;
     }
 }

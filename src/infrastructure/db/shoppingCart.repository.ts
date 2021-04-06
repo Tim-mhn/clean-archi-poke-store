@@ -1,8 +1,8 @@
 import { Service } from "typedi";
-import { shoppingCart } from "../../domain/entities/shoppingCart.entity";
+import { ShoppingCart } from "../../domain/entities/shoppingCart.entity";
 import { IShoppingCartRepository } from "../../domain/repositories/shoppingCart.repository";
 
-const carts: shoppingCart[] = [
+const carts: ShoppingCart[] = [
 
 ]
 
@@ -17,7 +17,7 @@ export class DBShoppingCartRepository implements IShoppingCartRepository {
             throw new Error(`shoppingCart ${id} not found`);
         }
 
-        return shoppingCart.contains;
+        return shoppingCart.pokemons;
     }
 
 }

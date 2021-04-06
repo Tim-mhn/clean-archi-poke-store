@@ -1,6 +1,6 @@
 import { Pokemon } from "./pokemon.entity";
 
-export interface shoppingCart {
+export interface ShoppingCart {
     id: string;
-    contains: Pokemon[];
+    pokemons: Pokemon[];
 }

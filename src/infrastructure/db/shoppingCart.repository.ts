@@ -20,4 +20,17 @@ export class DBShoppingCartRepository implements IShoppingCartRepository {
         return shoppingCart.pokemons;
     }
 
+    async createShoppingCart() {
+
+        // TODO: create a shopping cart and add it to carts
+        // get a new ID string generated randomly and use it as the cart ID
+        // and create it with no pokemon inside
+        
+        //var newCart = ;
+        //carts.push(newCart);
+
+        // TODO: return true if there's no problem adding
+        // return false if there's a problem on the insertion
+        return true;
+    }
 }

@@ -1,0 +1,38 @@
+{
+  "name": "clean_archi_poke",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon --exec ts-node src/server.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tim-mhn/clean_archi_poke.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Tim-mhn/clean_archi_poke/issues"
+  },
+  "homepage": "https://github.com/Tim-mhn/clean_archi_poke#readme",
+  "devDependencies": {
+    "@types/body-parser": "^1.19.0",
+    "@types/express": "^4.17.11",
+    "@types/multer": "^1.4.5",
+    "metadata": "^0.1.0",
+    "nodemon": "^2.0.7",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.3"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "class-transformer": "^0.4.0",
+    "class-validator": "^0.13.1",
+    "express": "^4.17.1",
+    "reflect-metadata": "^0.1.13",
+    "routing-controllers": "^0.9.0",
+    "typedi": "^0.10.0"
+  }
+}

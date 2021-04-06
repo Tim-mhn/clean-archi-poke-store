@@ -6,6 +6,17 @@ const carts: ShoppingCart[] = [
 
 ]
 
+function randomString(len) {
+    const charSet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var randomString = '';
+    for (var i = 0; i < len; i++) {
+        var randomPoz = Math.floor(Math.random() * charSet.length);
+        randomString += charSet.substring(randomPoz,randomPoz+1);
+    }
+    return randomString;
+}
+
+
 @Service()
 export class DBShoppingCartRepository implements IShoppingCartRepository {
     constructor() { }
@@ -21,16 +32,11 @@ export class DBShoppingCartRepository implements IShoppingCartRepository {
     }
 
     async createShoppingCart() {
-
-        // TODO: create a shopping cart and add it to carts
-        // get a new ID string generated randomly and use it as the cart ID
-        // and create it with no pokemon inside
         
-        //var newCart = ;
-        //carts.push(newCart);
+        const shoppingCart: ShoppingCart = { id: randomString(8), pokemons: [] };
+        carts.push(shoppingCart);
 
-        // TODO: return true if there's no problem adding
-        // return false if there's a problem on the insertion
+        // TODO: return false if it failed to insert for some reason
         return true;
     }
 }

@@ -1,5 +1,5 @@
 import { Pokemon } from "../entities/pokemon.entity";
 
-export interface IPokemonRepository {
-    getPokemonDetailsByName: (name: string) =>  Promise<Pokemon>;
+export abstract class AbstractPokemonRepository {
+    abstract getPokemonDetailsByName(name: string): Promise<Pokemon>;
 }

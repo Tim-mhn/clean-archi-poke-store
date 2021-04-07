@@ -1,4 +1,4 @@
-export interface IStoreRepository {
-    getAvailablePokemonsFromStore: (storeId: string) => Promise<{quantity: number, name: string}[]>;
+export abstract class AbstractStoreRepository {
+    abstract getAvailablePokemonsFromStore (storeId: string): Promise<{quantity: number, name: string}[]>;
 
 }

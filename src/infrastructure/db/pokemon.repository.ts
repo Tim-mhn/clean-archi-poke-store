@@ -1,6 +1,6 @@
 import { Service } from "typedi";
 import { Pokemon, PokemonType } from "../../domain/entities/pokemon.entity";
-import { IPokemonRepository } from "../../domain/repositories/pokemon.repository";
+import { AbstractPokemonRepository } from "../../domain/repositories/pokemon.repository";
 
 const pokemons: Pokemon[] = [
     {
@@ -35,8 +35,10 @@ const pokemons: Pokemon[] = [
     
 
 @Service()
-export class DBPokemonRepository implements IPokemonRepository {
-    constructor() { }
+export class DBPokemonRepository extends AbstractPokemonRepository {
+    constructor() { 
+        super()
+    }
 
     async getPokemonDetailsByName(name: string) {
         const pokemon = pokemons.find(poke => poke.name.toLowerCase() === name.toLowerCase());

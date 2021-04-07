@@ -1,6 +1,5 @@
 import { Service } from "typedi";
-import { Pokemon, PokemonType } from "../entities/pokemon.entity";
-import { IPokemonRepository } from "../repositories/pokemon.repository";
+import { PokemonType } from "../entities/pokemon.entity";
 
 export interface CalculatePokemonPriceInput {
     weight: number;
@@ -15,8 +14,9 @@ export interface CalculatePokemonPriceOutput {
 @Service()
 export class CalculatePokemonPriceUseCase {
 
-    private readonly HALF_PRICE_THRESHOLD = 300;
+    public readonly HALF_PRICE_THRESHOLD;
     constructor() {
+        this.HALF_PRICE_THRESHOLD = 300;
     }
 
     public execute(input: CalculatePokemonPriceInput): CalculatePokemonPriceOutput {

@@ -1,7 +1,7 @@
 import { Service } from "typedi";
 import { Pokemon } from "../entities/pokemon.entity";
-import { IPokemonRepository } from "../repositories/pokemon.repository";
-import { IStoreRepository } from "../repositories/store.repository";
+import { AbstractPokemonRepository } from "../repositories/pokemon.repository";
+import { AbstractStoreRepository } from "../repositories/store.repository";
 import { CalculatePokemonPriceUseCase } from "./calculatePokemonPrice.useCase";
 
 export interface GetQuantityOfPokemonAvailableInStoreAndPriceInput {
@@ -16,11 +16,11 @@ export interface GetQuantityOfPokemonAvailableInStoreAndPriceOutput {
 @Service()
 export class GetQuantityOfPokemonAvailableInStoreAndPriceUseCase {
 
-    private pokemonRepo: IPokemonRepository;
-    private storeRepo: IStoreRepository;
+    private pokemonRepo: AbstractPokemonRepository;
+    private storeRepo: AbstractStoreRepository;
     private calculatePokemonPriceUseCase: CalculatePokemonPriceUseCase;
 
-    constructor(pokemonRepo: IPokemonRepository, storeRepo: IStoreRepository, calculatePokemonPriceUseCase: CalculatePokemonPriceUseCase) {
+    constructor(pokemonRepo: AbstractPokemonRepository, storeRepo: AbstractStoreRepository, calculatePokemonPriceUseCase: CalculatePokemonPriceUseCase) {
         this.pokemonRepo = pokemonRepo;
         this.storeRepo = storeRepo;
         this.calculatePokemonPriceUseCase = calculatePokemonPriceUseCase;

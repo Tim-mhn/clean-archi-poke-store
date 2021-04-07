@@ -38,9 +38,10 @@ const pokemons: Pokemon[] = [
 export class DBPokemonRepository implements IPokemonRepository {
     constructor() { }
 
-    async getPokemonDetails(name: string) {
+    async getPokemonDetailsByName(name: string) {
         const pokemon = pokemons.find(poke => poke.name.toLowerCase() === name.toLowerCase());
         if (!pokemon) {
+            console.error('error')
             throw new Error(`pokemon ${name} not found`);
         }
         return pokemon;

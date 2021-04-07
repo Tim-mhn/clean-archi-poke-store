@@ -31,7 +31,7 @@ export class GetQuantityOfPokemonAvailableInStoreAndPriceUseCase {
 
         const availablePokemonsWithPriceAndQuantityPromises = availablePokemonNamesAndQuantity.map(async ({name, quantity}) => {
             const poke: Pokemon = await this.pokemonRepo.getPokemonDetailsByName(name);
-            const { price } = await this.calculatePokemonPriceUseCase.execute(poke);
+            const { price } = this.calculatePokemonPriceUseCase.execute(poke);
             return {
                 pokemon: poke,
                 price,

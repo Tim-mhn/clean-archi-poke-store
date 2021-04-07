@@ -19,8 +19,16 @@ export class CalculatePokemonPriceUseCase {
     constructor() {
     }
 
-    public async execute(input: CalculatePokemonPriceInput): Promise<CalculatePokemonPriceOutput> {
+    public execute(input: CalculatePokemonPriceInput): CalculatePokemonPriceOutput {
         let price: number;
+
+        if (input.level <= 0) {
+            throw new Error('Level cannot be negative');
+        }
+
+        if (input.weight <= 0) {
+            throw new Error('Level cannot be negative');
+        }
         switch (input.type) {
             case PokemonType.ELETRIC:
                 price = input.level * input.weight * 3;

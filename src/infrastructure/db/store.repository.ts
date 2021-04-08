@@ -3,37 +3,35 @@ import { IStoreRepository } from "../../domain/repositories/store.repository";
 
 const storesWithAvailablesPokemons: {
   storeId;
-  availablePokemons: { name; quantity }[];
+  availablePokemons: { id; name; quantity }[];
 }[] = [
   {
     storeId: "1",
     availablePokemons: [
       {
+        id: "1",
         name: "charizard",
         quantity: 5,
       },
-      {
-        name: "Bulbasaur",
-        quantity: 25,
-      },
-      {
-        name: "Pikachu",
-        quantity: 2,
-      },
+      { id: "2", name: "Bulbasaur", quantity: 25 },
+      { id: "3", name: "Pikachu", quantity: 2 },
     ],
   },
   {
     storeId: "2",
     availablePokemons: [
       {
+        id: "1",
         name: "charizard",
         quantity: 5,
       },
       {
+        id: "2",
         name: "Bulbasaur",
         quantity: 25,
       },
       {
+        id: "3",
         name: "squirtle",
         quantity: 2,
       },
@@ -43,14 +41,17 @@ const storesWithAvailablesPokemons: {
     storeId: "3",
     availablePokemons: [
       {
+        id: "1",
         name: "charizard",
         quantity: 5,
       },
       {
+        id: "2",
         name: "Bulbasaur",
         quantity: 25,
       },
       {
+        id: "3",
         name: "Pikachu",
         quantity: 2,
       },

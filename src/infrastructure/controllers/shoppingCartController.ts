@@ -6,7 +6,7 @@ import { IShoppingCartRepository } from "../../domain/repositories/shoppingCart.
 import {
   AddPokemonToShoppingCartInput,
   AddPokemonToShoppingCartUseCase,
-} from "../../domain/usecases/addPokemonToShoppingCart.usecase";
+} from "../../domain/usecases/addPokemonToShoppingCart.useCase";
 import { CreateEmptyShoppingCartUseCase } from "../../domain/usecases/createEmptyShoppingCart.useCase";
 import { CreateEmptyShoppingCartPresenter } from "../presenters/createEmptyShoppingCart.presenter";
 import { PokemonRepositoryProxy } from "../repositoryProxies/pokemonRepository.proxy";

@@ -1,6 +1,5 @@
 import { createExpressServer, Post, useContainer, useExpressServer } from "routing-controllers";
-import * as  express from 'express';
-import * as path from "path";
+import express from 'express';
 import Container from "typedi";
 
 

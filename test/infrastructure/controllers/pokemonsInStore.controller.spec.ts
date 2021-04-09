@@ -86,7 +86,7 @@ describe('PokemonsInStoreController @Get /:storeId endpoint', () => {
         Sinon.assert.calledOnceWithMatch(res.status().json, presenterOutput)
     })
 
-    it('should return a 500 error if usecase throws error', async () => {
+    it('should call presenter.presentOnError if catches an error', async () => {
         // Fakes and stub usecase throwing error
         usecase.execute.throws();
         const res = {
@@ -98,35 +98,55 @@ describe('PokemonsInStoreController @Get /:storeId endpoint', () => {
         const input = {
             storeId: storeId
         }
+        // Stub presenter returns predictable output for presentOnError
+        // Need to stub all methods
+        const stubPresenter = new GetQuantityOfPokemonAvailableInStoreAndPricePresenter();
+        Sinon.stub(stubPresenter, "presentOnError").returns([500, { error: "this is an error"}]);
+        Sinon.stub(stubPresenter, "present").returns(null);
+        controller.presenter = stubPresenter;
+
         // Execute function
         await controller.getAvailablePokemonsWithPriceFromStore(storeId, <Response><any>res);
 
         // Expect
         Sinon.assert.calledOnceWithMatch(usecase.execute, input);
-        Sinon.assert.notCalled(presenter.present);
-        Sinon.assert.calledOnceWithMatch(res.status, 500);
+        Sinon.assert.calledOnce(<any>stubPresenter.presentOnError);
+        Sinon.assert.notCalled(<any>stubPresenter.present);
+
     })
 
-    it('should return a 500 error if presenter throws error', async () => {
+    it('should return error code and response from presenter presentOnError if an error is thrown', async () => {
         // Fakes and stub presenter throwing error
+
+        // usecase will throw error
+        usecase.execute.throws();
+        // stubbed presenter with predicted presentOnError res
+        const stubPresenter = new GetQuantityOfPokemonAvailableInStoreAndPricePresenter();
+        const statusCode = 403;
+        const errorResponse = { error: "this is an error"};
+        Sinon.stub(stubPresenter, "presentOnError").returns([statusCode, errorResponse]);
+        Sinon.stub(stubPresenter, "present").returns(null);
+        controller.presenter = stubPresenter;
+        // stubbed api Response
         const res = {
             status: fake.returns({
                 json: fake.returns({}),
             }),
         };
+
+        // inputs & outputs
         const storeId = "someId"
         const input = {
             storeId: storeId
         }
-        presenter.present.throws();
+        
 
         // Execute function
         await controller.getAvailablePokemonsWithPriceFromStore(storeId, <Response><any>res);
 
         // Expect
-        Sinon.assert.calledOnceWithMatch(usecase.execute, input);
-        Sinon.assert.calledOnce(presenter.present);
-        Sinon.assert.calledOnceWithMatch(res.status, 500);
+        Sinon.assert.calledOnceWithMatch(res.status, statusCode);
+        Sinon.assert.calledOnceWithMatch(res.status().json, errorResponse);
     })
 
 })

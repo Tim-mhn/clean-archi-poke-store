@@ -38,7 +38,8 @@ export class PokemonsInStoreController {
             const formattedResponse = this.presenter.present(useCaseOutput)
             return response.status(200).json(formattedResponse);
         } catch (e) {
-            return response.status(500).json({ error: "error" });
+            const [statusCode, formattedErrorResponse] = this.presenter.presentOnError(e);
+            return response.status(statusCode).json(formattedErrorResponse);
         }
 
     }

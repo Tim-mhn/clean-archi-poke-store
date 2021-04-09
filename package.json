@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha -r ts-node/register src/**/*.spec.ts",
-    "test:watch": "mocha --require ts-node/register --watch --watch-files src, src/**/*.spec.ts",
+    "test:watch": "mocha --require ts-node/register --watch --watch-files src, test/**/*.spec.**",
     "dev": "nodemon --exec ts-node src/server.ts"
   },
   "repository": {

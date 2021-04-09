@@ -15,28 +15,31 @@ import { AbstractStoreRepository } from "../../domain/repositories/store.reposit
 @JsonController('/pokemons-in-store')
 @Service()
 export class PokemonsInStoreController {
+    public getQuantityOfPokemonAvailableInStoreAndPriceUseCase;
+    private readonly presenter;
     constructor(
-        @Inject(PokemonRepositoryProxy.getInstance) private readonly pokemonRepository: AbstractPokemonRepository,
-        @Inject(StoreRepositoryProxy.getInstance) private readonly storeRepository: AbstractStoreRepository,
-        @Inject(() => GetQuantityOfPokemonAvailableInStoreAndPricePresenter) private readonly presenter: GetQuantityOfPokemonAvailableInStoreAndPricePresenter,
-        private readonly getQuantityOfPokemonAvailableInStoreAndPriceUseCase: GetQuantityOfPokemonAvailableInStoreAndPriceUseCase,
-        private readonly calculatePokemonPriceUseCase: CalculatePokemonPriceUseCase
+        @Inject(PokemonRepositoryProxy.getInstance) pokemonRepository: AbstractPokemonRepository,
+        @Inject(StoreRepositoryProxy.getInstance) storeRepository: AbstractStoreRepository,
+        @Inject(() => GetQuantityOfPokemonAvailableInStoreAndPricePresenter) presenter: GetQuantityOfPokemonAvailableInStoreAndPricePresenter,
     ) {
-        this.getQuantityOfPokemonAvailableInStoreAndPriceUseCase = new GetQuantityOfPokemonAvailableInStoreAndPriceUseCase(pokemonRepository, storeRepository, calculatePokemonPriceUseCase);
+        this.getQuantityOfPokemonAvailableInStoreAndPriceUseCase = new GetQuantityOfPokemonAvailableInStoreAndPriceUseCase(pokemonRepository, storeRepository, new CalculatePokemonPriceUseCase());
         this.presenter = presenter;
     }
 
     @Get('/:storeId')
-    async getAvailablePokemonsWithPriceFromStore(
+    public async getAvailablePokemonsWithPriceFromStore(
         @Param('storeId') storeId: string,
         @Res() response: Response) {
         const input: GetQuantityOfPokemonAvailableInStoreAndPriceInput = {
             storeId: storeId
         }
-        const useCaseOutput = await this.getQuantityOfPokemonAvailableInStoreAndPriceUseCase.execute(input);
-        const formattedResponse = this.presenter.present(useCaseOutput)
-
-        return response.status(200).json(formattedResponse);
+        try {
+            const useCaseOutput = await this.getQuantityOfPokemonAvailableInStoreAndPriceUseCase.execute(input);
+            const formattedResponse = this.presenter.present(useCaseOutput)
+            return response.status(200).json(formattedResponse);
+        } catch (e) {
+            return response.status(500).json({ error: "error" });
+        }
 
     }
 

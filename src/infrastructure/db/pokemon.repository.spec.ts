@@ -1,7 +1,7 @@
-import chai, { expect } from 'chai';
-
+import * as chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { DBPokemonRepository } from './pokemon.repository';
+import { expect } from 'chai';
 chai.use(chaiAsPromised);
 
 describe('DB Pokemon Repository - Get Pokemon Details', () => {
@@ -9,11 +9,11 @@ describe('DB Pokemon Repository - Get Pokemon Details', () => {
     it('should return a pokemon with the right name', async () => {
 
         const pokemonRepo = new DBPokemonRepository();
-        const existingPokemonName = 'charizard';
+        const existingPokemonId = '1';
 
-        const charizard = await pokemonRepo.getPokemonDetailsByName(existingPokemonName);
+        const charizard = await pokemonRepo.getPokemonDetailsById(existingPokemonId);
         
-        expect(charizard.name.toLowerCase()).to.equal(existingPokemonName.toLowerCase());
+        expect(charizard.id).to.equal(existingPokemonId);
 
     })
 
@@ -21,23 +21,12 @@ describe('DB Pokemon Repository - Get Pokemon Details', () => {
     it ('Should throw error if no pokemon are found ', async () => {
 
         const pokemonRepo = new DBPokemonRepository();
-        const pokemonNameThatDoesntExist = 'thisPokeDoesntExisteee';
+        const pokemonNameThatDoesntExist = 'wwrongId';
 
-        const getPokemonDetailsFnThatWillThrow = () => pokemonRepo.getPokemonDetailsByName(pokemonNameThatDoesntExist);
+        const getPokemonDetailsFnThatWillThrow = () => pokemonRepo.getPokemonDetailsById(pokemonNameThatDoesntExist);
 
         expect(getPokemonDetailsFnThatWillThrow()).to.eventually.throw();
 
     })
 
-    it('should be case insensitive with regards to the input', async () => {
-
-        const pokemonRepo = new DBPokemonRepository();
-        const lowercaseCharizard = 'charizard';
-        const uppercaseCharizard = 'ChariZard';
-
-        const charizard = await pokemonRepo.getPokemonDetailsByName(lowercaseCharizard);
-        const charizardFromUpperCase = await pokemonRepo.getPokemonDetailsByName(uppercaseCharizard);
-        expect(charizard).to.deep.equal(charizardFromUpperCase);
-
-    })
 });

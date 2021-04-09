@@ -1,11 +1,6 @@
 import chai, { expect } from 'chai';
 import sinon, { mock } from 'sinon';
 import sinonChai from 'sinon-chai';
-import { GetQuantityOfPokemonAvailableInStoreAndPricePresenter } from '../../infrastructure/presenters/getQuantityOfPokemonAvailableInStoreAndPrice.presenter';
-import { AbstractPokemonRepository } from '../repositories/pokemon.repository';
-import { AbstractStoreRepository } from '../repositories/store.repository';
-import { CalculatePokemonPriceUseCase } from './calculatePokemonPrice.useCase';
-import { GetQuantityOfPokemonAvailableInStoreAndPriceUseCase } from './getQuantityOfPokemonAvailableInStoreAndPrice.usecase';
 chai.use(sinonChai);
 
 describe('Get quantity of pokemons available and price use case - Get Pokemon Details', () => {

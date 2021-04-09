@@ -1,6 +1,6 @@
 import chai, { expect } from 'chai';
-import { PokemonType } from '../entities/pokemon.entity';
-import { CalculatePokemonPriceInput, CalculatePokemonPriceUseCase } from './calculatePokemonPrice.useCase';
+import { PokemonType } from '../../../src/domain/entities/pokemon.entity';
+import { CalculatePokemonPriceInput, CalculatePokemonPriceUseCase } from '../../../src/domain/usecases/calculatePokemonPrice.useCase';
 
 describe('Calculate Pokemon Price Use Case - Calculate poke price', () => {
 

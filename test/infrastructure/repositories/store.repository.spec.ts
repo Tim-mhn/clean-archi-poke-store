@@ -11,7 +11,7 @@ describe('Store Mongo Repository - getAvailablePokemonsFromStore', () => {
     it('should throw Store Not Found Error if given inexistent store id', async () => {
 
         const mongoStoreRepo = new DBStoreRepository();
-        const inexistentStoreId = "thisIdWontWork";
+        const inexistentStoreId = "thisIdWontWork ";
 
         const getPokemonsFromStoreShouldThrow = async () => await mongoStoreRepo.getAvailablePokemonsFromStore(inexistentStoreId);
 

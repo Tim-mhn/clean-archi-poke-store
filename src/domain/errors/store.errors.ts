@@ -1,1 +1,1 @@
-export class StoreNotFound extends Error {};
+export class StoreNotFoundError extends Error {};

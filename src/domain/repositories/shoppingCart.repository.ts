@@ -8,4 +8,8 @@ export interface IShoppingCartRepository {
         shoppingCartId: string,
         pokemon: Pokemon
     ) => Promise<PokemonInCart[]>
+    removePokemonFromShoppingCart: (
+        shoppingCartId: string,
+        pokemon: Pokemon
+    ) => Promise<PokemonInCart[]>
 }

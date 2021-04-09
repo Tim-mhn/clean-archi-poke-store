@@ -9,7 +9,7 @@ export interface GetQuantityOfPokemonAvailableInStoreAndPriceInput {
 }
 
 export interface GetQuantityOfPokemonAvailableInStoreAndPriceOutput {
-    availablePokemonsWithPriceAndQuantity: { pokemon: Pokemon, price: number, quantity: number}[];
+    availablePokemonsWithPriceAndQuantity: { pokemon: Pokemon, price: number, quantity: number }[];
     id: string;
 }
 
@@ -21,6 +21,9 @@ export class GetQuantityOfPokemonAvailableInStoreAndPriceUseCase {
     private calculatePokemonPriceUseCase: CalculatePokemonPriceUseCase;
 
     constructor(pokemonRepo: AbstractPokemonRepository, storeRepo: AbstractStoreRepository, calculatePokemonPriceUseCase: CalculatePokemonPriceUseCase) {
+        if (!pokemonRepo || !storeRepo || !calculatePokemonPriceUseCase) {
+            throw new Error('Error getQtyOfPokeAvailableInStoreAndPrice usecase constructor. One arg is null');
+        }
         this.pokemonRepo = pokemonRepo;
         this.storeRepo = storeRepo;
         this.calculatePokemonPriceUseCase = calculatePokemonPriceUseCase;
@@ -28,8 +31,16 @@ export class GetQuantityOfPokemonAvailableInStoreAndPriceUseCase {
 
     public async execute(input: GetQuantityOfPokemonAvailableInStoreAndPriceInput): Promise<GetQuantityOfPokemonAvailableInStoreAndPriceOutput> {
         const availablePokemonNamesAndQuantity = await this.storeRepo.getAvailablePokemonsFromStore(input.storeId);
-            console.log('calling execute')
-        const availablePokemonsWithPriceAndQuantityPromises = availablePokemonNamesAndQuantity.map(async ({id, quantity}) => {
+        const availablePokemonsWithPriceAndQuantity = await this.getAvailablePokemonsWithPriceAndQty(availablePokemonNamesAndQuantity)
+
+        return {
+            availablePokemonsWithPriceAndQuantity,
+            id: input.storeId
+        }
+    }
+
+    private getAvailablePokemonsWithPriceAndQty = async (availablePokemonNamesAndQuantity: {quantity, id}[]): Promise<{ pokemon: Pokemon, price: number, quantity: number }[]> => {
+        const availablePokemonsWithPriceAndQuantityPromises = availablePokemonNamesAndQuantity.map(async ({ id, quantity }) => {
             const poke: Pokemon = await this.pokemonRepo.getPokemonDetailsById(id);
             const { price } = await this.calculatePokemonPriceUseCase.execute(poke);
             return {
@@ -41,10 +52,6 @@ export class GetQuantityOfPokemonAvailableInStoreAndPriceUseCase {
         });
 
         const availablePokemonsWithPriceAndQuantity = await Promise.all(availablePokemonsWithPriceAndQuantityPromises);
-        
-        return {
-            availablePokemonsWithPriceAndQuantity,
-            id: input.storeId
-        }
+        return availablePokemonsWithPriceAndQuantity;
     }
 }

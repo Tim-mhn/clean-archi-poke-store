@@ -15,7 +15,7 @@ import { AbstractStoreRepository } from "../../domain/repositories/store.reposit
 @JsonController('/pokemons-in-store')
 @Service()
 export class PokemonsInStoreController {
-    public getQuantityOfPokemonAvailableInStoreAndPriceUseCase;
+    private readonly getQuantityOfPokemonAvailableInStoreAndPriceUseCase;
     private readonly presenter;
     constructor(
         @Inject(PokemonRepositoryProxy.getInstance) pokemonRepository: AbstractPokemonRepository,

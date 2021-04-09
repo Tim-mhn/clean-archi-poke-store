@@ -58,7 +58,35 @@ describe('PokemonsInStoreController @Get /:storeId endpoint', () => {
         Sinon.assert.calledOnceWithMatch(res.status, 200);
     })
 
-    it('should return a 500 error usecase throws error', async () => {
+    it('should return the output of present in response if no error are thrown', async () => {
+        // Fakes and stubs
+        const res = {
+            status: fake.returns({
+                json: fake.returns({}),
+            }),
+        };
+        const storeId = "someId"
+        const input = {
+            storeId: storeId
+        }
+        const presenterOutput = {
+            "a": 1
+        }
+        const fakePresenter = {
+            present: fake.returns(presenterOutput)
+        }
+        controller.presenter = fakePresenter;
+
+        // Execute
+        await controller.getAvailablePokemonsWithPriceFromStore(storeId, <Response><any>res);
+
+        // Assert
+        Sinon.assert.calledOnceWithMatch(usecase.execute, input);
+        Sinon.assert.calledOnce(fakePresenter.present);
+        Sinon.assert.calledOnceWithMatch(res.status().json, presenterOutput)
+    })
+
+    it('should return a 500 error if usecase throws error', async () => {
         // Fakes and stub usecase throwing error
         usecase.execute.throws();
         const res = {

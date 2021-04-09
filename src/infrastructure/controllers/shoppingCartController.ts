@@ -12,6 +12,10 @@ import { CreateEmptyShoppingCartPresenter } from "../presenters/createEmptyShopp
 import { PokemonRepositoryProxy } from "../repositoryProxies/pokemonRepository.proxy";
 import { ShoppingCartRepositoryProxy } from "../repositoryProxies/shoppingCartRepository.proxy";
 import bodyParser = require("body-parser");
+import { 
+  RemovePokemonFromShoppingCartInput,
+  RemovePokemonFromShoppingCartUseCase
+ } from "../../domain/usecases/removePokemonFromShoppingCart.useCase";
 
 @JsonController("/shopping-cart")
 @Service()
@@ -25,13 +29,19 @@ export class ShoppingCartController {
 
     private readonly createEmptyShoppingCartPresenter: CreateEmptyShoppingCartPresenter,
     private readonly createEmptyShoppingCartUseCase: CreateEmptyShoppingCartUseCase,
-    private readonly addPokemonToShoppingCartUseCase: AddPokemonToShoppingCartUseCase
+    private readonly addPokemonToShoppingCartUseCase: AddPokemonToShoppingCartUseCase,
+    private readonly removePokemonFromShoppingCartUseCase: RemovePokemonFromShoppingCartUseCase
+
   ) {
     this.createEmptyShoppingCartUseCase = new CreateEmptyShoppingCartUseCase(
       shoppingCartRepository
     );
     this.createEmptyShoppingCartPresenter = createEmptyShoppingCartPresenter;
     this.addPokemonToShoppingCartUseCase = new AddPokemonToShoppingCartUseCase(
+      shoppingCartRepository,
+      pokemonRepository
+    );
+    this.removePokemonFromShoppingCartUseCase = new RemovePokemonFromShoppingCartUseCase(
       shoppingCartRepository,
       pokemonRepository
     );
@@ -43,7 +53,7 @@ export class ShoppingCartController {
     return this.createEmptyShoppingCartPresenter.present(useCaseOutput);
   }
 
-  @Post("/:shoppingCartId/pokemon/:pokemonId")
+  @Post("/add/:shoppingCartId/pokemon/:pokemonId")
   async addPokemonToShoppingCart(
     @Param("pokemonId") pokemonId: string,
     @Param("shoppingCartId") shoppingCartId: string
@@ -57,4 +67,20 @@ export class ShoppingCartController {
     );
     return useCaseOutput;
   }
+
+  @Post("/remove/:shoppingCartId/pokemon/:pokemonId")
+  async removePokemonFromShoppingCart(
+    @Param("pokemonId") pokemonId: string,
+    @Param("shoppingCartId") shoppingCartId: string
+  ) {
+    const input: RemovePokemonFromShoppingCartInput = {
+      pokemonId: pokemonId,
+      shoppingCartId: shoppingCartId,
+    };
+    const useCaseOutput = await this.removePokemonFromShoppingCartUseCase.execute(
+      input
+    );
+    return useCaseOutput;
+  }
+
 }

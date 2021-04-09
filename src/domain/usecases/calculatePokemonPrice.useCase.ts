@@ -5,6 +5,7 @@ export interface CalculatePokemonPriceInput {
     weight: number;
     type: PokemonType;
     level: number;
+    stats: number;
 }
 
 export interface CalculatePokemonPriceOutput {
@@ -20,7 +21,7 @@ export class CalculatePokemonPriceUseCase {
     }
 
     public execute(input: CalculatePokemonPriceInput): CalculatePokemonPriceOutput {
-        let price: number;
+        let type_coeff: number;
 
         if (input.level <= 0) {
             throw new Error('Level cannot be negative');
@@ -31,20 +32,22 @@ export class CalculatePokemonPriceUseCase {
         }
         switch (input.type) {
             case PokemonType.ELETRIC:
-                price = input.level * input.weight * 3;
+                type_coeff = 5;
                 break;
             case PokemonType.FIRE:
-                price = input.level * input.weight * 4;
+                type_coeff = 2;
                 break;
             case PokemonType.WATER:
-                price = input.level * input.weight * 2;
+                type_coeff = 1.5;
                 break;
             case PokemonType.GRASS:
-                price = input.level * input.weight * 1;
+                type_coeff = 1;
                 break;
             default:
                 throw new Error(`Can't calculate price for pokemon of type ${input.type}`);
         }
+
+        let price: number = input.level * input.weight * type_coeff + input.stats
 
         if (price >= this.HALF_PRICE_THRESHOLD) {
             price = price/2;

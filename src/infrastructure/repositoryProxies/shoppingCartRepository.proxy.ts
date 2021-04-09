@@ -1,5 +1,5 @@
 import { Service } from "typedi";
-import { DBShoppingCartRepository } from "../db/shoppingCart.repository";
+import { DBShoppingCartRepository } from "../repositories/shoppingCart.repository";
 
 @Service()
 export class ShoppingCartRepositoryProxy  {

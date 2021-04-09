@@ -1,6 +1,5 @@
 import { Service } from "typedi";
-import { DBPokemonRepository } from "../db/pokemon.repository";
-
+import { DBPokemonRepository } from "../repositories/pokemon.repository";
 @Service()
 export class PokemonRepositoryProxy  {
     static getInstance() {

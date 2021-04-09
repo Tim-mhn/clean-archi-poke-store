@@ -8,7 +8,8 @@ describe('Calculate Pokemon Price Use Case - Calculate poke price', () => {
         const input = {
             level: 2,
             weight: 10,
-            type: PokemonType.GRASS
+            type: PokemonType.GRASS,
+            stats:  1
         };
 
         const usecase = new CalculatePokemonPriceUseCase();
@@ -22,13 +23,15 @@ describe('Calculate Pokemon Price Use Case - Calculate poke price', () => {
         const grassPokemonInput: CalculatePokemonPriceInput = {
             level: 2,
             weight: 10,
-            type: PokemonType.GRASS
+            type: PokemonType.GRASS,
+            stats: 1
+
         }
 
         const calculateUsecase = new CalculatePokemonPriceUseCase();
 
         const ouput = calculateUsecase.execute(grassPokemonInput);
-        const expectedPrice = 2*10;
+        const expectedPrice = 2 * 10 * 1+ 1;
         expect(ouput.price).to.equal(expectedPrice);
     })
 
@@ -36,41 +39,47 @@ describe('Calculate Pokemon Price Use Case - Calculate poke price', () => {
         const waterInput: CalculatePokemonPriceInput = {
             level: 4,
             weight: 5,
-            type: PokemonType.WATER
+            type: PokemonType.WATER,
+            stats: 1
+
         }
 
         const calculateUsecase = new CalculatePokemonPriceUseCase();
 
         const ouput = calculateUsecase.execute(waterInput);
-        const expectedPrice = 4 * 5 * 2
+        const expectedPrice = 4 * 5 * 1.5 + 1
         expect(ouput.price).to.equal(expectedPrice);
     });
 
-    it('price should be level * weight * 4 if pokemon is of type fire and there are no reductions', () => {
+    it('price should be level * weight * 2 if pokemon is of type fire and there are no reductions', () => {
         const fireinput: CalculatePokemonPriceInput = {
             level: 4,
             weight: 5,
-            type: PokemonType.FIRE
+            type: PokemonType.FIRE,
+            stats: 1
+
         }
 
         const calculateUsecase = new CalculatePokemonPriceUseCase();
 
         const ouput = calculateUsecase.execute(fireinput);
-        const expectedPrice = 4 * 5 * 4
+        const expectedPrice = 4 * 5 * 2 + 1
         expect(ouput.price).to.equal(expectedPrice);
     })
 
-    it('price should be level * weight * 3 if pokemon is of type electric and there are no reductions', () => {
+    it('price should be level * weight * 5 if pokemon is of type electric and there are no reductions', () => {
         const electricinput: CalculatePokemonPriceInput = {
             level: 2,
-            weight: 45,
-            type: PokemonType.ELETRIC
+            weight: 10,
+            type: PokemonType.ELETRIC,
+            stats: 1
+
         }
 
         const calculateUsecase = new CalculatePokemonPriceUseCase();
 
         const ouput = calculateUsecase.execute(electricinput);
-        const expectedPrice = 2 * 45 * 3;
+        const expectedPrice = 2 * 10 * 5 + 1;
         expect(ouput.price).to.equal(expectedPrice);
     });
 
@@ -78,13 +87,15 @@ describe('Calculate Pokemon Price Use Case - Calculate poke price', () => {
         const inputforPriceOver300: CalculatePokemonPriceInput = {
             level: 4,
             weight: 200,
-            type: PokemonType.ELETRIC
+            type: PokemonType.ELETRIC,
+            stats: 1
+
         }
 
         const calculateUsecase = new CalculatePokemonPriceUseCase();
 
         const ouput = calculateUsecase.execute(inputforPriceOver300);
-        const expectedPrice = 4 * 200 * 3 / 2;
+        const expectedPrice = (4 * 200 * 5 + 1)/2;
         expect(ouput.price).to.equal(expectedPrice);
     })
 
@@ -95,7 +106,9 @@ describe('Calculate Pokemon price use case should throw error when input is inco
         const inputWithNullType = {
             level: 1,
             weight: 1,
-            type: null
+            type: null,
+            stats: 1
+
         };
 
         const usecase = new CalculatePokemonPriceUseCase();
@@ -111,7 +124,9 @@ describe('Calculate Pokemon price use case should throw error when input is inco
         const inputWithNullType = {
             level: -2,
             weight: 1,
-            type: PokemonType.FIRE
+            type: PokemonType.FIRE,
+            stats: 1
+
         };
 
         const usecase = new CalculatePokemonPriceUseCase();
@@ -127,7 +142,9 @@ describe('Calculate Pokemon price use case should throw error when input is inco
         const inputWithNullType = {
             level: 1,
             weight: -2,
-            type: PokemonType.ELETRIC
+            type: PokemonType.ELETRIC,
+            stats: 1
+
         };
 
         const usecase = new CalculatePokemonPriceUseCase();
@@ -143,7 +160,9 @@ describe('Calculate Pokemon price use case should throw error when input is inco
         const inputWithNullType = {
             level: 0,
             weight: 1,
-            type: PokemonType.FIRE
+            type: PokemonType.FIRE,
+            stats: 1
+
         };
 
         const usecase = new CalculatePokemonPriceUseCase();
@@ -159,7 +178,9 @@ describe('Calculate Pokemon price use case should throw error when input is inco
         const inputWithNullType = {
             level: 1,
             weight: 0,
-            type: PokemonType.ELETRIC
+            type: PokemonType.ELETRIC,
+            stats: 1
+
         };
 
         const usecase = new CalculatePokemonPriceUseCase();

@@ -29,6 +29,7 @@ export class DBPokemonRepository extends AbstractPokemonRepository {
             weight: pokemonData.weight,
             level: 1,
             stats: stats,
+            sprite: pokemonData.sprites.front_default
         };
 
         return pokemon;

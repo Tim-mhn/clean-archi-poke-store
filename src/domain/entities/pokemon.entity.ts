@@ -5,6 +5,7 @@ export interface Pokemon {
     type: PokemonType;
     level: number;
     stats: number;
+    sprite: string;
 }
 
 export enum PokemonType {

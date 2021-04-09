@@ -1,5 +1,6 @@
 import { Service } from "typedi";
 import { PokemonType } from "../../domain/entities/pokemon.entity";
+import { StoreNotFoundError } from "../../domain/errors/store.errors";
 import { GetQuantityOfPokemonAvailableInStoreAndPriceOutput } from "../../domain/usecases/getQuantityOfPokemonAvailableInStoreAndPrice.usecase";
 
 type PokemonInfo = {
@@ -21,7 +22,7 @@ type GetQuantityOfPokemonAvailableInStoreAndPricePresenterOutput = {
 @Service()
 export class GetQuantityOfPokemonAvailableInStoreAndPricePresenter {
 
-  constructor() {};
+  constructor() { };
 
 
   public present(
@@ -50,13 +51,21 @@ export class GetQuantityOfPokemonAvailableInStoreAndPricePresenter {
   // constructor() {
   //   this.present = this.present.bind(this);
   // }
-  
 
 
-  /**
-   * name
-   */
-  public name() {
-    return 1;
+
+
+  public presentOnError(error: Error) {
+    let errorMessage;
+    let statusCode;
+    if (error instanceof StoreNotFoundError) {
+      errorMessage = 'Store not found';
+      statusCode = 403;
+    } else {
+      errorMessage = 'Internal error when getting pokemons from store'
+      statusCode = 500;
+    }
+
+    return [statusCode, { message: errorMessage }];
   }
 }

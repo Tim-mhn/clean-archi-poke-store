@@ -2,6 +2,8 @@ import { Service } from "typedi";
 import { Pokemon, PokemonType } from "../../domain/entities/pokemon.entity";
 import { IPokemonRepository } from "../../domain/repositories/pokemon.repository";
 
+const fetch = require("node-fetch");
+
 const pokemons: Pokemon[] = [
   {
     id: "1",
@@ -38,7 +40,10 @@ export class DBPokemonRepository implements IPokemonRepository {
   constructor() {}
 
   async getPokemonDetails(id: string) {
-    const pokemon = pokemons.find((poke) => poke.id === id);
+
+    const pokemon = await fetch('https://pokeapi.co/api/v2/pokemon/%s', id)
+
+    // const pokemon = pokemons.find((poke) => poke.id === id);
     if (!pokemon) {
       throw new Error(`pokemon ${id} not found`);
     }

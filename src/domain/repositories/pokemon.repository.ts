@@ -1,5 +1,7 @@
+import { Service } from "typedi";
 import { Pokemon } from "../entities/pokemon.entity";
 
-export interface IPokemonRepository {
-    getPokemonDetails: (id: string) =>  Promise<Pokemon>;
+@Service()
+export abstract class AbstractPokemonRepository {
+    abstract getPokemonDetailsById(id: string): Promise<Pokemon>;
 }

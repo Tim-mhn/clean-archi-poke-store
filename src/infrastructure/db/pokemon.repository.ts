@@ -1,18 +1,17 @@
-import { CurrentUser } from "routing-controllers";
 import { Service } from "typedi";
 import { Pokemon, PokemonType } from "../../domain/entities/pokemon.entity";
-import { IPokemonRepository } from "../../domain/repositories/pokemon.repository";
-import { PokemonRepositoryProxy } from "../repositoryProxies/pokemonRepository.proxy";
+import { AbstractPokemonRepository } from "../../domain/repositories/pokemon.repository";
 
 const fetch = require("node-fetch");
 
 @Service()
-export class DBPokemonRepository implements IPokemonRepository {
-    constructor() { }
+export class DBPokemonRepository extends AbstractPokemonRepository {
+    constructor() { 
+      super();
+    }
 
-    async getPokemonDetails(id: string) {
+    async getPokemonDetailsById(id: string) {
         const url = 'https://pokeapi.co/api/v2/pokemon/' + id
-        console.log('fetching details from id ' + id);
 
         const getPokemon = await fetch(url);
         const pokemonData = await getPokemon.json();

@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha -r ts-node/register test/**/*.spec.**",
+    "test:watch": "mocha --require ts-node/register --watch --watch-files src, test/**/*.spec.**",
     "dev": "nodemon --exec ts-node src/server.ts"
   },
   "repository": {
@@ -27,13 +28,22 @@
     "typescript": "^4.2.3"
   },
   "dependencies": {
+    "@types/chai": "^4.2.16",
+    "@types/chai-as-promised": "^7.1.3",
+    "@types/mocha": "^8.2.2",
+    "@types/sinon-chai": "^3.2.5",
     "body-parser": "^1.19.0",
+    "chai": "^4.3.4",
+    "chai-as-promised": "^7.1.1",
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
     "express": "^4.17.1",
     "node-fetch": "^2.6.1",
+    "mocha": "^8.3.2",
     "reflect-metadata": "^0.1.13",
     "routing-controllers": "^0.9.0",
+    "sinon": "^10.0.0",
+    "sinon-chai": "^3.6.0",
     "typedi": "^0.10.0"
   }
 }

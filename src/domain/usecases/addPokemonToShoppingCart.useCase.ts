@@ -1,6 +1,6 @@
 import { Service } from "typedi"
 import { PokemonInCart } from "../entities/shoppingCart.entity"
-import { IPokemonRepository } from "../repositories/pokemon.repository"
+import { AbstractPokemonRepository } from "../repositories/pokemon.repository"
 import { IShoppingCartRepository } from "../repositories/shoppingCart.repository"
 
 export interface AddPokemonToShoppingCartInput {
@@ -15,11 +15,11 @@ export interface AddPokemonToShoppingCartOutput {
 @Service()
 export class AddPokemonToShoppingCartUseCase {
     private shoppingCartRepo: IShoppingCartRepository
-    private pokemonRepo: IPokemonRepository
+    private pokemonRepo: AbstractPokemonRepository
 
     constructor(
         shoppingCartRepo: IShoppingCartRepository,
-        pokemonRepo: IPokemonRepository
+        pokemonRepo: AbstractPokemonRepository
     ) {
         this.shoppingCartRepo = shoppingCartRepo
         this.pokemonRepo = pokemonRepo
@@ -28,7 +28,7 @@ export class AddPokemonToShoppingCartUseCase {
     public async execute(
         input: AddPokemonToShoppingCartInput
     ): Promise<AddPokemonToShoppingCartOutput> {
-        const pokemon = await this.pokemonRepo.getPokemonDetails(
+        const pokemon = await this.pokemonRepo.getPokemonDetailsById(
             input.pokemonId
         )
         const shoppingCartIdOutput = await this.shoppingCartRepo.addPokemonToShoppingCart(

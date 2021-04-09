@@ -1,7 +1,7 @@
 import { Service } from "typedi";
 import { Pokemon } from "../entities/pokemon.entity";
-import { IPokemonRepository } from "../repositories/pokemon.repository";
-import { IStoreRepository } from "../repositories/store.repository";
+import { AbstractPokemonRepository } from "../repositories/pokemon.repository";
+import { AbstractStoreRepository } from "../repositories/store.repository";
 import { CalculatePokemonPriceUseCase } from "./calculatePokemonPrice.useCase";
 
 export interface GetQuantityOfPokemonAvailableInStoreAndPriceInput {
@@ -9,18 +9,21 @@ export interface GetQuantityOfPokemonAvailableInStoreAndPriceInput {
 }
 
 export interface GetQuantityOfPokemonAvailableInStoreAndPriceOutput {
-    availablePokemonsWithPriceAndQuantity: { pokemon: Pokemon, price: number, quantity: number}[];
+    availablePokemonsWithPriceAndQuantity: { pokemon: Pokemon, price: number, quantity: number }[];
     id: string;
 }
 
 @Service()
 export class GetQuantityOfPokemonAvailableInStoreAndPriceUseCase {
 
-    private pokemonRepo: IPokemonRepository;
-    private storeRepo: IStoreRepository;
+    private pokemonRepo: AbstractPokemonRepository;
+    private storeRepo: AbstractStoreRepository;
     private calculatePokemonPriceUseCase: CalculatePokemonPriceUseCase;
 
-    constructor(pokemonRepo: IPokemonRepository, storeRepo: IStoreRepository, calculatePokemonPriceUseCase: CalculatePokemonPriceUseCase) {
+    constructor(pokemonRepo: AbstractPokemonRepository, storeRepo: AbstractStoreRepository, calculatePokemonPriceUseCase: CalculatePokemonPriceUseCase) {
+        if (!pokemonRepo || !storeRepo || !calculatePokemonPriceUseCase) {
+            throw new Error('Error getQtyOfPokeAvailableInStoreAndPrice usecase constructor. One arg is null');
+        }
         this.pokemonRepo = pokemonRepo;
         this.storeRepo = storeRepo;
         this.calculatePokemonPriceUseCase = calculatePokemonPriceUseCase;
@@ -28,9 +31,17 @@ export class GetQuantityOfPokemonAvailableInStoreAndPriceUseCase {
 
     public async execute(input: GetQuantityOfPokemonAvailableInStoreAndPriceInput): Promise<GetQuantityOfPokemonAvailableInStoreAndPriceOutput> {
         const availablePokemonNamesAndQuantity = await this.storeRepo.getAvailablePokemonsFromStore(input.storeId);
+        const availablePokemonsWithPriceAndQuantity = await this.getAvailablePokemonsWithPriceAndQty(availablePokemonNamesAndQuantity)
 
-        const availablePokemonsWithPriceAndQuantityPromises = availablePokemonNamesAndQuantity.map(async ({id, quantity}) => {
-            const poke: Pokemon = await this.pokemonRepo.getPokemonDetails(id);
+        return {
+            availablePokemonsWithPriceAndQuantity,
+            id: input.storeId
+        }
+    }
+
+    private getAvailablePokemonsWithPriceAndQty = async (availablePokemonNamesAndQuantity: {quantity, id}[]): Promise<{ pokemon: Pokemon, price: number, quantity: number }[]> => {
+        const availablePokemonsWithPriceAndQuantityPromises = availablePokemonNamesAndQuantity.map(async ({ id, quantity }) => {
+            const poke: Pokemon = await this.pokemonRepo.getPokemonDetailsById(id);
             const { price } = await this.calculatePokemonPriceUseCase.execute(poke);
             return {
                 pokemon: poke,
@@ -41,10 +52,6 @@ export class GetQuantityOfPokemonAvailableInStoreAndPriceUseCase {
         });
 
         const availablePokemonsWithPriceAndQuantity = await Promise.all(availablePokemonsWithPriceAndQuantityPromises);
-        
-        return {
-            availablePokemonsWithPriceAndQuantity,
-            id: input.storeId
-        }
+        return availablePokemonsWithPriceAndQuantity;
     }
 }

@@ -1,5 +1,5 @@
 import { Service } from "typedi";
-import { IStoreRepository } from "../../domain/repositories/store.repository";
+import { AbstractStoreRepository } from "../../domain/repositories/store.repository";
 
 const storesWithAvailablesPokemons: {
   storeId;
@@ -60,8 +60,10 @@ const storesWithAvailablesPokemons: {
 ];
 
 @Service()
-export class DBStoreRepository implements IStoreRepository {
-  constructor() {}
+export class DBStoreRepository extends AbstractStoreRepository {
+  constructor() {
+    super();
+  }
 
   async getAvailablePokemonsFromStore(storeId: string) {
     const storeWithPokemons = storesWithAvailablesPokemons.find(

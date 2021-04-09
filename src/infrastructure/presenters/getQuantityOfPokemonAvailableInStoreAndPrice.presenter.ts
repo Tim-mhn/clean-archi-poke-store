@@ -20,6 +20,10 @@ type GetQuantityOfPokemonAvailableInStoreAndPricePresenterOutput = {
 
 @Service()
 export class GetQuantityOfPokemonAvailableInStoreAndPricePresenter {
+
+  constructor() {};
+
+
   public present(
     useCaseOutput: GetQuantityOfPokemonAvailableInStoreAndPriceOutput
   ): GetQuantityOfPokemonAvailableInStoreAndPricePresenterOutput {
@@ -42,5 +46,17 @@ export class GetQuantityOfPokemonAvailableInStoreAndPricePresenter {
       storeId: useCaseOutput.id,
       availablePokemons,
     };
+  }
+  // constructor() {
+  //   this.present = this.present.bind(this);
+  // }
+  
+
+
+  /**
+   * name
+   */
+  public name() {
+    return 1;
   }
 }

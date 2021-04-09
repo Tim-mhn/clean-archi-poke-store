@@ -1,6 +1,6 @@
 import * as chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import { DBPokemonRepository } from './pokemon.repository';
+import { DBPokemonRepository } from '../../../src/infrastructure/db/pokemon.repository';
 import { expect } from 'chai';
 chai.use(chaiAsPromised);
 

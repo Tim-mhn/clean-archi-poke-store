@@ -1,6 +1,6 @@
 import { Service } from "typedi";
 import { Pokemon, PokemonType } from "../../domain/entities/pokemon.entity";
-import { IPokemonRepository } from "../../domain/repositories/pokemon.repository";
+import { AbstractPokemonRepository } from "../../domain/repositories/pokemon.repository";
 
 const pokemons: Pokemon[] = [
   {
@@ -34,12 +34,15 @@ const pokemons: Pokemon[] = [
 ];
 
 @Service()
-export class DBPokemonRepository implements IPokemonRepository {
-  constructor() {}
+export class DBPokemonRepository extends AbstractPokemonRepository {
+  constructor() {
+    super()
+  }
 
-  async getPokemonDetails(id: string) {
-    const pokemon = pokemons.find((poke) => poke.id === id);
+  async getPokemonDetailsById(id: string) {
+    const pokemon = pokemons.find(poke => poke.id === id);
     if (!pokemon) {
+      console.error('error')
       throw new Error(`pokemon ${id} not found`);
     }
     return pokemon;

@@ -4,6 +4,7 @@ export interface Pokemon {
     weight: number;
     type: PokemonType;
     level: number;
+    stats: number;
 }
 
 export enum PokemonType {

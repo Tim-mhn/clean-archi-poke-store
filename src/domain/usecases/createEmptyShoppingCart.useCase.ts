@@ -18,17 +18,21 @@ export class CreateEmptyShoppingCartUseCase {
 
     constructor(
         shoppingCartRepo: AbstractShoppingCartRepository,
-        storeRepository: AbstractStoreRepository
+        storeRepo: AbstractStoreRepository
     ) {
+        if (!shoppingCartRepo || !storeRepo) {
+            throw new Error('Error createEmptyShoppingCart usecase constructor. One arg is null');
+        }
+
         this.shoppingCartRepo = shoppingCartRepo
-        this.storeRepository = storeRepository
+        this.storeRepository = storeRepo
     }
 
     public async execute(
         input: CreateEmptyShoppingCartInput
     ): Promise<CreateEmptyShoppingCartOutput> {
         const store = await this.storeRepository.getStoreById(input.storeId)
-        const shoppingCart = await this.shoppingCartRepo.createShoppingCart(
+        const shoppingCart = await this.shoppingCartRepo.createEmptyShoppingCart(
             store
         )
 

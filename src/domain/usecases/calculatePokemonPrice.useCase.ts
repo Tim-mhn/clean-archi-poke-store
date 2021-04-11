@@ -48,7 +48,6 @@ export class CalculatePokemonPriceUseCase {
         }
 
         let price: number = input.level * input.weight * type_coeff + input.stats
-
         if (price >= this.HALF_PRICE_THRESHOLD) {
             price = price/2;
         }

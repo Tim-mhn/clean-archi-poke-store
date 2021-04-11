@@ -1,15 +1,20 @@
+import { modelNames } from "mongoose";
 import { Service } from "typedi";
 import { Pokemon } from "../entities/pokemon.entity";
+import { PokemonInCart } from "../entities/shoppingCart.entity";
 import { AbstractShoppingCartRepository } from "../repositories/shoppingCart.repository";
+import { CalculatePokemonPriceUseCase } from "./calculatePokemonPrice.useCase";
+import { CalculateShoppingCartPriceUseCase } from "./calculateShoppingCartPrice.useCase";
+import { EstimateReadyForPickupDateUseCase } from "./estimateReadyForPickupDate.usecase";
 
 export interface GetShoppingCartContentPriceAndReadyDateInput {
-    storeId: string;
+    shoppingCartId: string;
     now: Date;
 }
 
 export interface GetShoppingCartContentPriceAndReadyDateOutput {
-    pokemons: { pokemon: { name: string, id: string}, price: number, quantity: number }[];
-    storeId: string;
+    pokemons: { pokemon: { name: string, id: string }, price: number, quantity: number }[];
+    shoppingCartId: string;
     price: number;
     readyDate: Date;
 
@@ -19,16 +24,46 @@ export interface GetShoppingCartContentPriceAndReadyDateOutput {
 export class GetShoppingCartContentPriceAndReadyDateUseCase {
 
     shoppingCartRepo: AbstractShoppingCartRepository;
-    constructor(shoppingCartRepo: AbstractShoppingCartRepository) {
+    estimateReadyForPickupDateUseCase: EstimateReadyForPickupDateUseCase = new EstimateReadyForPickupDateUseCase();
+    calculatePokePriceUsecase: CalculatePokemonPriceUseCase = new CalculatePokemonPriceUseCase();
+    calculateShoppingCartPriceUsecase: CalculateShoppingCartPriceUseCase = new CalculateShoppingCartPriceUseCase(this.calculatePokePriceUsecase);
+
+    constructor(shoppingCartRepo: AbstractShoppingCartRepository,
+    ) {
         if (!shoppingCartRepo) {
             throw new Error('Error GetShoppingCartDetailsUseCase constructor. One arg is null');
         }
         this.shoppingCartRepo = shoppingCartRepo;
+
+
     }
 
-    // public async execute(input: GetShoppingCartContentPriceAndReadyDateInput): Promise<GetShoppingCartContentPriceAndReadyDateOutput> {
-    //     const pokemonsInCart = await this.shoppingCartRepo.getShoppingCartDetails(input.storeId);
-        
-    // }
+    public async execute(input: GetShoppingCartContentPriceAndReadyDateInput): Promise<GetShoppingCartContentPriceAndReadyDateOutput> {
+        const pokemonsInCart = await this.shoppingCartRepo.getShoppingCartDetails(input.shoppingCartId);
+        const pokemonsWithUnitPriceAndQuantity = this.pokemonsWithUnitPriceAndQuantityInfo(pokemonsInCart)
+        const shoppingCartPrice = this.calculateShoppingCartPriceUsecase.execute(pokemonsInCart);
+        const estimatedPickupDate = this.estimateReadyForPickupDateUseCase.execute({now: input.now, pokemonsInCart: pokemonsInCart});
+            return {
+                shoppingCartId: input.shoppingCartId,
+                price: shoppingCartPrice,
+                readyDate: estimatedPickupDate,
+                pokemons: pokemonsWithUnitPriceAndQuantity
+            }
+    }
+
+    pokemonsWithUnitPriceAndQuantityInfo(pokemonsInCart: PokemonInCart[]): {pokemon: {name, id}, price, quantity}[] {
+        return pokemonsInCart.map(poke => {
+            const price = this.calculatePokePriceUsecase.execute(poke.pokemon);
+            return {
+                pokemon: {
+                    name: poke.pokemon.name,
+                    id: poke.pokemon.id,
+                },
+                price,
+                quantity: poke.quantity
+            }
+        });
+
+    }
 
 }

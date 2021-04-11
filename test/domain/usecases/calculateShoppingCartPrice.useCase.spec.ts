@@ -34,19 +34,19 @@ describe('Calculate ShoppingCart Price Use Case - getReductionCoeffIfBulkOrderOf
 
     })
 
-    it('should return 0 if level is 1 and quantity is under 10', () => {
+    it('should return 1 if level is 1 and quantity is under 10', () => {
         const level = 1;
         const quantity = 9;
-        const reduction = calculateShoppingCartPriceUsecase.getReductionCoeffIfBulkOrderOfOnePokemon(level, quantity);
+        const reductionCoeff = calculateShoppingCartPriceUsecase.getReductionCoeffIfBulkOrderOfOnePokemon(level, quantity);
         
-        expect(reduction).to.be.equal(0)
+        expect(reductionCoeff).to.be.equal(1)
 
     })
 
     it('should return 0.1 if level is 1 and quantity is 10 or over', () => {
         const level = 1;
         const quantity = 10;
-        const expectedReduction = 0.1;
+        const expectedReduction = 1-0.1;
         const reduction = calculateShoppingCartPriceUsecase.getReductionCoeffIfBulkOrderOfOnePokemon(level, quantity);
         const reduction2 = calculateShoppingCartPriceUsecase.getReductionCoeffIfBulkOrderOfOnePokemon(level, quantity + 1);
 
@@ -56,18 +56,18 @@ describe('Calculate ShoppingCart Price Use Case - getReductionCoeffIfBulkOrderOf
 
     })
 
-    it('should return 0 if level is 2 and quantity is under 8', () => {
+    it('should return 1 if level is 2 and quantity is under 8 (no reduction)', () => {
         const level = 2;
         const quantity = 7;
         const reduction = calculateShoppingCartPriceUsecase.getReductionCoeffIfBulkOrderOfOnePokemon(level, quantity);
 
-        expect(reduction).to.be.equal(0)
+        expect(reduction).to.be.equal(1)
     })
 
     it('should return 0.15 if level is 2 and quantity is 8 or over', () => {
         const level = 2;
         const quantity = 8;
-        const expectedReduction = 0.15;
+        const expectedReduction = 1-0.15;
         const reduction = calculateShoppingCartPriceUsecase.getReductionCoeffIfBulkOrderOfOnePokemon(level, quantity);
         const reduction2 = calculateShoppingCartPriceUsecase.getReductionCoeffIfBulkOrderOfOnePokemon(level, quantity + 1);
 
@@ -76,18 +76,18 @@ describe('Calculate ShoppingCart Price Use Case - getReductionCoeffIfBulkOrderOf
 
     })
 
-    it('should return 0 if level is 3 and quantity is under 3', () => {
+    it('should return 1 if level is 3 and quantity is under 3', () => {
         const level = 3;
         const quantity = 2;
         const reduction = calculateShoppingCartPriceUsecase.getReductionCoeffIfBulkOrderOfOnePokemon(level, quantity);
 
-        expect(reduction).to.be.equal(0)
+        expect(reduction).to.be.equal(1)
     })
 
     it('should return 0.2 if level is 3 and quantity is 3 or over', () => {
         const level = 3;
         const quantity = 3;
-        const expectedReduction = 0.2;
+        const expectedReduction = 1-0.2;
         const reduction = calculateShoppingCartPriceUsecase.getReductionCoeffIfBulkOrderOfOnePokemon(level, quantity);
         const reduction2 = calculateShoppingCartPriceUsecase.getReductionCoeffIfBulkOrderOfOnePokemon(level, quantity + 1);
 

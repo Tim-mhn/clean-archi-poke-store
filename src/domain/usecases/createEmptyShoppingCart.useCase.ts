@@ -1,28 +1,37 @@
-import { Service } from "typedi";
-import { ShoppingCart } from "../entities/shoppingCart.entity";
-import { AbstractShoppingCartRepository } from "../repositories/shoppingCart.repository";
+import { Service } from 'typedi'
+import { ShoppingCart } from '../entities/shoppingCart.entity'
+import { AbstractShoppingCartRepository } from '../repositories/shoppingCart.repository'
+import { AbstractStoreRepository } from '../repositories/store.repository'
 
 export interface CreateEmptyShoppingCartInput {
-    storeId: string;
+    storeId: string
 }
 
 export interface CreateEmptyShoppingCartOutput {
-    shoppingCart: ShoppingCart;
+    shoppingCart: ShoppingCart
 }
-
 
 @Service()
 export class CreateEmptyShoppingCartUseCase {
-    private shoppingCartRepo: AbstractShoppingCartRepository;
-    
-    constructor(shoppingCartRepo: AbstractShoppingCartRepository) {
-        this.shoppingCartRepo = shoppingCartRepo;
+    private shoppingCartRepo: AbstractShoppingCartRepository
+    private storeRepository: AbstractStoreRepository
+
+    constructor(
+        shoppingCartRepo: AbstractShoppingCartRepository,
+        storeRepository: AbstractStoreRepository
+    ) {
+        this.shoppingCartRepo = shoppingCartRepo
+        this.storeRepository = storeRepository
     }
 
-    public async execute(input: CreateEmptyShoppingCartInput): Promise<CreateEmptyShoppingCartOutput> {
-    
-        const shoppingCart = await this.shoppingCartRepo.createShoppingCart(input.storeId);
+    public async execute(
+        input: CreateEmptyShoppingCartInput
+    ): Promise<CreateEmptyShoppingCartOutput> {
+        const store = await this.storeRepository.getStoreById(input.storeId)
+        const shoppingCart = await this.shoppingCartRepo.createShoppingCart(
+            store
+        )
 
-        return { shoppingCart: shoppingCart };
+        return { shoppingCart: shoppingCart }
     }
 }

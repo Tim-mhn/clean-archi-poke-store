@@ -6,6 +6,7 @@ import {
     Param,
     Post,
     QueryParam,
+    Res,
 } from 'routing-controllers'
 import { Inject, Service } from 'typedi'
 import { AbstractPokemonRepository } from '../../domain/repositories/pokemon.repository'
@@ -28,10 +29,14 @@ import { PokemonRepositoryProxy } from '../repositoryProxies/pokemonRepository.p
 import { ShoppingCartRepositoryProxy } from '../repositoryProxies/shoppingCartRepository.proxy'
 import { StoreRepositoryProxy } from '../repositoryProxies/storeRepository.proxy'
 import bodyParser = require('body-parser')
+import { Response } from 'express'
+import { GetShoppingCartContentPriceAndReadyDateOutput, GetShoppingCartContentPriceAndReadyDateUseCase } from '../../domain/usecases/getShoppingCartContentPriceAndReadyDate.usecase'
+import { GetShoppingCartContentPriceAndReadyDatePresenter } from '../presenters/getShoppingCartContentPriceAndReadyDate.presenter'
 
 @JsonController('/shopping-cart')
 @Service()
 export class ShoppingCartController {
+    getShoppingCartContentPriceAndReadyDateUseCase: GetShoppingCartContentPriceAndReadyDateUseCase;
     constructor(
         @Inject(ShoppingCartRepositoryProxy.getInstance)
         private readonly shoppingCartRepository: AbstractShoppingCartRepository,
@@ -40,7 +45,7 @@ export class ShoppingCartController {
         private readonly pokemonRepository: AbstractPokemonRepository,
         @Inject(StoreRepositoryProxy.getInstance)
         private readonly storeRepository: AbstractStoreRepository,
-
+        private readonly getShoppingCartContentPriceAndReadyDatePresenter: GetShoppingCartContentPriceAndReadyDatePresenter,
         private readonly createEmptyShoppingCartPresenter: CreateEmptyShoppingCartPresenter,
         private readonly createEmptyShoppingCartUseCase: CreateEmptyShoppingCartUseCase,
         private readonly addPokemonToShoppingCartUseCase: AddPokemonToShoppingCartUseCase,
@@ -59,6 +64,7 @@ export class ShoppingCartController {
             shoppingCartRepository,
             pokemonRepository
         )
+        this.getShoppingCartContentPriceAndReadyDateUseCase = new GetShoppingCartContentPriceAndReadyDateUseCase(shoppingCartRepository);
     }
 
     @Post('/:shoppingCartId/pokemon/:pokemonId')
@@ -101,6 +107,18 @@ export class ShoppingCartController {
         return this.createEmptyShoppingCartPresenter.present(useCaseOutput)
     }
 
-    @Get('/:shoppingCartId')
-    async getShoppingCartDetails() {}
+    @Get("/:shoppingCartId")
+    async getShoppingCartDetails(
+        @Param("shoppingCartId") shoppingCartId: string,
+        @Res() response: Response,
+    ) {
+        try {
+            const output: GetShoppingCartContentPriceAndReadyDateOutput = await this.getShoppingCartContentPriceAndReadyDateUseCase.execute({ shoppingCartId, now: new Date() });
+            const formattedResponse = this.getShoppingCartContentPriceAndReadyDatePresenter.present(output);
+            return response.status(200).json(formattedResponse);
+        } catch (e) {
+            console.log(e);
+            return response.status(500).json({ error: "unhandled error" });
+        }
+    }
 }

@@ -1,5 +1,5 @@
 import "reflect-metadata"; // Don't forget to import this for each Controller
-import { Get, JsonController, Param, Post } from "routing-controllers";
+import { Delete, Get, JsonController, Param, Post } from "routing-controllers";
 import { Inject, Service } from "typedi";
 import { AbstractPokemonRepository } from "../../domain/repositories/pokemon.repository";
 import { AbstractShoppingCartRepository } from "../../domain/repositories/shoppingCart.repository";
@@ -62,7 +62,7 @@ export class ShoppingCartController {
     return this.createEmptyShoppingCartPresenter.present(useCaseOutput);
   }
 
-  @Post("/add/:shoppingCartId/pokemon/:pokemonId")
+  @Post("/:shoppingCartId/pokemon/:pokemonId")
   async addPokemonToShoppingCart(
     @Param("pokemonId") pokemonId: string,
     @Param("shoppingCartId") shoppingCartId: string
@@ -77,7 +77,7 @@ export class ShoppingCartController {
     return useCaseOutput;
   }
 
-  @Post("/remove/:shoppingCartId/pokemon/:pokemonId")
+  @Delete("/:shoppingCartId/pokemon/:pokemonId")
   async removePokemonFromShoppingCart(
     @Param("pokemonId") pokemonId: string,
     @Param("shoppingCartId") shoppingCartId: string

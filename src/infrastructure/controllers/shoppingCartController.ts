@@ -92,7 +92,6 @@ export class ShoppingCartController {
     }
     @Post()
     async createEmptyShoppingCart(@QueryParam('storeId') storeId: string) {
-        console.log(storeId)
         const useCaseInput: CreateEmptyShoppingCartInput = {
             storeId: storeId,
         }

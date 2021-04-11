@@ -1,7 +1,7 @@
 import { Service } from "typedi"
 import { PokemonInCart } from "../entities/shoppingCart.entity"
 import { AbstractPokemonRepository } from "../repositories/pokemon.repository"
-import { IShoppingCartRepository } from "../repositories/shoppingCart.repository"
+import { AbstractShoppingCartRepository } from "../repositories/shoppingCart.repository"
 
 export interface AddPokemonToShoppingCartInput {
     pokemonId: string
@@ -14,11 +14,11 @@ export interface AddPokemonToShoppingCartOutput {
 
 @Service()
 export class AddPokemonToShoppingCartUseCase {
-    private shoppingCartRepo: IShoppingCartRepository
+    private shoppingCartRepo: AbstractShoppingCartRepository
     private pokemonRepo: AbstractPokemonRepository
 
     constructor(
-        shoppingCartRepo: IShoppingCartRepository,
+        shoppingCartRepo: AbstractShoppingCartRepository,
         pokemonRepo: AbstractPokemonRepository
     ) {
         this.shoppingCartRepo = shoppingCartRepo

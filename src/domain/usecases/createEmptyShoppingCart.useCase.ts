@@ -1,5 +1,5 @@
 import { Service } from "typedi";
-import { IShoppingCartRepository } from "../repositories/shoppingCart.repository";
+import { AbstractShoppingCartRepository } from "../repositories/shoppingCart.repository";
 
 export interface CreateEmptyShoppingCartOutput {
     shoppingCartId: string;
@@ -8,9 +8,9 @@ export interface CreateEmptyShoppingCartOutput {
 
 @Service()
 export class CreateEmptyShoppingCartUseCase {
-    private shoppingCartRepo: IShoppingCartRepository;   
+    private shoppingCartRepo: AbstractShoppingCartRepository;
     
-    constructor(shoppingCartRepo: IShoppingCartRepository) {
+    constructor(shoppingCartRepo: AbstractShoppingCartRepository) {
         this.shoppingCartRepo = shoppingCartRepo;
     }
 

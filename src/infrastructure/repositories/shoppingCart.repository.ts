@@ -1,7 +1,7 @@
 import { Service } from "typedi"
 import { Pokemon } from "../../domain/entities/pokemon.entity"
 import { ShoppingCart } from "../../domain/entities/shoppingCart.entity"
-import { IShoppingCartRepository } from "../../domain/repositories/shoppingCart.repository"
+import { AbstractShoppingCartRepository } from "../../domain/repositories/shoppingCart.repository"
 
 const charSet =
 "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
@@ -25,8 +25,10 @@ function randomString(len) {
 }
 
 @Service()
-export class DBShoppingCartRepository implements IShoppingCartRepository {
-    constructor() {}
+export class DBShoppingCartRepository extends AbstractShoppingCartRepository {
+    constructor() {
+    super()
+}
 
     async getShoppingCartDetails(id: string) {
         const shoppingCart = carts.find((cart) => cart.id === id)

@@ -1,8 +1,8 @@
 import "reflect-metadata"; // Don't forget to import this for each Controller
-import { JsonController, Param, Post } from "routing-controllers";
+import { Get, JsonController, Param, Post } from "routing-controllers";
 import { Inject, Service } from "typedi";
 import { AbstractPokemonRepository } from "../../domain/repositories/pokemon.repository";
-import { IShoppingCartRepository } from "../../domain/repositories/shoppingCart.repository";
+import { AbstractShoppingCartRepository } from "../../domain/repositories/shoppingCart.repository";
 import {
   AddPokemonToShoppingCartInput,
   AddPokemonToShoppingCartUseCase,
@@ -22,7 +22,7 @@ import {
 export class ShoppingCartController {
   constructor(
     @Inject(ShoppingCartRepositoryProxy.getInstance)
-    private readonly shoppingCartRepository: IShoppingCartRepository,
+    private readonly shoppingCartRepository: AbstractShoppingCartRepository,
     @Inject(() => CreateEmptyShoppingCartPresenter)
     @Inject(PokemonRepositoryProxy.getInstance)
     private readonly pokemonRepository: AbstractPokemonRepository,
@@ -81,6 +81,11 @@ export class ShoppingCartController {
       input
     );
     return useCaseOutput;
+  }
+
+  @Get("/:shoppingCartId")
+  async getShoppingCartDetails() {
+
   }
 
 }

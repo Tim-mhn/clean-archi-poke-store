@@ -1,10 +1,11 @@
 import { Service } from "typedi"
 import { Pokemon } from "../entities/pokemon.entity"
-import { PokemonInCart } from "../entities/shoppingCart.entity"
+import { PokemonInCart, ShoppingCart } from "../entities/shoppingCart.entity"
+import { Store } from "../entities/store.entity"
 @Service()
 export abstract class AbstractShoppingCartRepository {
-    abstract getShoppingCartDetails(id: string): Promise<PokemonInCart[]>
-    abstract createShoppingCart():  Promise<string>
+    abstract getShoppingCartDetails(shoppingCartId: string): Promise<PokemonInCart[]>
+    abstract createEmptyShoppingCart(store: Store):  Promise<ShoppingCart>
     abstract addPokemonToShoppingCart(
         shoppingCartId: string,
         pokemon: Pokemon

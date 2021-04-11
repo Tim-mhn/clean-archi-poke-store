@@ -1,7 +1,7 @@
-import { Service } from "typedi"
-import { PokemonInCart } from "../entities/shoppingCart.entity"
-import { AbstractPokemonRepository } from "../repositories/pokemon.repository"
-import { AbstractShoppingCartRepository } from "../repositories/shoppingCart.repository"
+import { Service } from 'typedi'
+import { PokemonInCart } from '../entities/shoppingCart.entity'
+import { AbstractPokemonRepository } from '../repositories/pokemon.repository'
+import { AbstractShoppingCartRepository } from '../repositories/shoppingCart.repository'
 
 export interface AddPokemonToShoppingCartInput {
     pokemonId: string

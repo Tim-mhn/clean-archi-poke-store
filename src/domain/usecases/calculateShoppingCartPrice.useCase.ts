@@ -11,9 +11,7 @@ export class CalculateShoppingCartPriceUseCase {
     }
 
     public execute(pokemonsInCart: PokemonInCart[]): number {
-        console.log(pokemonsInCart);
         let price = this.computeOrderBasePrice(pokemonsInCart);
-        console.log(price);
         price = this.reducedPriceIfOrderIsExpensive(price);
 
         return price;
@@ -27,7 +25,6 @@ export class CalculateShoppingCartPriceUseCase {
             const calculatePokePriceInput: CalculatePokemonPriceInput = this.mapPokemonInCartToCalculatePokePriceInput(pokeInCart);
 
             const pokeUnitPrice = this.calculatePokemonPriceUsecase.execute(calculatePokePriceInput);
-            console.log(pokeUnitPrice);
             const reductionCoeffIfBulkOrder = this.getReductionCoeffIfBulkOrderOfOnePokemon(pokeInCart.pokemon.level, pokeInCart.quantity);
             price += pokeUnitPrice.price * pokeInCart.quantity * reductionCoeffIfBulkOrder;
         });

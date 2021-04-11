@@ -6,6 +6,7 @@ export interface PokemonInCart {
 }
 
 export interface ShoppingCart {
-    id: string
+    shoppingCartId: string
+    storeId: string
     pokemons: PokemonInCart[]
 }

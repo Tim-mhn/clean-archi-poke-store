@@ -42,7 +42,7 @@ export class DBShoppingCartRepository extends AbstractShoppingCartRepository {
         return shoppingCart.pokemons
     }
 
-    async createShoppingCart(store: Store) {
+    async createEmptyShoppingCart(store: Store) {
         const shoppingCartId = randomString(8)
         const shoppingCart: ShoppingCart = {
             storeId: store.id,

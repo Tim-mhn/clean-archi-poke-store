@@ -1,5 +1,5 @@
-import { Service } from "typedi"
-import { PokemonType } from "../../domain/entities/pokemon.entity"
+import { Service } from 'typedi'
+import { PokemonType } from '../../domain/entities/pokemon.entity'
 
 type PokemonInfo = {
     id: string
@@ -30,5 +30,15 @@ export class AddPokemonToShoppingCartPresenter {
                 },
             })),
         }
+    }
+
+    public presentOnError(error: Error) {
+        let errorMessage
+        let statusCode
+
+        errorMessage = 'Internal error when adding pokemon to cart'
+        statusCode = 500
+
+        return [statusCode, { message: errorMessage }]
     }
 }

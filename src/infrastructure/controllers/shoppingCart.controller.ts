@@ -1,3 +1,4 @@
+import { Response } from 'express'
 import 'reflect-metadata' // Don't forget to import this for each Controller
 import {
     Delete,
@@ -21,22 +22,25 @@ import {
     CreateEmptyShoppingCartUseCase,
 } from '../../domain/usecases/createEmptyShoppingCart.useCase'
 import {
+    GetShoppingCartContentPriceAndReadyDateOutput,
+    GetShoppingCartContentPriceAndReadyDateUseCase,
+} from '../../domain/usecases/getShoppingCartContentPriceAndReadyDate.usecase'
+import {
     RemovePokemonFromShoppingCartInput,
     RemovePokemonFromShoppingCartUseCase,
 } from '../../domain/usecases/removePokemonFromShoppingCart.useCase'
+import { AddPokemonToShoppingCartPresenter } from '../presenters/addPokemonToShoppingCart.presenter'
 import { CreateEmptyShoppingCartPresenter } from '../presenters/createEmptyShoppingCart.presenter'
+import { GetShoppingCartContentPriceAndReadyDatePresenter } from '../presenters/getShoppingCartContentPriceAndReadyDate.presenter'
 import { PokemonRepositoryProxy } from '../repositoryProxies/pokemonRepository.proxy'
 import { ShoppingCartRepositoryProxy } from '../repositoryProxies/shoppingCartRepository.proxy'
 import { StoreRepositoryProxy } from '../repositoryProxies/storeRepository.proxy'
 import bodyParser = require('body-parser')
-import { Response } from 'express'
-import { GetShoppingCartContentPriceAndReadyDateOutput, GetShoppingCartContentPriceAndReadyDateUseCase } from '../../domain/usecases/getShoppingCartContentPriceAndReadyDate.usecase'
-import { GetShoppingCartContentPriceAndReadyDatePresenter } from '../presenters/getShoppingCartContentPriceAndReadyDate.presenter'
 
 @JsonController('/shopping-cart')
 @Service()
 export class ShoppingCartController {
-    getShoppingCartContentPriceAndReadyDateUseCase: GetShoppingCartContentPriceAndReadyDateUseCase;
+    getShoppingCartContentPriceAndReadyDateUseCase: GetShoppingCartContentPriceAndReadyDateUseCase
     constructor(
         @Inject(ShoppingCartRepositoryProxy.getInstance)
         private readonly shoppingCartRepository: AbstractShoppingCartRepository,
@@ -48,6 +52,7 @@ export class ShoppingCartController {
         private readonly getShoppingCartContentPriceAndReadyDatePresenter: GetShoppingCartContentPriceAndReadyDatePresenter,
         private readonly createEmptyShoppingCartPresenter: CreateEmptyShoppingCartPresenter,
         private readonly createEmptyShoppingCartUseCase: CreateEmptyShoppingCartUseCase,
+        private readonly addPokemonToShoppingCartPresenter: AddPokemonToShoppingCartPresenter,
         private readonly addPokemonToShoppingCartUseCase: AddPokemonToShoppingCartUseCase,
         private readonly removePokemonFromShoppingCartUseCase: RemovePokemonFromShoppingCartUseCase
     ) {
@@ -60,26 +65,42 @@ export class ShoppingCartController {
             shoppingCartRepository,
             pokemonRepository
         )
+        this.addPokemonToShoppingCartPresenter = addPokemonToShoppingCartPresenter
         this.removePokemonFromShoppingCartUseCase = new RemovePokemonFromShoppingCartUseCase(
             shoppingCartRepository,
             pokemonRepository
         )
-        this.getShoppingCartContentPriceAndReadyDateUseCase = new GetShoppingCartContentPriceAndReadyDateUseCase(shoppingCartRepository);
+        this.getShoppingCartContentPriceAndReadyDateUseCase = new GetShoppingCartContentPriceAndReadyDateUseCase(
+            shoppingCartRepository
+        )
     }
 
     @Post('/:shoppingCartId/pokemon/:pokemonId')
     async addPokemonToShoppingCart(
         @Param('pokemonId') pokemonId: string,
-        @Param('shoppingCartId') shoppingCartId: string
+        @Param('shoppingCartId') shoppingCartId: string,
+        @Res() response: Response
     ) {
         const input: AddPokemonToShoppingCartInput = {
             pokemonId: pokemonId,
             shoppingCartId: shoppingCartId,
         }
-        const useCaseOutput = await this.addPokemonToShoppingCartUseCase.execute(
-            input
-        )
-        return useCaseOutput
+
+        try {
+            const useCaseOutput = await this.addPokemonToShoppingCartUseCase.execute(
+                input
+            )
+            const formattedResponse = this.addPokemonToShoppingCartPresenter.present(
+                useCaseOutput
+            )
+            return response.status(200).json(formattedResponse)
+        } catch (e) {
+            const [
+                statusCode,
+                formattedErrorResponse,
+            ] = this.addPokemonToShoppingCartPresenter.presentOnError(e)
+            return response.status(statusCode).json(formattedErrorResponse)
+        }
     }
 
     @Delete('/:shoppingCartId/pokemon/:pokemonId')
@@ -107,18 +128,22 @@ export class ShoppingCartController {
         return this.createEmptyShoppingCartPresenter.present(useCaseOutput)
     }
 
-    @Get("/:shoppingCartId")
+    @Get('/:shoppingCartId')
     async getShoppingCartDetails(
-        @Param("shoppingCartId") shoppingCartId: string,
-        @Res() response: Response,
+        @Param('shoppingCartId') shoppingCartId: string,
+        @Res() response: Response
     ) {
         try {
-            const output: GetShoppingCartContentPriceAndReadyDateOutput = await this.getShoppingCartContentPriceAndReadyDateUseCase.execute({ shoppingCartId, now: new Date() });
-            const formattedResponse = this.getShoppingCartContentPriceAndReadyDatePresenter.present(output);
-            return response.status(200).json(formattedResponse);
+            const output: GetShoppingCartContentPriceAndReadyDateOutput = await this.getShoppingCartContentPriceAndReadyDateUseCase.execute(
+                { shoppingCartId, now: new Date() }
+            )
+            const formattedResponse = this.getShoppingCartContentPriceAndReadyDatePresenter.present(
+                output
+            )
+            return response.status(200).json(formattedResponse)
         } catch (e) {
-            console.log(e);
-            return response.status(500).json({ error: "unhandled error" });
+            console.log(e)
+            return response.status(500).json({ error: 'unhandled error' })
         }
     }
 }

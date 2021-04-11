@@ -1,8 +1,13 @@
 import { Service } from "typedi";
+import { ShoppingCart } from "../entities/shoppingCart.entity";
 import { AbstractShoppingCartRepository } from "../repositories/shoppingCart.repository";
 
+export interface CreateEmptyShoppingCartInput {
+    storeId: string;
+}
+
 export interface CreateEmptyShoppingCartOutput {
-    shoppingCartId: string;
+    shoppingCart: ShoppingCart;
 }
 
 
@@ -14,10 +19,10 @@ export class CreateEmptyShoppingCartUseCase {
         this.shoppingCartRepo = shoppingCartRepo;
     }
 
-    public async execute(): Promise<CreateEmptyShoppingCartOutput> {
+    public async execute(input: CreateEmptyShoppingCartInput): Promise<CreateEmptyShoppingCartOutput> {
     
-        const shoppingCartId = await this.shoppingCartRepo.createShoppingCart();
+        const shoppingCart = await this.shoppingCartRepo.createShoppingCart(input.storeId);
 
-        return { shoppingCartId: shoppingCartId };
+        return { shoppingCart: shoppingCart };
     }
 }

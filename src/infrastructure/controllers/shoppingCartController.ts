@@ -7,7 +7,10 @@ import {
   AddPokemonToShoppingCartInput,
   AddPokemonToShoppingCartUseCase,
 } from "../../domain/usecases/addPokemonToShoppingCart.useCase";
-import { CreateEmptyShoppingCartUseCase } from "../../domain/usecases/createEmptyShoppingCart.useCase";
+import { 
+  CreateEmptyShoppingCartInput,
+  CreateEmptyShoppingCartUseCase 
+} from "../../domain/usecases/createEmptyShoppingCart.useCase";
 import { CreateEmptyShoppingCartPresenter } from "../presenters/createEmptyShoppingCart.presenter";
 import { PokemonRepositoryProxy } from "../repositoryProxies/pokemonRepository.proxy";
 import { ShoppingCartRepositoryProxy } from "../repositoryProxies/shoppingCartRepository.proxy";
@@ -47,9 +50,15 @@ export class ShoppingCartController {
     );
   }
 
-  @Post()
-  async createEmptyShoppingCart() {
-    const useCaseOutput = await this.createEmptyShoppingCartUseCase.execute();
+  @Post("/:storeId")
+  async createEmptyShoppingCart(
+    @Param("storeId") storeId: string
+  ) {
+
+    const useCaseInput : CreateEmptyShoppingCartInput = {
+      storeId: storeId
+    }
+    const useCaseOutput = await this.createEmptyShoppingCartUseCase.execute(useCaseInput);
     return this.createEmptyShoppingCartPresenter.present(useCaseOutput);
   }
 

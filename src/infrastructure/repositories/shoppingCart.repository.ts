@@ -1,7 +1,9 @@
 import { Service } from "typedi"
 import { Pokemon } from "../../domain/entities/pokemon.entity"
 import { ShoppingCart } from "../../domain/entities/shoppingCart.entity"
+import { StoreNotFoundError } from "../../domain/errors/store.errors"
 import { AbstractShoppingCartRepository } from "../../domain/repositories/shoppingCart.repository"
+import Store from "../mongo/store.model"
 
 const charSet =
 "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
@@ -30,26 +32,35 @@ export class DBShoppingCartRepository extends AbstractShoppingCartRepository {
     super()
 }
 
-    async getShoppingCartDetails(id: string) {
-        const shoppingCart = carts.find((cart) => cart.id === id)
+    async getShoppingCartDetails(shoppingCartId: string) {
+        const shoppingCart = carts.find((cart) => cart.shoppingCartId === shoppingCartId)
 
         if (!shoppingCart) {
-            throw new Error(`shoppingCart ${id} not found`)
+            throw new Error(`shoppingCart ${shoppingCartId} not found`)
         }
 
         return shoppingCart.pokemons
     }
 
-    async createShoppingCart() {
-        const id = randomString(8)
-        const shoppingCart: ShoppingCart = { id: id, pokemons: [] }
+    async createShoppingCart(storeId: string) {
+
+        try {
+            const store = <any>await this.getStoreById(storeId);
+        } catch (e) {
+            console.error(e);
+            throw new StoreNotFoundError()
+        }
+       
+
+        const shoppingCartId = randomString(8)
+        const shoppingCart: ShoppingCart = { storeId: storeId, shoppingCartId: shoppingCartId, pokemons: [] }
         carts.push(shoppingCart)
 
-        return id
+        return shoppingCart
     }
 
     async addPokemonToShoppingCart(shoppingCartId: string, pokemon: Pokemon) {
-        const shoppingCart = carts.find((cart) => cart.id === shoppingCartId)
+        const shoppingCart = carts.find((cart) => cart.shoppingCartId === shoppingCartId)
 
         if (!shoppingCart) {
             throw new Error(`shoppingCart ${shoppingCartId} not found`)
@@ -68,7 +79,7 @@ export class DBShoppingCartRepository extends AbstractShoppingCartRepository {
     }
 
     async removePokemonFromShoppingCart(shoppingCartId: string, pokemon: Pokemon) {
-        const shoppingCart = carts.find((cart) => cart.id === shoppingCartId)
+        const shoppingCart = carts.find((cart) => cart.shoppingCartId === shoppingCartId)
 
         if (!shoppingCart) {
             throw new Error(`shoppingCart ${shoppingCartId} not found`)
@@ -95,4 +106,10 @@ export class DBShoppingCartRepository extends AbstractShoppingCartRepository {
 
         return shoppingCart.pokemons
     }
+
+    async getStoreById(storeId: string): Promise< {id, availablePokemons}> {
+        const storeInfo = await Store.findById(storeId)
+        storeInfo.id = storeInfo._id.toString();
+        return storeInfo;
+      }
 }

@@ -1,13 +1,14 @@
 import { Service } from "typedi";
+import { ShoppingCart } from "../../domain/entities/shoppingCart.entity";
 import { CreateEmptyShoppingCartOutput } from "../../domain/usecases/createEmptyShoppingCart.useCase";
 
-type CreateEmptyShoppingCartPresenterOutput = { shoppingCartId: string };
+type CreateEmptyShoppingCartPresenterOutput = { shoppingCart: ShoppingCart };
 
 @Service()
 export class CreateEmptyShoppingCartPresenter {
     public present(useCaseOutput: CreateEmptyShoppingCartOutput): CreateEmptyShoppingCartPresenterOutput {
         return {
-            shoppingCartId: useCaseOutput.shoppingCartId
+            shoppingCart: useCaseOutput.shoppingCart
         }
     }
 }

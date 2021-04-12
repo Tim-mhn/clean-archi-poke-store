@@ -1,7 +1,8 @@
 import * as chai from 'chai'
 import { expect } from 'chai'
 import chaiAsPromised from 'chai-as-promised'
-import { fake } from 'sinon'
+import e from 'express'
+import Sinon, { fake } from 'sinon'
 import { PokemonType } from '../../../src/domain/entities/pokemon.entity'
 import { DBShoppingCartRepository } from '../../../src/infrastructure/repositories/shoppingCart.repository'
 chai.use(chaiAsPromised)
@@ -45,5 +46,34 @@ describe('DB ShoppingCartRepository - Add pokemon to shopping cart', () => {
             pokemonRepo.addPokemonToShoppingCart(shoppingCartId, fakePokemon)
 
         expect(addPokemonToCartFnThatWillThrow()).to.eventually.throw()
+    })
+})
+
+describe('DB ShoppingCartRepository - Create shopping empty shopping cart', () => {
+    it('should return a new empty shopping cart', async () => {
+        const shoppingCartRepo = new DBShoppingCartRepository()
+        const id = "randomStoreId"
+        const shoppingCartId = "randomShoppingCartId"
+        const availablePokemons = [{ quantity: 1, id: "1" }]
+        const store = { 
+            availablePokemons: availablePokemons,
+            id: id,
+        }
+
+        shoppingCartRepo.randomString = fake.returns(
+            shoppingCartId
+        )
+
+        const outputCart = await shoppingCartRepo.createEmptyShoppingCart(
+            store
+        )
+
+        const expectedOutput = {
+            shoppingCartId: shoppingCartId,
+            storeId: id,
+            pokemons: []
+        }
+
+        Sinon.assert.match(outputCart, expectedOutput)
     })
 })

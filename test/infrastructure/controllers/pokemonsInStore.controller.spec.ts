@@ -18,7 +18,6 @@ let usecase;
 let controller;
 
 
-
 describe('PokemonsInStoreController @Get /:storeId endpoint', () => {
     beforeEach(() => {
         presenter = Sinon.createStubInstance(GetQuantityOfPokemonAvailableInStoreAndPricePresenter);

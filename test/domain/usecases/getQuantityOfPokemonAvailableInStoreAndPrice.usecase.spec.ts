@@ -61,7 +61,7 @@ describe('Get quantity of pokemons available and price use case - execute functi
         Sinon.stub(usecase, "getAvailablePokemonsWithPriceAndQty").returns(1);
 
         // Execute
-        await usecase.execute(input);
+        await usecase.execute( input);
 
 
         // Expect

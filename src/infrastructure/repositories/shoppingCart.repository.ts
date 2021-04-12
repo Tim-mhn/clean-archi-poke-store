@@ -55,24 +55,20 @@ export class DBShoppingCartRepository extends AbstractShoppingCartRepository {
     }
 
     async addPokemonToShoppingCart(shoppingCartId: string, pokemon: Pokemon) {
-        const shoppingCart = carts.find(
-            (cart) => cart.shoppingCartId === shoppingCartId
+        const shoppingCartPokemons = await this.getShoppingCartDetails(
+            shoppingCartId
         )
 
-        if (!shoppingCart) {
-            throw new Error(`shoppingCart ${shoppingCartId} not found`)
-        }
-
-        const pokemonInCart = shoppingCart.pokemons.find(
+        const pokemonInCart = shoppingCartPokemons.find(
             (pokeInCart) => pokeInCart.pokemon.id === pokemon.id
         )
         if (!pokemonInCart) {
-            shoppingCart.pokemons.push({ pokemon: pokemon, quantity: 1 })
+            shoppingCartPokemons.push({ pokemon: pokemon, quantity: 1 })
         } else {
             pokemonInCart.quantity += 1
         }
 
-        return shoppingCart.pokemons
+        return shoppingCartPokemons
     }
 
     async removePokemonFromShoppingCart(

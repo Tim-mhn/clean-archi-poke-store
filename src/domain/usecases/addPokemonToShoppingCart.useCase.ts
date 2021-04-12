@@ -21,6 +21,11 @@ export class AddPokemonToShoppingCartUseCase {
         shoppingCartRepo: AbstractShoppingCartRepository,
         pokemonRepo: AbstractPokemonRepository
     ) {
+        if (!pokemonRepo || !shoppingCartRepo) {
+            throw new Error(
+                'Error addPokemonToShoppingCartUseCase usecase constructor. One arg is null'
+            )
+        }
         this.shoppingCartRepo = shoppingCartRepo
         this.pokemonRepo = pokemonRepo
     }

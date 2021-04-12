@@ -9,26 +9,26 @@ const charSet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
 const carts: ShoppingCart[] = []
 var idHashTable = {}
 
-function randomString(len) {
-    while (true) {
-        // dangerous, but in statistics we trust
-        var randomString = ''
-        for (var i = 0; i < len; i++) {
-            var randomPoz = Math.floor(Math.random() * charSet.length)
-            randomString += charSet.substring(randomPoz, randomPoz + 1)
-        }
-
-        if (!(randomString in idHashTable)) {
-            idHashTable[randomString] = true
-            return randomString
-        }
-    }
-}
-
 @Service()
 export class DBShoppingCartRepository extends AbstractShoppingCartRepository {
     constructor() {
         super()
+    }
+
+    randomString(len) {
+        while (true) {
+            // dangerous, but in statistics we trust
+            var randomString = ''
+            for (var i = 0; i < len; i++) {
+                var randomPoz = Math.floor(Math.random() * charSet.length)
+                randomString += charSet.substring(randomPoz, randomPoz + 1)
+            }
+
+            if (!(randomString in idHashTable)) {
+                idHashTable[randomString] = true
+                return randomString
+            }
+        }
     }
 
     async getShoppingCartDetails(shoppingCartId: string) {
@@ -44,7 +44,7 @@ export class DBShoppingCartRepository extends AbstractShoppingCartRepository {
     }
 
     async createEmptyShoppingCart(store: Store) {
-        const shoppingCartId = randomString(8)
+        const shoppingCartId = this.randomString(8)
         const shoppingCart: ShoppingCart = {
             storeId: store.id,
             shoppingCartId: shoppingCartId,

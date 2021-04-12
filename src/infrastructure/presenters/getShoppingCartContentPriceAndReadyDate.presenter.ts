@@ -1,4 +1,3 @@
-import e from "express";
 import { Service } from "typedi";
 import { ShoppingCartNotFoundError } from "../../domain/errors/shoppingCart.errors";
 import { GetShoppingCartContentPriceAndReadyDateOutput } from "../../domain/usecases/getShoppingCartContentPriceAndReadyDate.usecase";

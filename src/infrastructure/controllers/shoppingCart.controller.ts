@@ -129,7 +129,7 @@ export class ShoppingCartController {
     }
 
     @Get('/:shoppingCartId')
-    async getShoppingCartDetails(
+    async getShoppingCartContentPriceAndReadyDate(
         @Param('shoppingCartId') shoppingCartId: string,
         @Res() response: Response
     ) {
@@ -142,8 +142,8 @@ export class ShoppingCartController {
             )
             return response.status(200).json(formattedResponse)
         } catch (e) {
-            console.log(e)
-            return response.status(500).json({ error: 'unhandled error' })
+            const [statusCode, errorMeformattedErrorResponsessage] = this.getShoppingCartContentPriceAndReadyDatePresenter.presentOnError(e);
+            return response.status(<number>statusCode).json(errorMeformattedErrorResponsessage)
         }
     }
 }

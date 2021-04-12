@@ -51,15 +51,15 @@ export class GetShoppingCartContentPriceAndReadyDateUseCase {
             }
     }
 
-    pokemonsWithUnitPriceAndQuantityInfo(pokemonsInCart: PokemonInCart[]): {pokemon: {name, id}, price, quantity}[] {
+    pokemonsWithUnitPriceAndQuantityInfo(pokemonsInCart: PokemonInCart[]): {pokemon: {name, id}, price: number, quantity: number}[] {
         return pokemonsInCart.map(poke => {
-            const price = this.calculatePokePriceUsecase.execute(poke.pokemon);
+            const { price } = this.calculatePokePriceUsecase.execute(poke.pokemon);
             return {
                 pokemon: {
                     name: poke.pokemon.name,
                     id: poke.pokemon.id,
                 },
-                price,
+                price: price,
                 quantity: poke.quantity
             }
         });

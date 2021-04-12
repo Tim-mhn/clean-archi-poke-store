@@ -3,22 +3,31 @@ import { GetShoppingCartContentPriceAndReadyDateOutput } from "../../domain/usec
 
 @Service()
 export class GetShoppingCartContentPriceAndReadyDatePresenter {
-    constructor () {
+  constructor() {}
 
-    }
+  present(input: GetShoppingCartContentPriceAndReadyDateOutput) {
+    const formattedPokemonsWithPrice = input.pokemons.map((pokePriceQty) => {
+      return {
+        pokemon: {
+          id: pokePriceQty.pokemon.id,
+          name: pokePriceQty.pokemon.name,
+        },
+        unitPrice: pokePriceQty.price,
+        quantity: pokePriceQty.quantity,
+      };
+    });
+    return {
+      pokemons: formattedPokemonsWithPrice,
+      cartPrice: input.price,
+      readyDate: input.readyDate,
+      cartId: input.shoppingCartId,
+    };
+  }
 
-    present(input: GetShoppingCartContentPriceAndReadyDateOutput) {
-        return {
-            pokemons: input.pokemons,
-            cartPrice: input.price,
-            readyDate: input.readyDate,
-            cartId: input.shoppingCartId
-        }
-    }
-
-    presentOnError(error: Error) {
-        const statusCode = 500;
-        const errorMessage = "Unhandled error when getting shopping cart info (content, price, ready date)";
-        return [statusCode, { error: errorMessage }];
-    }
-}   
+  presentOnError(error: Error) {
+    const statusCode = 500;
+    const errorMessage =
+      "Unhandled error when getting shopping cart info (content, price, ready date)";
+    return [statusCode, { error: errorMessage }];
+  }
+}

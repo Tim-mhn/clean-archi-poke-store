@@ -2,6 +2,7 @@ import { Service } from 'typedi'
 import { Pokemon } from '../../domain/entities/pokemon.entity'
 import { ShoppingCart } from '../../domain/entities/shoppingCart.entity'
 import { Store } from '../../domain/entities/store.entity'
+import { ShoppingCartNotFoundError } from '../../domain/errors/shoppingCart.errors'
 import { AbstractShoppingCartRepository } from '../../domain/repositories/shoppingCart.repository'
 
 const charSet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
@@ -36,7 +37,7 @@ export class DBShoppingCartRepository extends AbstractShoppingCartRepository {
         )
 
         if (!shoppingCart) {
-            throw new Error(`shoppingCart ${shoppingCartId} not found`)
+            throw new ShoppingCartNotFoundError(`shoppingCart ${shoppingCartId} not found`)
         }
 
         return shoppingCart.pokemons

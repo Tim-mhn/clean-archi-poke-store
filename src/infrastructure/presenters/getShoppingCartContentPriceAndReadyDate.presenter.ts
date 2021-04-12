@@ -1,4 +1,6 @@
+import e from "express";
 import { Service } from "typedi";
+import { ShoppingCartNotFoundError } from "../../domain/errors/shoppingCart.errors";
 import { GetShoppingCartContentPriceAndReadyDateOutput } from "../../domain/usecases/getShoppingCartContentPriceAndReadyDate.usecase";
 
 @Service()
@@ -25,9 +27,14 @@ export class GetShoppingCartContentPriceAndReadyDatePresenter {
   }
 
   presentOnError(error: Error) {
-    const statusCode = 500;
-    const errorMessage =
+    let statusCode = 500;
+    let errorMessage =
       "Unhandled error when getting shopping cart info (content, price, ready date)";
+    if (error instanceof ShoppingCartNotFoundError) {
+      statusCode = 403;
+      errorMessage = error.message;
+    }
+
     return [statusCode, { error: errorMessage }];
   }
 }

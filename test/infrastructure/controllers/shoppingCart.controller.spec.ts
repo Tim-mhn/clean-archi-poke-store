@@ -12,6 +12,7 @@ import { ShoppingCartController } from '../../../src/infrastructure/controllers/
 import { AddPokemonToShoppingCartPresenter } from '../../../src/infrastructure/presenters/addPokemonToShoppingCart.presenter'
 import { CreateEmptyShoppingCartPresenter } from '../../../src/infrastructure/presenters/createEmptyShoppingCart.presenter'
 import { GetQuantityOfPokemonAvailableInStoreAndPricePresenter } from '../../../src/infrastructure/presenters/getQuantityOfPokemonAvailableInStoreAndPrice.presenter'
+import { GetShoppingCartContentPriceAndReadyDatePresenter } from '../../../src/infrastructure/presenters/getShoppingCartContentPriceAndReadyDate.presenter'
 import { PokemonRepositoryProxy } from '../../../src/infrastructure/repositoryProxies/pokemonRepository.proxy'
 import { ShoppingCartRepositoryProxy } from '../../../src/infrastructure/repositoryProxies/shoppingCartRepository.proxy'
 import { StoreRepositoryProxy } from '../../../src/infrastructure/repositoryProxies/storeRepository.proxy'
@@ -20,6 +21,7 @@ chai.use(sinonChai)
 let createEmptyShoppingCartPresenter
 let createEmptyShoppingCartUseCase
 let addPokemonToShoppingCartPresenter
+let getShoppingCartContentPriceAndReadyDatePresenter;
 let addPokemonToShoppingCartUseCase
 let removePokemonFromShoppingCartUseCase
 let shoppingCartRepo
@@ -36,6 +38,7 @@ describe('ShoppingCartController @Post :shoppingCartId/pokemon/:pokemonId endpoi
         addPokemonToShoppingCartPresenter = Sinon.createStubInstance(
             AddPokemonToShoppingCartPresenter
         )
+        getShoppingCartContentPriceAndReadyDatePresenter = Sinon.createStubInstance(GetShoppingCartContentPriceAndReadyDatePresenter);
         shoppingCartRepo = Sinon.createStubInstance(
             ShoppingCartRepositoryProxy.getInstance()
         )
@@ -49,6 +52,7 @@ describe('ShoppingCartController @Post :shoppingCartId/pokemon/:pokemonId endpoi
             (shoppingCartRepo as unknown) as AbstractShoppingCartRepository,
             (pokeRepo as unknown) as AbstractPokemonRepository,
             (storeRepo as unknown) as AbstractStoreRepository,
+            (getShoppingCartContentPriceAndReadyDatePresenter as unknown) as GetShoppingCartContentPriceAndReadyDatePresenter,
             (createEmptyShoppingCartPresenter as unknown) as CreateEmptyShoppingCartPresenter,
             (createEmptyShoppingCartUseCase as unknown) as CreateEmptyShoppingCartUseCase,
             (addPokemonToShoppingCartPresenter as unknown) as AddPokemonToShoppingCartPresenter,

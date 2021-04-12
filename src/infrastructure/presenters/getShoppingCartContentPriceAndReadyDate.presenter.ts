@@ -15,4 +15,10 @@ export class GetShoppingCartContentPriceAndReadyDatePresenter {
             cartId: input.shoppingCartId
         }
     }
+
+    presentOnError(error: Error) {
+        const statusCode = 500;
+        const errorMessage = "Unhandled error when getting shopping cart info (content, price, ready date)";
+        return [statusCode, { error: errorMessage }];
+    }
 }   

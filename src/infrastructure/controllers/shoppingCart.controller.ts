@@ -131,11 +131,12 @@ export class ShoppingCartController {
     @Get('/:shoppingCartId')
     async getShoppingCartContentPriceAndReadyDate(
         @Param('shoppingCartId') shoppingCartId: string,
+        @QueryParam('date') date: Date,
         @Res() response: Response
     ) {
         try {
             const output: GetShoppingCartContentPriceAndReadyDateOutput = await this.getShoppingCartContentPriceAndReadyDateUseCase.execute(
-                { shoppingCartId, now: new Date() }
+                { shoppingCartId, now: date }
             )
             const formattedResponse = this.getShoppingCartContentPriceAndReadyDatePresenter.present(
                 output

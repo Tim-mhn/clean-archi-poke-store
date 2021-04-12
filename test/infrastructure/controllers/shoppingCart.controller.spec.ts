@@ -257,9 +257,13 @@ describe("Shopping Cart Controller - @Get ShoppingCartDetails (content, price, e
       }),
     };
 
-    await (<ShoppingCartController>(
-      controller
-    )).getShoppingCartContentPriceAndReadyDate(shoppingCartId, <any>res);
+    await(
+      <ShoppingCartController>controller
+    ).getShoppingCartContentPriceAndReadyDate(
+      shoppingCartId,
+      new Date(),
+      <any>res
+    );
 
     expect(controller.getShoppingCartContentPriceAndReadyDateUseCase.execute).to
       .be.calledOnce;
@@ -277,7 +281,7 @@ describe("Shopping Cart Controller - @Get ShoppingCartDetails (content, price, e
 
     await (<ShoppingCartController>(
       controller
-    )).getShoppingCartContentPriceAndReadyDate(shoppingCartId, <any>res);
+    )).getShoppingCartContentPriceAndReadyDate(shoppingCartId, new Date(), <any>res);
 
     expect(res.status).to.be.calledOnceWith(200);
   });
@@ -298,9 +302,13 @@ describe("Shopping Cart Controller - @Get ShoppingCartDetails (content, price, e
     ).returns(presenterOutput);
     controller.getShoppingCartContentPriceAndReadyDatePresenter = getShoppingCartContentPriceAndReadyDatePresenter;
 
-    await (<ShoppingCartController>(
-      controller
-    )).getShoppingCartContentPriceAndReadyDate(shoppingCartId, <any>res);
+    await(
+      <ShoppingCartController>controller
+    ).getShoppingCartContentPriceAndReadyDate(
+      shoppingCartId,
+      new Date(),
+      <any>res
+    );
 
     expect(res.status().json).to.be.calledOnceWith(presenterOutput);
   });
@@ -333,9 +341,13 @@ describe("Shopping Cart Controller - @Get ShoppingCartDetails (content, price, e
     controller.getShoppingCartContentPriceAndReadyDateUseCase = usecase;
 
     // Execute call
-    await (<ShoppingCartController>(
-      controller
-    )).getShoppingCartContentPriceAndReadyDate(shoppingCartId, <any>res);
+    await(
+      <ShoppingCartController>controller
+    ).getShoppingCartContentPriceAndReadyDate(
+      shoppingCartId,
+      new Date(),
+      <any>res
+    );
 
     expect(
       controller.getShoppingCartContentPriceAndReadyDatePresenter.presentOnError

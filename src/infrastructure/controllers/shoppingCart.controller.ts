@@ -63,7 +63,8 @@ export class ShoppingCartController {
         this.createEmptyShoppingCartPresenter = createEmptyShoppingCartPresenter
         this.addPokemonToShoppingCartUseCase = new AddPokemonToShoppingCartUseCase(
             shoppingCartRepository,
-            pokemonRepository
+            pokemonRepository,
+            storeRepository
         )
         this.addPokemonToShoppingCartPresenter = addPokemonToShoppingCartPresenter
         this.removePokemonFromShoppingCartUseCase = new RemovePokemonFromShoppingCartUseCase(
@@ -143,8 +144,15 @@ export class ShoppingCartController {
             )
             return response.status(200).json(formattedResponse)
         } catch (e) {
-            const [statusCode, errorMeformattedErrorResponsessage] = this.getShoppingCartContentPriceAndReadyDatePresenter.presentOnError(e);
-            return response.status(<number>statusCode).json(errorMeformattedErrorResponsessage)
+            const [
+                statusCode,
+                errorMeformattedErrorResponsessage,
+            ] = this.getShoppingCartContentPriceAndReadyDatePresenter.presentOnError(
+                e
+            )
+            return response
+                .status(<number>statusCode)
+                .json(errorMeformattedErrorResponsessage)
         }
     }
 }

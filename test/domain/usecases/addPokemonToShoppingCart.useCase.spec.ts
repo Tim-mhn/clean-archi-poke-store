@@ -4,10 +4,12 @@ import sinonChai from 'sinon-chai'
 import { AddPokemonToShoppingCartUseCase } from '../../../src/domain/usecases/addPokemonToShoppingCart.useCase'
 import { PokemonRepositoryProxy } from '../../../src/infrastructure/repositoryProxies/pokemonRepository.proxy'
 import { ShoppingCartRepositoryProxy } from '../../../src/infrastructure/repositoryProxies/shoppingCartRepository.proxy'
+import { StoreRepositoryProxy } from '../../../src/infrastructure/repositoryProxies/storeRepository.proxy'
 chai.use(sinonChai)
 
 let pokemonRepo
 let shoppingCartRepo
+let storeRepo
 let usecase
 
 describe('AddPokemonToShoppingCartUseCase - constructor', () => {
@@ -18,21 +20,38 @@ describe('AddPokemonToShoppingCartUseCase - constructor', () => {
         pokemonRepo = Sinon.createStubInstance(
             PokemonRepositoryProxy.getInstance()
         )
+        storeRepo = Sinon.createStubInstance(StoreRepositoryProxy.getInstance())
     })
 
     it('constructor should throw error if pokeRepo is null', () => {
         const nullPokeRepo = null
         const usecaseConstructorThatShouldThrow = () =>
-            new AddPokemonToShoppingCartUseCase(shoppingCartRepo, nullPokeRepo)
+            new AddPokemonToShoppingCartUseCase(
+                shoppingCartRepo,
+                nullPokeRepo,
+                storeRepo
+            )
         expect(usecaseConstructorThatShouldThrow).to.throw()
     })
 
-    it('constructor should throw error if shoppingCart is null', () => {
+    it('constructor should throw error if shoppingCartRepo is null', () => {
         const nullShoppingCartRepo = null
         const usecaseConstructorThatShouldThrow = () =>
             new AddPokemonToShoppingCartUseCase(
                 nullShoppingCartRepo,
-                pokemonRepo
+                pokemonRepo,
+                storeRepo
+            )
+        expect(usecaseConstructorThatShouldThrow).to.throw()
+    })
+
+    it('constructor should throw error if storeRepo is null', () => {
+        const nullStoreRepo = null
+        const usecaseConstructorThatShouldThrow = () =>
+            new AddPokemonToShoppingCartUseCase(
+                shoppingCartRepo,
+                pokemonRepo,
+                nullStoreRepo
             )
         expect(usecaseConstructorThatShouldThrow).to.throw()
     })
@@ -45,9 +64,11 @@ describe('Add pokemon to shopping cart use case - execute function', () => {
         pokemonRepo = Sinon.createStubInstance(
             PokemonRepositoryProxy.getInstance()
         )
+        storeRepo = Sinon.createStubInstance(StoreRepositoryProxy.getInstance())
         usecase = new AddPokemonToShoppingCartUseCase(
             shoppingCartRepo,
-            pokemonRepo
+            pokemonRepo,
+            storeRepo
         )
     })
 
@@ -55,6 +76,7 @@ describe('Add pokemon to shopping cart use case - execute function', () => {
         // Stubs
         const pokemonId = '1'
         const shoppingCartId = '1'
+        const storeId = 'akhsfA'
 
         const fakePokemon = {
             id: '2',
@@ -64,6 +86,18 @@ describe('Add pokemon to shopping cart use case - execute function', () => {
             level: 1,
             stats: 405,
         }
+
+        const fakeStorePokemons = [
+            {
+                quantity: 15,
+                id: '1',
+            },
+            {
+                quantity: 5,
+                id: '2',
+            },
+        ]
+
         const input = {
             pokemonId: pokemonId,
             shoppingCartId: shoppingCartId,
@@ -71,13 +105,18 @@ describe('Add pokemon to shopping cart use case - execute function', () => {
         const storeRepoAvailablePokemons = [{ shoppingCart: [] }]
         shoppingCartRepo = {
             addPokemonToShoppingCart: fake.returns(storeRepoAvailablePokemons),
+            getShoppingCartStoreId: fake.returns(storeId),
         }
         pokemonRepo = {
             getPokemonDetailsById: fake.returns(fakePokemon),
         }
+        storeRepo = {
+            getAvailablePokemonsFromStore: fake.returns(fakeStorePokemons),
+        }
         usecase = new AddPokemonToShoppingCartUseCase(
             shoppingCartRepo,
-            pokemonRepo
+            pokemonRepo,
+            storeRepo
         )
 
         // Execute
@@ -94,6 +133,7 @@ describe('Add pokemon to shopping cart use case - execute function', () => {
         // Stubs
         const pokemonId = '1'
         const shoppingCartId = '1'
+        const storeId = 'akhsfA'
 
         const fakePokemon = {
             id: '2',
@@ -103,6 +143,18 @@ describe('Add pokemon to shopping cart use case - execute function', () => {
             level: 1,
             stats: 405,
         }
+
+        const fakeStorePokemons = [
+            {
+                quantity: 15,
+                id: '1',
+            },
+            {
+                quantity: 5,
+                id: '2',
+            },
+        ]
+
         const input = {
             pokemonId: pokemonId,
             shoppingCartId: shoppingCartId,
@@ -110,13 +162,18 @@ describe('Add pokemon to shopping cart use case - execute function', () => {
         const storeRepoAvailablePokemons = [{ shoppingCart: [] }]
         shoppingCartRepo = {
             addPokemonToShoppingCart: fake.returns(storeRepoAvailablePokemons),
+            getShoppingCartStoreId: fake.returns(storeId),
         }
         pokemonRepo = {
             getPokemonDetailsById: fake.returns(fakePokemon),
         }
+        storeRepo = {
+            getAvailablePokemonsFromStore: fake.returns(fakeStorePokemons),
+        }
         usecase = new AddPokemonToShoppingCartUseCase(
             shoppingCartRepo,
-            pokemonRepo
+            pokemonRepo,
+            storeRepo
         )
 
         // Execute
@@ -126,7 +183,8 @@ describe('Add pokemon to shopping cart use case - execute function', () => {
         Sinon.assert.calledOnceWithExactly(
             shoppingCartRepo.addPokemonToShoppingCart,
             shoppingCartId,
-            fakePokemon
+            fakePokemon,
+            15
         )
     })
 
@@ -134,6 +192,7 @@ describe('Add pokemon to shopping cart use case - execute function', () => {
         // Stubs
         const pokemonId = '1'
         const shoppingCartId = '1'
+        const storeId = 'akhsfA'
 
         const fakePokemon = {
             id: '2',
@@ -143,20 +202,36 @@ describe('Add pokemon to shopping cart use case - execute function', () => {
             level: 1,
             stats: 405,
         }
+
+        const fakeStorePokemons = [
+            {
+                quantity: 15,
+                id: '1',
+            },
+            {
+                quantity: 5,
+                id: '2',
+            },
+        ]
         const input = {
             pokemonId: pokemonId,
             shoppingCartId: shoppingCartId,
         }
         const emptyShoppingCart = [{ shoppingCart: [] }]
         shoppingCartRepo = {
+            getShoppingCartStoreId: fake.returns(storeId),
             addPokemonToShoppingCart: fake.returns(emptyShoppingCart),
         }
         pokemonRepo = {
             getPokemonDetailsById: fake.returns(fakePokemon),
         }
+        storeRepo = {
+            getAvailablePokemonsFromStore: fake.returns(fakeStorePokemons),
+        }
         usecase = new AddPokemonToShoppingCartUseCase(
             shoppingCartRepo,
-            pokemonRepo
+            pokemonRepo,
+            storeRepo
         )
 
         // Execute

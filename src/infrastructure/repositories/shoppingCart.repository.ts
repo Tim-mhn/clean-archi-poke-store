@@ -2,7 +2,10 @@ import { Service } from 'typedi'
 import { Pokemon } from '../../domain/entities/pokemon.entity'
 import { ShoppingCart } from '../../domain/entities/shoppingCart.entity'
 import { Store } from '../../domain/entities/store.entity'
-import { ShoppingCartNotFoundError } from '../../domain/errors/shoppingCart.errors'
+import {
+    PokemonNotAvailableInStoreError,
+    ShoppingCartNotFoundError,
+} from '../../domain/errors/shoppingCart.errors'
 import { AbstractShoppingCartRepository } from '../../domain/repositories/shoppingCart.repository'
 
 const charSet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
@@ -31,13 +34,29 @@ export class DBShoppingCartRepository extends AbstractShoppingCartRepository {
         }
     }
 
+    async getShoppingCartStoreId(shoppingCartId: string) {
+        const shoppingCart = carts.find(
+            (cart) => cart.shoppingCartId === shoppingCartId
+        )
+
+        if (!shoppingCart) {
+            throw new ShoppingCartNotFoundError(
+                `shoppingCart ${shoppingCartId} not found`
+            )
+        }
+
+        return shoppingCart.storeId
+    }
+
     async getShoppingCartDetails(shoppingCartId: string) {
         const shoppingCart = carts.find(
             (cart) => cart.shoppingCartId === shoppingCartId
         )
 
         if (!shoppingCart) {
-            throw new ShoppingCartNotFoundError(`shoppingCart ${shoppingCartId} not found`)
+            throw new ShoppingCartNotFoundError(
+                `shoppingCart ${shoppingCartId} not found`
+            )
         }
 
         return shoppingCart.pokemons
@@ -55,7 +74,11 @@ export class DBShoppingCartRepository extends AbstractShoppingCartRepository {
         return shoppingCart
     }
 
-    async addPokemonToShoppingCart(shoppingCartId: string, pokemon: Pokemon) {
+    async addPokemonToShoppingCart(
+        shoppingCartId: string,
+        pokemon: Pokemon,
+        quantityOfPokemonAvailableInStore: number
+    ) {
         const shoppingCartPokemons = await this.getShoppingCartDetails(
             shoppingCartId
         )
@@ -63,6 +86,22 @@ export class DBShoppingCartRepository extends AbstractShoppingCartRepository {
         const pokemonInCart = shoppingCartPokemons.find(
             (pokeInCart) => pokeInCart.pokemon.id === pokemon.id
         )
+
+        const newQuantityOfPokemonInStore = pokemonInCart
+            ? pokemonInCart.quantity + 1
+            : 1
+
+        if (newQuantityOfPokemonInStore > quantityOfPokemonAvailableInStore) {
+            const errorMessage =
+                quantityOfPokemonAvailableInStore > 0
+                    ? 'in the quantity you want'
+                    : ''
+            throw new PokemonNotAvailableInStoreError(
+                `pokemon ${pokemon.name} is not available in store ` +
+                    errorMessage
+            )
+        }
+
         if (!pokemonInCart) {
             shoppingCartPokemons.push({ pokemon: pokemon, quantity: 1 })
         } else {

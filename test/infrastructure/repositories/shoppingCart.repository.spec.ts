@@ -1,7 +1,6 @@
 import * as chai from 'chai'
 import { expect } from 'chai'
 import chaiAsPromised from 'chai-as-promised'
-import e from 'express'
 import Sinon, { fake } from 'sinon'
 import { PokemonType } from '../../../src/domain/entities/pokemon.entity'
 import { DBShoppingCartRepository } from '../../../src/infrastructure/repositories/shoppingCart.repository'
@@ -20,6 +19,8 @@ describe('DB ShoppingCartRepository - Add pokemon to shopping cart', () => {
     it('should return a cart with quantity updated', async () => {
         const shoppingCartRepo = new DBShoppingCartRepository()
         const shoppingCartId = '1'
+        const quantityOfPokemonAvailable = 3
+        const fakeStoreId = '1aBjkhsfd';
 
         const fakeShoppingCartPokemons = [{ pokemon: fakePokemon, quantity: 1 }]
 
@@ -27,9 +28,14 @@ describe('DB ShoppingCartRepository - Add pokemon to shopping cart', () => {
             fakeShoppingCartPokemons
         )
 
+        shoppingCartRepo.getShoppingCartStoreId = fake.returns(
+            fakeStoreId
+        )
+
         const outputCart = await shoppingCartRepo.addPokemonToShoppingCart(
             shoppingCartId,
-            fakePokemon
+            fakePokemon,
+            quantityOfPokemonAvailable
         )
         const outputQuantity = outputCart.find(
             (poke) => poke.pokemon.id === fakePokemon.id
@@ -41,9 +47,14 @@ describe('DB ShoppingCartRepository - Add pokemon to shopping cart', () => {
     it('Should throw error if no cart are found ', async () => {
         const pokemonRepo = new DBShoppingCartRepository()
         const shoppingCartId = '1'
+        const quantityOfPokemonAvailable = 3
 
         const addPokemonToCartFnThatWillThrow = () =>
-            pokemonRepo.addPokemonToShoppingCart(shoppingCartId, fakePokemon)
+            pokemonRepo.addPokemonToShoppingCart(
+                shoppingCartId,
+                fakePokemon,
+                quantityOfPokemonAvailable
+            )
 
         expect(addPokemonToCartFnThatWillThrow()).to.eventually.throw()
     })
@@ -52,26 +63,23 @@ describe('DB ShoppingCartRepository - Add pokemon to shopping cart', () => {
 describe('DB ShoppingCartRepository - Create shopping empty shopping cart', () => {
     it('should return a new empty shopping cart', async () => {
         const shoppingCartRepo = new DBShoppingCartRepository()
-        const id = "randomStoreId"
-        const shoppingCartId = "randomShoppingCartId"
-        const availablePokemons = [{ quantity: 1, id: "1" }]
-        const store = { 
+        const id = 'randomStoreId'
+        const shoppingCartId = 'randomShoppingCartId'
+
+        const availablePokemons = [{ quantity: 1, id: '1' }]
+        const store = {
             availablePokemons: availablePokemons,
             id: id,
         }
 
-        shoppingCartRepo.randomString = fake.returns(
-            shoppingCartId
-        )
+        shoppingCartRepo.randomString = fake.returns(shoppingCartId)
 
-        const outputCart = await shoppingCartRepo.createEmptyShoppingCart(
-            store
-        )
+        const outputCart = await shoppingCartRepo.createEmptyShoppingCart(store)
 
         const expectedOutput = {
             shoppingCartId: shoppingCartId,
             storeId: id,
-            pokemons: []
+            pokemons: [],
         }
 
         Sinon.assert.match(outputCart, expectedOutput)

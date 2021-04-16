@@ -11,6 +11,8 @@ export interface GetQuantityOfPokemonAvailableInStoreAndPriceInput {
 export interface GetQuantityOfPokemonAvailableInStoreAndPriceOutput {
     availablePokemonsWithPriceAndQuantity: { pokemon: Pokemon, price: number, quantity: number }[];
     id: string;
+    name: string;
+    location: string;
 }
 
 @Service()
@@ -30,12 +32,15 @@ export class GetQuantityOfPokemonAvailableInStoreAndPriceUseCase {
     }
 
     public async execute(input: GetQuantityOfPokemonAvailableInStoreAndPriceInput): Promise<GetQuantityOfPokemonAvailableInStoreAndPriceOutput> {
+        const storeInfo = await this.storeRepo.getStoreById(input.storeId);
         const availablePokemonNamesAndQuantity = await this.storeRepo.getAvailablePokemonsFromStore(input.storeId);
         const availablePokemonsWithPriceAndQuantity = await this.getAvailablePokemonsWithPriceAndQty(availablePokemonNamesAndQuantity)
 
         return {
             availablePokemonsWithPriceAndQuantity,
-            id: input.storeId
+            id: input.storeId,
+            name: storeInfo.name,
+            location: storeInfo.location,
         }
     }
 

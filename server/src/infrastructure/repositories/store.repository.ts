@@ -1,7 +1,8 @@
 import { Service } from "typedi";
+import { Store } from "../../domain/entities/store.entity";
 import { StoreNotFoundError } from "../../domain/errors/store.errors";
 import { AbstractStoreRepository } from "../../domain/repositories/store.repository";
-import Store from "../mongo/store.model";
+import StoreModel from "../mongo/store.model";
 
 
 @Service()
@@ -21,9 +22,19 @@ export class DBStoreRepository extends AbstractStoreRepository {
     }
   }
 
-  async getStoreById(storeId: string): Promise< {id, availablePokemons}> {
-    const storeInfo = await Store.findById(storeId)
+  async getStoreById(storeId: string) {
+    const storeInfo = await StoreModel.findById(storeId)
     storeInfo.id = storeInfo._id.toString();
+    console.log(storeInfo)
     return storeInfo;
   }
+
+  async getAllStores(): Promise<Store[]> {
+    let stores = await StoreModel.find({});
+    stores.forEach(st => this.mapMongoId(st));
+    return stores;
+  }
+
+  private mapMongoId = (store) => store.id = store._id.toString();
+  
 }

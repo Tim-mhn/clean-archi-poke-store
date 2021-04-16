@@ -1,0 +1,20 @@
+<div
+  fxLayout="column"
+  fxLayoutAlign="start center"
+  fxFlexFill
+  style="background-color: rgba(220, 220, 220, 0.6)"
+>
+  <div fxLayout="row" fxLayoutAlign="center center" fxFlexFill>
+    Welcome to the Poke Click'n'Collect Store
+  </div>
+
+  <div fxLayout="row" fxLayoutAlign="center center">Please select a store</div>
+
+  <div fxLayout="row wrap" fxLayoutGap="20px" fxLayoutAlign="start center" fxFlexFill>
+    <app-store-card
+      fxFlex="20"
+      *ngFor="let store of stores"
+      [store]="store"
+    ></app-store-card>
+  </div>
+</div>

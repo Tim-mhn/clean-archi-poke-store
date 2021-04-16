@@ -11,12 +11,14 @@ import { PokemonRepositoryProxy } from "../repositoryProxies/pokemonRepository.p
 import { CalculatePokemonPriceUseCase } from "../../domain/usecases/calculatePokemonPrice.useCase";
 import { StoreRepositoryProxy } from "../repositoryProxies/storeRepository.proxy";
 import { AbstractStoreRepository } from "../../domain/repositories/store.repository";
+import { GetAllStoresBasicInformationsUseCase } from "../../domain/usecases/getAllStoresBasicInformations.useCase";
 
-@JsonController('/pokemons-in-store')
+@JsonController('/stores')
 @Service()
 export class PokemonsInStoreController {
     private readonly getQuantityOfPokemonAvailableInStoreAndPriceUseCase;
     private readonly presenter;
+    private readonly getAllStoresBasicInformationsUseCase: GetAllStoresBasicInformationsUseCase;
     constructor(
         @Inject(PokemonRepositoryProxy.getInstance) pokemonRepository: AbstractPokemonRepository,
         @Inject(StoreRepositoryProxy.getInstance) storeRepository: AbstractStoreRepository,
@@ -24,9 +26,20 @@ export class PokemonsInStoreController {
     ) {
         this.getQuantityOfPokemonAvailableInStoreAndPriceUseCase = new GetQuantityOfPokemonAvailableInStoreAndPriceUseCase(pokemonRepository, storeRepository, new CalculatePokemonPriceUseCase());
         this.presenter = presenter;
+        this.getAllStoresBasicInformationsUseCase = new GetAllStoresBasicInformationsUseCase(storeRepository);
     }
 
-    @Get('/:storeId')
+    @Get()
+    public async getAllStores(@Res() response: Response) {
+        try {
+            const allStores = await this.getAllStoresBasicInformationsUseCase.execute();
+            return response.status(200).json(allStores);
+        } catch (e) {
+            console.error(e);
+            return response.status(500).json({error: e.message});
+        }
+    }
+    @Get('/:storeId/pokemons')
     public async getAvailablePokemonsWithPriceFromStore(
         @Param('storeId') storeId: string,
         @Res() response: Response) {

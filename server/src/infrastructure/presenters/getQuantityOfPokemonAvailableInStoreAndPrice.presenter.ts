@@ -17,6 +17,8 @@ type AvailablePokemon = {
 type GetQuantityOfPokemonAvailableInStoreAndPricePresenterOutput = {
   storeId: string;
   availablePokemons: AvailablePokemon[];
+  name: string;
+  location: string;
 };
 
 @Service()
@@ -28,6 +30,7 @@ export class GetQuantityOfPokemonAvailableInStoreAndPricePresenter {
   public present(
     useCaseOutput: GetQuantityOfPokemonAvailableInStoreAndPriceOutput
   ): GetQuantityOfPokemonAvailableInStoreAndPricePresenterOutput {
+
     const availablePokemons: AvailablePokemon[] = useCaseOutput.availablePokemonsWithPriceAndQuantity.map(
       (availablePoke) => {
         return {
@@ -42,9 +45,10 @@ export class GetQuantityOfPokemonAvailableInStoreAndPricePresenter {
         };
       }
     );
-
     return {
       storeId: useCaseOutput.id,
+      location: useCaseOutput.location,
+      name: useCaseOutput.name,
       availablePokemons,
     };
   }

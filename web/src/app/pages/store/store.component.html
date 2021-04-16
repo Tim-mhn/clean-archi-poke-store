@@ -1,0 +1,12 @@
+<div fxLayout="column">
+    <div fxLayout="row" fxLayoutAlign="center center" fxFlexFill>
+        Welcome to store {{ storeData.name }}
+    </div>
+    <div fxLayout="row" fxLayoutAlign="center center" fxFlexFill>
+        Time to get some pokemons !
+    </div>
+    {{ storeData.location}}
+    <div *ngFor="let poke of storeData.availablePokemons">
+        {{ poke.quantity }} {{ poke.pokemon.name}} {{ poke.unitPrice}}$
+    </div>
+</div>

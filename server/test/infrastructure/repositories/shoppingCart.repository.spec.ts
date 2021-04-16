@@ -70,6 +70,8 @@ describe('DB ShoppingCartRepository - Create shopping empty shopping cart', () =
         const store = {
             availablePokemons: availablePokemons,
             id: id,
+            name: "poke store",
+            location: "paris"
         }
 
         shoppingCartRepo.randomString = fake.returns(shoppingCartId)

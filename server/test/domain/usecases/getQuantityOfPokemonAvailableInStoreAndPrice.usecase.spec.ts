@@ -1,6 +1,7 @@
 import chai, { expect } from 'chai';
 import Sinon, { fake } from "sinon";
 import sinonChai from 'sinon-chai';
+import { Store } from '../../../src/domain/entities/store.entity';
 import { CalculatePokemonPriceUseCase } from '../../../src/domain/usecases/calculatePokemonPrice.useCase';
 import { GetQuantityOfPokemonAvailableInStoreAndPriceUseCase } from '../../../src/domain/usecases/getQuantityOfPokemonAvailableInStoreAndPrice.usecase';
 import { PokemonRepositoryProxy } from '../../../src/infrastructure/repositoryProxies/pokemonRepository.proxy';
@@ -54,8 +55,12 @@ describe('Get quantity of pokemons available and price use case - execute functi
         const storeId = "a4_caecd";
         const input = { storeId: storeId}
         const storeRepoAvailablePokemons = [ { quantity: 1, id: "1"}]
+        const fakeStore: Store = { id: storeId, name: "a great store", location: "PAris" };
+
         storeRepo = {
-            getAvailablePokemonsFromStore: fake.returns(storeRepoAvailablePokemons)
+            getAvailablePokemonsFromStore: fake.returns(storeRepoAvailablePokemons),
+            getStoreById: fake.returns(fakeStore)
+
         };
         usecase = new GetQuantityOfPokemonAvailableInStoreAndPriceUseCase(pokemonRepo, storeRepo, calculatePokemonPriceUsecase);
         Sinon.stub(usecase, "getAvailablePokemonsWithPriceAndQty").returns(1);
@@ -75,8 +80,10 @@ describe('Get quantity of pokemons available and price use case - execute functi
         const storeId = "a4_caecd";
         const input = { storeId: storeId }
         const storeRepoAvailablePokemons = [{ quantity: 1, id: "1" }]
+        const fakeStore: Store = { id: storeId, name: "a great store", location: "PAris"};
         storeRepo = {
-            getAvailablePokemonsFromStore: fake.returns(storeRepoAvailablePokemons)
+            getAvailablePokemonsFromStore: fake.returns(storeRepoAvailablePokemons),
+            getStoreById: fake.returns(fakeStore)
         };
         usecase.storeRepo = storeRepo;
         const getAvailablePokemonsWithPriceAndQtyRes = [{ quantity: 1, id: "1", price: 2}]

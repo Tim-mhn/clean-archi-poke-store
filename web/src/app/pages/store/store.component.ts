@@ -12,10 +12,17 @@ import { StoreService } from 'src/app/services/store.service';
 export class StoreComponent implements OnInit, OnDestroy {
   storeId: string;
 
-  storeData: StoreWithAvailablePokemons;
+  storeData: StoreWithAvailablePokemons ;
   private _storeDataSub: Subscription;
   constructor(private _storeService: StoreService,
-    private _actRoute: ActivatedRoute) { }
+    private _actRoute: ActivatedRoute) { 
+    this.storeData = {
+      availablePokemons: [],
+      id: null,
+      name: null,
+      location: null
+    };
+    }
 
   ngOnInit(): void {
     this.storeId = this._actRoute.snapshot.params.storeId;

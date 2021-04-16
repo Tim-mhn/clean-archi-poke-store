@@ -21,7 +21,7 @@ export class GetShoppingCartContentPriceAndReadyDatePresenter {
       pokemons: formattedPokemonsWithPrice,
       cartPrice: input.price,
       readyDate: input.readyDate,
-      cartId: input.shoppingCartId,
+      shoppingCartId: input.shoppingCartId,
     };
   }
 

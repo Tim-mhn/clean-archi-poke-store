@@ -33,7 +33,8 @@ export class PokemonsInStoreController {
     public async getAllStores(@Res() response: Response) {
         try {
             const allStores = await this.getAllStoresBasicInformationsUseCase.execute();
-            return response.status(200).json(allStores);
+            const formattedAllStores = this.presenter.presentAllStores(allStores);
+            return response.status(200).json(formattedAllStores);
         } catch (e) {
             console.error(e);
             return response.status(500).json({error: e.message});

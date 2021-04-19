@@ -1,0 +1,29 @@
+<div fxLayout="column" fxLayoutAlign="start center">
+  <div fxLayout="row" fxLayoutAlign="center center">
+    <h2>Your Cart</h2>
+  </div>
+
+  <div fxLayout="column" fxLayoutAlign="start stretch">
+    <div fxLayout="column">
+      {{ cartDetails.readyDate }}
+    </div>
+    <div
+      fxLayout="row"
+      fxLayoutAlign="start center"
+      fxFlexFill
+      *ngFor="let poke of cartDetails.pokemons"
+    >
+      <div fxFlex="25">
+        {{ poke.pokemon.name }}
+      </div>
+
+      <div fxFlex="25">
+        {{ poke.quantity }}
+      </div>
+
+      <div fxFlexFill>
+        {{ poke.unitPrice }}
+      </div>
+    </div>
+  </div>
+</div>

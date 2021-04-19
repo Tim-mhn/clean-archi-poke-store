@@ -1,5 +1,6 @@
 import { Service } from "typedi";
 import { PokemonType } from "../../domain/entities/pokemon.entity";
+import { Store } from "../../domain/entities/store.entity";
 import { StoreNotFoundError } from "../../domain/errors/store.errors";
 import { GetQuantityOfPokemonAvailableInStoreAndPriceOutput } from "../../domain/usecases/getQuantityOfPokemonAvailableInStoreAndPrice.usecase";
 
@@ -52,10 +53,18 @@ export class GetQuantityOfPokemonAvailableInStoreAndPricePresenter {
       availablePokemons,
     };
   }
-  // constructor() {
-  //   this.present = this.present.bind(this);
-  // }
+  
+  public presentAllStores(stores: Store[]) {
+    const storesWithStoreId = stores.map(store => {
+        return {
+          storeId: store.id,
+          location: store.location,
+          name: store.name
+        }
+    });
 
+    return storesWithStoreId;
+  }
 
 
 

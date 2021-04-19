@@ -20,10 +20,10 @@
                 <div fxLayout="column" fxLayoutAlign="start start" fxFlex>
                   <div>
                     {{
-                      cartPrice | currency: "EUR":"symbol":"1.2-2"
+                      cartDetails.cartPrice | currency: "EUR":"symbol":"1.2-2"
                     }}
                   </div>
-                  <div>{{ readyDate | date }}</div>
+                  <div>{{ cartDetails.readyDate | date }}</div>
                 </div>
               </div>
             </div>

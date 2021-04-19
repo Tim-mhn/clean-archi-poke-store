@@ -1,0 +1,11 @@
+<div
+    fxLayout="row"
+    fxLayoutAlign="center center"
+    fxFlex="100"
+    [ngSwitch]="asyncStatus$ | async"
+  >
+    <span *ngSwitchCase="Status.LOADING"><mat-spinner color="primary" diameter="30" mode="indeterminate"></mat-spinner></span>
+    <span *ngSwitchCase="Status.ERROR"
+      >There was an error loading the user.</span
+    >
+  </div>

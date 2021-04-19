@@ -17,6 +17,8 @@ import { CommonModule } from '@angular/common';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatDividerModule } from '@angular/material/divider';
 import { CartSumupComponent } from './components/cart-sumup/cart-sumup.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { LoadingComponent } from './components/loading/loading.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,8 @@ import { CartSumupComponent } from './components/cart-sumup/cart-sumup.component
     StoreComponent,
     StoreCardComponent,
     PokemonCardComponent,
-    CartSumupComponent
+    CartSumupComponent,
+    LoadingComponent
   ],
   imports: [
     BrowserModule,
@@ -38,7 +41,8 @@ import { CartSumupComponent } from './components/cart-sumup/cart-sumup.component
     MatCardModule,
     MatButtonModule,
     MatTableModule,
-    MatDividerModule
+    MatDividerModule,
+    MatProgressSpinnerModule
   ],
   providers: [],
   bootstrap: [AppComponent]

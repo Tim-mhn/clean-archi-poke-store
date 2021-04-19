@@ -13,26 +13,35 @@
     <div
       fxLayout="row wrap"
       fxLayoutAlign="start center"
-      fxLayoutGap="20px"
+      fxLayoutGap="20px grid"
       fxFlex="90"
     >
-      <app-pokemon-card
-        fxFlex="22"
-        *ngFor="let poke of storeData.availablePokemons"
-        [availablePokemonData]="poke"
-        [storeId]="storeId"
-      ></app-pokemon-card>
+      <ng-container *ngIf="storeAndPokes$.data | async as storeAndPokes">
+        <app-pokemon-card
+          fxFlex="22"
+          *ngFor="let poke of storeAndPokes.availablePokemons"
+          [availablePokemonData]="poke"
+          [storeId]="storeId"
+        ></app-pokemon-card>
+      </ng-container>
+
+      <div fxLayout="row" fxLayoutAlign="center center" fxFlex="100">
+        <app-loading [asyncStatus]="storeAndPokes$.status"></app-loading>
+      </div>
     </div>
 
     <div fxLayout="row" fxFlex>
-      <a
-        style="width: 100%"
-        [routerLink]="['/stores/', storeData.storeId, 'cart']"
-      >
-        <button style="width: 100%" mat-flat-button color="warn">
-          Go To Cart
-        </button>
-      </a>
+      <div fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="8px">
+        <app-cart-sumup [storeId]="storeId"></app-cart-sumup>
+
+        <div fxFlex>
+          <a [routerLink]="['/stores/', storeId, 'cart']" style="width: 100%">
+            <button style="width: 100%" mat-flat-button color="warn">
+              Go to cart
+            </button>
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 </div>

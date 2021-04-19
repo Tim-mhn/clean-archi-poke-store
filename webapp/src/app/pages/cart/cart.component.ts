@@ -24,12 +24,10 @@ export class CartComponent implements OnInit {
 
   ngOnInit(): void {
     this.storeId = this._actRoute.snapshot.params.storeId;
-    this._shoppingCartService.getShoppingCartDetailsFromStoreId(this.storeId)
-      .then(cartDetails => {
-        console.log(cartDetails);
-        this.cartDetails = cartDetails;
-      })
-      .catch(err => console.error(err));
+    this._shoppingCartService.storeIdToShoppingCartObs.subscribe(storeIdToShoppingCart => {
+      const cartDetails: ShoppingCart = storeIdToShoppingCart[this.storeId];
+      this.cartDetails = cartDetails;
+    });
 
 
   }

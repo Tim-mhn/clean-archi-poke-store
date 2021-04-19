@@ -10,11 +10,23 @@
 
   <div fxLayout="row" fxLayoutAlign="center center">Please select a store</div>
 
-  <div fxLayout="row wrap" fxLayoutGap="20px" fxLayoutAlign="start center" fxFlexFill>
+  <div
+    fxLayout="row wrap"
+    fxLayoutGap="20px"
+    fxLayoutAlign="start center"
+    fxFlexFill
+  >
     <app-store-card
       fxFlex="20"
-      *ngFor="let store of stores"
+      *ngFor="let store of _storeService.stores$.data | async"
       [store]="store"
     ></app-store-card>
+  </div>
+
+  <div
+    fxLayout="row"
+    fxLayoutAlign="center center"
+  >
+    <app-loading [asyncStatus]="_storeService.stores$.status"></app-loading>
   </div>
 </div>

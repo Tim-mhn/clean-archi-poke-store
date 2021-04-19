@@ -1,32 +1,43 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, defer, Observable, ReplaySubject } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { Pending, Status } from '../interfaces/pending.interface';
 import { Store, StoreWithAvailablePokemons } from '../interfaces/store.interface';
+import { PendingService } from './pending.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class StoreService {
   private readonly STORES_URI = "http://localhost:4000/stores";
+  public readonly stores$: Pending<Store[]>;
 
-  private _stores: BehaviorSubject<Store[]> = new BehaviorSubject([]);
-  public storesObs = this._stores.asObservable();
+  constructor(private http: HttpClient,
+              private _pendingService: PendingService) {
+    this.stores$ = this._getStoresPendingObservable();
 
-  constructor(private http: HttpClient) {
-    this.initiallyGetAllStores();
-
-  }
-
-
-  private initiallyGetAllStores(): void {
-    console.log('initally getting stores called');
-    this.http.get<Store[]>(this.STORES_URI).subscribe(stores => {
-      console.log(stores);
-      this._stores.next(stores);
-    });
   }
 
   public findById(storeId: string) {
     return this.http.get<StoreWithAvailablePokemons>(`${this.STORES_URI}/${storeId}/pokemons`);
   }
+
+  public getStoreAndAvailablePokemons(storeId: string) {
+    const storeWithAvailablePokemons$ = this.http.get<StoreWithAvailablePokemons>(`${this.STORES_URI}/${storeId}/pokemons`)
+    return this._pendingService.observableToPending(storeWithAvailablePokemons$);
+  }
+
+
+  private _getStoresPendingObservable(): Pending<Store[]> {
+    const allStores$ = this._getAllStoresRequest();
+    return this._pendingService.observableToPending(allStores$);
+  }
+
+
+
+  private _getAllStoresRequest() {
+    return this.http.get<Store[]>(this.STORES_URI);
+  }
+
 }

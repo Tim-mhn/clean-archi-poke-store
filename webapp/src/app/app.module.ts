@@ -19,6 +19,10 @@ import { MatDividerModule } from '@angular/material/divider';
 import { CartSumupComponent } from './components/cart-sumup/cart-sumup.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { LoadingComponent } from './components/loading/loading.component';
+import { FormsModule } from '@angular/forms';
+import { CheckoutComponent } from './pages/checkout/checkout.component';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from "@angular/material/form-field";
 
 @NgModule({
   declarations: [
@@ -29,7 +33,8 @@ import { LoadingComponent } from './components/loading/loading.component';
     StoreCardComponent,
     PokemonCardComponent,
     CartSumupComponent,
-    LoadingComponent
+    LoadingComponent,
+    CheckoutComponent
   ],
   imports: [
     BrowserModule,
@@ -42,7 +47,10 @@ import { LoadingComponent } from './components/loading/loading.component';
     MatButtonModule,
     MatTableModule,
     MatDividerModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule
   ],
   providers: [],
   bootstrap: [AppComponent]

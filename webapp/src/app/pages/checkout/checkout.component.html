@@ -1,0 +1,73 @@
+<div fxLayout="row" fxLayoutAlign="center start" fxLayoutGap="10px">
+  <div fxLayout="column" fxFlex="65">
+    <form (ngSubmit)="onSubmit()" #checkoutForm="ngForm">
+      <div fxLayout="column" fxLayoutAlign="start stretch" fxFlexFill>
+        <mat-form-field appearance="outline">
+          <mat-label for="name">Card Number</mat-label>
+          <input
+            matInput
+            type="text"
+            class="form-control"
+            id="cardNumber"
+            required
+            [(ngModel)]="formData.cardNumber"
+            name="cardNumber"
+            #cardNumber="ngModel"
+          />
+          <mat-error *ngIf="!cardNumber.valid || !cardNumber.pristine"
+            >Card Number is required</mat-error
+          >
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label for="name">CVV</mat-label>
+          <input
+            matInput
+            type="text"
+            class="form-control"
+            id="cardCVV"
+            required
+            [(ngModel)]="formData.cardCVV"
+            name="cardCVV"
+            #cardCVV="ngModel"
+          />
+
+          <mat-error *ngIf="!cardCVV.valid || !cardCVV.pristine"
+            >Card CVV is required</mat-error
+          >
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label for="name">Card Owner</mat-label>
+          <input
+            matInput
+            type="text"
+            class="form-control"
+            id="cardOwner"
+            required
+            [(ngModel)]="formData.cardOwner"
+            name="cardOwner"
+            #cardOwner="ngModel"
+          />
+
+          <mat-error *ngIf="!cardOwner.valid || !cardOwner.pristine"
+            >Card owner is required</mat-error
+          >
+        </mat-form-field>
+
+        <button
+          mat-flat-button
+          color="primary"
+          type="submit"
+          [disabled]="!checkoutForm.valid"
+        >
+          Pay
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div fxFlex>
+    <app-cart-sumup [storeId]="storeId"></app-cart-sumup>
+  </div>
+</div>

@@ -53,4 +53,8 @@ export class ShoppingCartService {
     return await this._getShoppingCartDetails(cartId);
   }
 
+  public getCartIdFromStoreId(storeId: string) {
+    return this.storeIdToCartId[storeId];
+  }
+
 }

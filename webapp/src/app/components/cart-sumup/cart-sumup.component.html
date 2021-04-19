@@ -1,31 +1,27 @@
 <mat-card style="width: 100%">
-          <!-- <mat-card-header>header</mat-card-header> -->
-          <mat-card-content>
-            <div
-              fxLayout="column"
-              fxLayoutAlign="start stretch"
-              fxLayoutGap="10px"
-            >
-              <button mat-flat-button color="primary">Checkout</button>
-              <a [routerLink]="['/stores/', storeId]" style="width: 100%">
-                <button mat-stroked-button color="primary" style="width: 100%">
-                  Keep shopping
-                </button>
-              </a>
-              <div fxLayout="row" fxLayoutAlign="start start">
-                <div fxLayout="column" fxLayoutAlign="start start" fxFlex="60">
-                  <div>Order Total</div>
-                  <div>Ready for pickup</div>
-                </div>
-                <div fxLayout="column" fxLayoutAlign="start start" fxFlex>
-                  <div>
-                    {{
-                      cartDetails.cartPrice | currency: "EUR":"symbol":"1.2-2"
-                    }}
-                  </div>
-                  <div>{{ cartDetails.readyDate | date }}</div>
-                </div>
-              </div>
-            </div>
-          </mat-card-content>
-        </mat-card>
+  <!-- <mat-card-header>header</mat-card-header> -->
+  <mat-card-content>
+    <div fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="10px">
+      <a [routerLink]="['/stores/', storeId, 'checkout']" style="width: 100%">
+        <button style="width: 100%" mat-flat-button color="primary">Checkout</button></a
+      >
+      <a [routerLink]="['/stores/', storeId]" style="width: 100%">
+        <button mat-stroked-button color="primary" style="width: 100%">
+          Keep shopping
+        </button>
+      </a>
+      <div fxLayout="row" fxLayoutAlign="start start">
+        <div fxLayout="column" fxLayoutAlign="start start" fxFlex="60">
+          <div>Order Total</div>
+          <div>Ready for pickup</div>
+        </div>
+        <div fxLayout="column" fxLayoutAlign="start start" fxFlex>
+          <div>
+            {{ cartDetails.cartPrice | currency: "EUR":"symbol":"1.2-2" }}
+          </div>
+          <div>{{ cartDetails.readyDate | date }}</div>
+        </div>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

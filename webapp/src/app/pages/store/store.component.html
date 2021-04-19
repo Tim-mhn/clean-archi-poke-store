@@ -1,13 +1,15 @@
 <div fxLayout="column" fxFlexFill>
-  <div fxLayout="row" fxLayoutAlign="center center" fxFlexFill>
-    <h1>Welcome to store {{ storeData.name }}</h1>
-  </div>
-  <div fxLayout="row" fxLayoutAlign="center center" fxFlexFill>
-    <span>{{ storeData.location }}</span>
-  </div>
-  <div fxLayout="row" fxLayoutAlign="center center" fxFlexFill>
-    <h3>Time to get some pokemons !</h3>
-  </div>
+  <ng-container *ngIf="storeAndPokes$.data | async as storeAndPokes">
+    <div fxLayout="row" fxLayoutAlign="center center" fxFlexFill>
+      <h1>Welcome to store {{ storeAndPokes.name }}</h1>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="center center" fxFlexFill>
+      <span>{{ storeAndPokes.location }}</span>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="center center" fxFlexFill>
+      <h3>Time to get some pokemons !</h3>
+    </div>
+  </ng-container>
 
   <div fxLayout="row" fxLayoutAlign="start start" fxFlexFill>
     <div

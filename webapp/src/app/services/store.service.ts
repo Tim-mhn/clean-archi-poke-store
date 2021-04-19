@@ -24,6 +24,7 @@ export class StoreService {
   }
 
   public getStoreAndAvailablePokemons(storeId: string) {
+    console.log('getStoreAndAvailablePokemons called')
     const storeWithAvailablePokemons$ = this.http.get<StoreWithAvailablePokemons>(`${this.STORES_URI}/${storeId}/pokemons`)
     return this._pendingService.observableToPending(storeWithAvailablePokemons$);
   }

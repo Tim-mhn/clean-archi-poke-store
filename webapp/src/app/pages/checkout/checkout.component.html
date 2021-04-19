@@ -65,6 +65,10 @@
         </button>
       </div>
     </form>
+
+    <app-loading [asyncStatus]="checkout$.status"></app-loading>
+
+    {{ checkout$.status | async }}
   </div>
 
   <div fxFlex>

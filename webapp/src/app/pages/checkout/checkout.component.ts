@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { of } from 'rxjs';
 import { CheckoutFormModel } from 'src/app/interfaces/checkout.interface';
+import { Pending, Status } from 'src/app/interfaces/pending.interface';
 import { CheckoutService } from 'src/app/services/checkout.service';
 import { ShoppingCartService } from 'src/app/services/shopping-cart.service';
 
@@ -17,8 +19,13 @@ export class CheckoutComponent implements OnInit {
     storeId: ''
   };
   storeId: string;
+  public checkout$: Pending<any> = {
+    data: of(null),
+    status: of(Status.SUCCESS)
+  };
+
   constructor(private _activatedRoute: ActivatedRoute,
-              private _checkoutService: CheckoutService) {
+    private _checkoutService: CheckoutService) {
     this.storeId = this._activatedRoute.snapshot.params.storeId;
     this.formData.storeId = this.storeId;
   }
@@ -29,7 +36,8 @@ export class CheckoutComponent implements OnInit {
   log = (e) => console.log(e);
   onSubmit() {
     console.log(this.formData);
-    this._checkoutService.payShoppingCart(this.formData).then(() => console.log('success !')).catch(err => console.error(err));
+    this._checkoutService.payShoppingCart(this.formData).then(res => console.log(res))
+      .catch(err => console.error(err));
   }
 
 }

@@ -20,6 +20,7 @@ export class StoreComponent implements OnInit {
   ngOnInit(): void {
     this.storeId = this._actRoute.snapshot.params.storeId;
     this.storeAndPokes$ = this._storeService.getStoreAndAvailablePokemons(this.storeId);
+    console.log(this.storeAndPokes$);
   }
 
  

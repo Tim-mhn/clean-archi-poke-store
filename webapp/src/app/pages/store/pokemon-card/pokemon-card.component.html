@@ -1,18 +1,18 @@
     <mat-card
       fxLayout="column"
-      fxLayoutAlign="center center"
+      fxLayoutAlign="start stretch"
       fxFlex="45"
     >
-      <mat-card-title>{{ pokemonData.pokemon.name }} </mat-card-title>
+      <mat-card-title>{{ pokemonData.pokemon.name | titlecase}} </mat-card-title>
       <mat-card-content>
-        <div fxLayout="column" fxLayoutAlign="center center">
-          <div>{{ pokemonData.unitPrice }}€</div>
-          <div>{{ pokemonData.quantity }} remaining</div>
+        <div fxLayout="column" fxLayoutAlign="end start">
+          <div style="color: red; font-weight: bold;">{{ pokemonData.unitPrice }}€</div>
+          <div style="color: grey; font-style: italic;">{{ pokemonData.quantity }} remaining</div>
         </div>
       </mat-card-content>
 
       <mat-card-actions>
-              <button mat-raised-button color="primary" (click)="onAddToCart()">Add to cart</button>
+              <button style="width: 100%;" mat-raised-button color="primary" (click)="onAddToCart()">Add to cart</button>
 
       </mat-card-actions>
     </mat-card>

@@ -1,4 +1,4 @@
-import { BodyParam, Get, JsonController, Param, QueryParam, Res } from "routing-controllers";
+import { BodyParam, Get, JsonController, Param, Post, QueryParam, Res } from "routing-controllers";
 import "reflect-metadata" // Don't forget to import this for each Controller
 import bodyParser = require("body-parser");
 import { Inject, Service } from "typedi";
@@ -49,14 +49,17 @@ export class PokemonsInStoreController {
         }
         try {
             const useCaseOutput = await this.getQuantityOfPokemonAvailableInStoreAndPriceUseCase.execute(input);
+            console.log('use case output', useCaseOutput)
             const formattedResponse = this.presenter.present(useCaseOutput)
             return response.status(200).json(formattedResponse);
         } catch (e) {
+            console.error(e);
             const [statusCode, formattedErrorResponse] = this.presenter.presentOnError(e);
             return response.status(statusCode).json(formattedErrorResponse);
         }
 
     }
+
 
 
 }

@@ -1,26 +1,38 @@
 <div fxLayout="column" fxFlexFill>
   <div fxLayout="row" fxLayoutAlign="center center" fxFlexFill>
-    Welcome to store {{ storeData.name }}
+    <h1>Welcome to store {{ storeData.name }}</h1>
   </div>
   <div fxLayout="row" fxLayoutAlign="center center" fxFlexFill>
-    Time to get some pokemons !
+    <span>{{ storeData.location }}</span>
   </div>
-  {{ storeData.location }}
-  <div
-    fxLayout="row wrap"
-    fxLayoutAlign="start center"
-    fxLayoutGap="20px"
-    fxFlexFill
-  >
-    <app-pokemon-card
-      fxFlex="45"
-      *ngFor="let poke of storeData.availablePokemons"
-      [availablePokemonData]="poke"
-      [storeId]="storeId"
-    ></app-pokemon-card>
+  <div fxLayout="row" fxLayoutAlign="center center" fxFlexFill>
+    <h3>Time to get some pokemons !</h3>
   </div>
 
-  <a [routerLink]="['/stores/', storeData.storeId, 'cart']">
-    <button mat-button>To Cart</button>
-  </a>
+  <div fxLayout="row" fxLayoutAlign="start start" fxFlexFill>
+    <div
+      fxLayout="row wrap"
+      fxLayoutAlign="start center"
+      fxLayoutGap="20px"
+      fxFlex="90"
+    >
+      <app-pokemon-card
+        fxFlex="22"
+        *ngFor="let poke of storeData.availablePokemons"
+        [availablePokemonData]="poke"
+        [storeId]="storeId"
+      ></app-pokemon-card>
+    </div>
+
+    <div fxLayout="row" fxFlex>
+      <a
+        style="width: 100%"
+        [routerLink]="['/stores/', storeData.storeId, 'cart']"
+      >
+        <button style="width: 100%" mat-flat-button color="warn">
+          Go To Cart
+        </button>
+      </a>
+    </div>
+  </div>
 </div>

@@ -10,8 +10,14 @@ import { ShoppingCartService } from 'src/app/services/shopping-cart.service';
 })
 export class CartComponent implements OnInit {
 
-  cartDetails: ShoppingCart;
+  cartDetails: ShoppingCart = {
+    pokemons: [],
+    cartPrice: null,
+    readyDate: null,
+    shoppingCartId: null
+  };
   storeId: string;
+  displayedColumns: string[] = ['name', 'unitPrice', 'quantity'];
   // private cartDetailsSub: Subscription;
   constructor(private _actRoute: ActivatedRoute,
     private _shoppingCartService: ShoppingCartService) { }
@@ -27,5 +33,7 @@ export class CartComponent implements OnInit {
 
 
   }
+
+
 
 }

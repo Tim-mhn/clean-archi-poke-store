@@ -21,7 +21,8 @@ export class CalculatePokemonPriceUseCase {
     }
 
     public execute(input: CalculatePokemonPriceInput): CalculatePokemonPriceOutput {
-        let type_coeff: number;
+        try {
+            let type_coeff: number;
 
         if (input.level <= 0) {
             throw new Error('Level cannot be negative');
@@ -44,7 +45,9 @@ export class CalculatePokemonPriceUseCase {
                 type_coeff = 1;
                 break;
             default:
-                throw new Error(`Can't calculate price for pokemon of type ${input.type}`);
+                console.warn(`Can't calculate price for pokemon of type ${input.type}`);
+                type_coeff = 1;
+                break;
         }
 
         let price: number = input.level * input.weight * type_coeff + input.stats
@@ -55,5 +58,9 @@ export class CalculatePokemonPriceUseCase {
         return {
             price: price
         }
+    } catch (e) {
+        console.error('Error in calculate pokemon price usecase', e);
+        throw new Error(e);
+    }
     }
 }

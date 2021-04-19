@@ -102,23 +102,7 @@ describe('Calculate Pokemon Price Use Case - Calculate poke price', () => {
 })
 
 describe('Calculate Pokemon price use case should throw error when input is incorrect', () => {
-    it('should throw error if type is null', () => {
-        const inputWithNullType = {
-            level: 1,
-            weight: 1,
-            type: null,
-            stats: 1
-
-        };
-
-        const usecase = new CalculatePokemonPriceUseCase();
-
-        const calculatePriceShouldThrowError = () => usecase.execute(inputWithNullType);
-
-        expect(calculatePriceShouldThrowError).to.throw();
-
-
-    });
+    
 
     it('should throw error if level is negative', () => {
         const inputWithNullType = {

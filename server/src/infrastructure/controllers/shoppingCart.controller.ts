@@ -1,6 +1,7 @@
 import { Response } from 'express'
 import 'reflect-metadata' // Don't forget to import this for each Controller
 import {
+    BodyParam,
     Delete,
     Get,
     JsonController,
@@ -36,11 +37,12 @@ import { PokemonRepositoryProxy } from '../repositoryProxies/pokemonRepository.p
 import { ShoppingCartRepositoryProxy } from '../repositoryProxies/shoppingCartRepository.proxy'
 import { StoreRepositoryProxy } from '../repositoryProxies/storeRepository.proxy'
 import bodyParser = require('body-parser')
+import { CheckoutUseCase } from '../../domain/usecases/checkout.useCase'
 
 @JsonController('/shopping-cart')
 @Service()
 export class ShoppingCartController {
-    getShoppingCartContentPriceAndReadyDateUseCase: GetShoppingCartContentPriceAndReadyDateUseCase
+    getShoppingCartContentPriceAndReadyDateUseCase: GetShoppingCartContentPriceAndReadyDateUseCase;
     constructor(
         @Inject(ShoppingCartRepositoryProxy.getInstance)
         private readonly shoppingCartRepository: AbstractShoppingCartRepository,
@@ -54,7 +56,7 @@ export class ShoppingCartController {
         private readonly createEmptyShoppingCartUseCase: CreateEmptyShoppingCartUseCase,
         private readonly addPokemonToShoppingCartPresenter: AddPokemonToShoppingCartPresenter,
         private readonly addPokemonToShoppingCartUseCase: AddPokemonToShoppingCartUseCase,
-        private readonly removePokemonFromShoppingCartUseCase: RemovePokemonFromShoppingCartUseCase
+        private readonly removePokemonFromShoppingCartUseCase: RemovePokemonFromShoppingCartUseCase,
     ) {
         this.createEmptyShoppingCartUseCase = new CreateEmptyShoppingCartUseCase(
             shoppingCartRepository,
@@ -73,7 +75,8 @@ export class ShoppingCartController {
         )
         this.getShoppingCartContentPriceAndReadyDateUseCase = new GetShoppingCartContentPriceAndReadyDateUseCase(
             shoppingCartRepository
-        )
+        );
+
     }
 
     @Post('/:shoppingCartId/pokemon/:pokemonId')
@@ -155,4 +158,6 @@ export class ShoppingCartController {
                 .json(errorMeformattedErrorResponsessage)
         }
     }
+
+
 }

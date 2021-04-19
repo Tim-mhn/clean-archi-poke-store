@@ -35,6 +35,16 @@ export class DBStoreRepository extends AbstractStoreRepository {
     return stores;
   }
 
+  async removePokemonsFromStore(storeId: string, pokemonsToRemove: { id: string; quantity: number }[]) {
+    const availablePokemons = await this.getAvailablePokemonsFromStore(storeId);
+    pokemonsToRemove.forEach(({ id, quantity }) => {
+      let pokeToDecreaseQty = availablePokemons.find(p => p.id == id);
+      if (pokeToDecreaseQty) pokeToDecreaseQty.quantity -= quantity
+    });
+    const updateRes = await StoreModel.updateOne({ _id: storeId }, { availablePokemons: availablePokemons});
+    console.log('update: ', updateRes);
+  }
+
   // async update() {
   //   let arr = new Array(45).fill(1);
   //   const availablePokemons = arr.map((_, idx) => {

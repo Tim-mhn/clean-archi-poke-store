@@ -10,4 +10,6 @@ export abstract class AbstractStoreRepository {
     abstract getStoreById(storeId: string): Promise<{ id; availablePokemons, location, name }>;
 
     abstract getAllStores(): Promise<Store[]>;
+
+    abstract removePokemonsFromStore(storeId: string, pokemonsToRemove: {id: string; quantity: number}[]): Promise<any>;
 }

@@ -13,13 +13,11 @@
       <div fxLayout="row" fxLayoutAlign="start start">
         <div fxLayout="column" fxLayoutAlign="start start" fxFlex="60">
           <div>Order Total</div>
-          <div>Ready for pickup</div>
         </div>
         <div fxLayout="column" fxLayoutAlign="start start" fxFlex>
           <div>
-            {{ cartDetails.cartPrice | currency: "EUR":"symbol":"1.2-2" }}
+            {{ totalEstimate | currency: "EUR":"symbol":"1.2-2" }}
           </div>
-          <div>{{ cartDetails.readyDate | date }}</div>
         </div>
       </div>
     </div>

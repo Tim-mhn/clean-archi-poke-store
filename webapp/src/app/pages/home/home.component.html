@@ -18,7 +18,7 @@
   >
     <app-store-card
       fxFlex="20"
-      *ngFor="let store of _storeService.stores$.data | async"
+      *ngFor="let store of stores$.data | async"
       [store]="store"
     ></app-store-card>
   </div>
@@ -27,6 +27,6 @@
     fxLayout="row"
     fxLayoutAlign="center center"
   >
-    <app-loading [asyncStatus]="_storeService.stores$.status"></app-loading>
+    <app-loading [asyncStatus]="stores$.status"></app-loading>
   </div>
 </div>

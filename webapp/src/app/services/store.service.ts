@@ -11,11 +11,9 @@ import { PendingService } from './pending.service';
 })
 export class StoreService {
   private readonly STORES_URI = "http://localhost:4000/stores";
-  public readonly stores$: Pending<Store[]>;
 
   constructor(private http: HttpClient,
               private _pendingService: PendingService) {
-    this.stores$ = this._getStoresPendingObservable();
 
   }
 
@@ -24,21 +22,16 @@ export class StoreService {
   }
 
   public getStoreAndAvailablePokemons(storeId: string) {
-    console.log('getStoreAndAvailablePokemons called')
     const storeWithAvailablePokemons$ = this.http.get<StoreWithAvailablePokemons>(`${this.STORES_URI}/${storeId}/pokemons`)
     return this._pendingService.observableToPending(storeWithAvailablePokemons$);
   }
 
 
-  private _getStoresPendingObservable(): Pending<Store[]> {
-    const allStores$ = this._getAllStoresRequest();
+
+  public getAllStores() {
+    const allStores$ =  this.http.get<Store[]>(this.STORES_URI);
     return this._pendingService.observableToPending(allStores$);
-  }
 
-
-
-  private _getAllStoresRequest() {
-    return this.http.get<Store[]>(this.STORES_URI);
   }
 
 }

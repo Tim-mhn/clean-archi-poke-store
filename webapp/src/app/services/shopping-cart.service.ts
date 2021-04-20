@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ShoppingCart } from '../interfaces/shopping-cart.interface';
 import { map } from 'rxjs/operators';
+import { AvailablePokemon } from '../interfaces/available-pokemon.interface';
+import { ShoppingCartTotalEstimateService } from './shopping-cart-total-estimate.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +14,8 @@ export class ShoppingCartService {
   private storeIdToCartId = {};
   private _storeIdToShoppingCartSubject: BehaviorSubject<Map<string, ShoppingCart>> = new BehaviorSubject(new Map());
   public storeIdToShoppingCartObs: Observable<Map<string, ShoppingCart>> = this._storeIdToShoppingCartSubject.asObservable();
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,
+    private _shoppingCartTotalEstimateService: ShoppingCartTotalEstimateService) {
   }
 
   private _createShoppingCart(storeId: string): Promise<ShoppingCart> {
@@ -22,35 +25,32 @@ export class ShoppingCartService {
       .toPromise()
   }
 
-  async addPokemonToShoppingCart(pokemonId: string, storeId: string) {
+  async addPokemonToShoppingCart(pokemonToAdd: AvailablePokemon, storeId: string) {
     let cartId = this.storeIdToCartId[storeId];
     if (!cartId) {
       const emptyCart = await this._createShoppingCart(storeId);
       cartId = emptyCart.shoppingCartId;
       this.storeIdToCartId[storeId] = cartId;
     }
+    this._shoppingCartTotalEstimateService.addPriceToTotal(storeId, pokemonToAdd.unitPrice);
+    await this.http.post<ShoppingCart>(`${this.SHOPPING_CART_URI}${cartId}/pokemon/${pokemonToAdd.pokemon.id}`, {}).toPromise();
 
-    await this.http.post<ShoppingCart>(`${this.SHOPPING_CART_URI}${cartId}/pokemon/${pokemonId}`, {}).toPromise();
-    await this._updateShoppingCart(storeId);
   }
 
-  async _updateShoppingCart(storeId: string) {
-    const storeShoppingCartDetails = await this._getShoppingCartDetailsFromStoreId(storeId);
-    this._storeIdToShoppingCartSubject.next({
-      ...this._storeIdToShoppingCartSubject.getValue(),
-      [storeId]: storeShoppingCartDetails
-    });
-  }
+  // async _updateShoppingCart(storeId: string) {
+  //   const storeShoppingCartDetails = await this._getShoppingCartDetailsFromStoreId(storeId);
+  //   this._storeIdToShoppingCartSubject.next({
+  //     ...this._storeIdToShoppingCartSubject.getValue(),
+  //     [storeId]: storeShoppingCartDetails
+  //   });
+  // }
 
-  private _getShoppingCartDetails(cartId: string): Promise<ShoppingCart> {
-    const now = new Date();
-    return this.http.get<ShoppingCart>(`${this.SHOPPING_CART_URI}${cartId}?date=${now}`).toPromise();
-  }
 
-  private async _getShoppingCartDetailsFromStoreId(storeId: string) {
-    const cartId = this.storeIdToCartId[storeId];
+  public getShoppingCartDetailsFromStoreId(storeId: string) {
+    const cartId = this.getCartIdFromStoreId(storeId);
     if (!cartId) return null;
-    return await this._getShoppingCartDetails(cartId);
+    const now = new Date();
+    return this.http.get<ShoppingCart>(`${this.SHOPPING_CART_URI}${cartId}?date=${now}`);
   }
 
   public getCartIdFromStoreId(storeId: string) {

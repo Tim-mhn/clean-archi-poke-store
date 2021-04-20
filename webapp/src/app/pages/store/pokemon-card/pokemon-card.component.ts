@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { AvailablePokemon } from 'src/app/interfaces/available-pokemon.interface';
 import { ShoppingCartService } from 'src/app/services/shopping-cart.service';
 
@@ -10,13 +10,15 @@ import { ShoppingCartService } from 'src/app/services/shopping-cart.service';
 export class PokemonCardComponent implements OnInit {
   @Input("availablePokemonData") pokemonData: AvailablePokemon;
   @Input("storeId") storeId: string;
-  constructor(private _shoppingCartService: ShoppingCartService) { }
+  @Output() addPokemon = new EventEmitter<AvailablePokemon> ();
+
+  constructor() { }
 
   ngOnInit(): void {
   }
 
-  onAddToCart() {
-    this._shoppingCartService.addPokemonToShoppingCart(this.pokemonData.pokemon.id, this.storeId);
+  emitAddPokemonEvent() {
+    this.addPokemon.emit(this.pokemonData);
   }
 
 }

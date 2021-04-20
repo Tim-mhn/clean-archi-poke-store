@@ -1,10 +1,10 @@
 <div fxLayout="column" fxFlexFill>
-  <ng-container *ngIf="storeAndPokes$.data | async as storeAndPokes">
+  <ng-container *ngIf="storeAndPokesData">
     <div fxLayout="row" fxLayoutAlign="center center" fxFlexFill>
-      <h1>Welcome to store {{ storeAndPokes.name }}</h1>
+      <h1>Welcome to store {{ storeAndPokesData.name }}</h1>
     </div>
     <div fxLayout="row" fxLayoutAlign="center center" fxFlexFill>
-      <span>{{ storeAndPokes.location }}</span>
+      <span>{{ storeAndPokesData.location }}</span>
     </div>
     <div fxLayout="row" fxLayoutAlign="center center" fxFlexFill>
       <h3>Time to get some pokemons !</h3>
@@ -18,17 +18,18 @@
       fxLayoutGap="20px grid"
       fxFlex="90"
     >
-      <ng-container *ngIf="storeAndPokes$.data | async as storeAndPokes">
+      <ng-container *ngIf="storeAndPokesData">
         <app-pokemon-card
           fxFlex="22"
-          *ngFor="let poke of storeAndPokes.availablePokemons"
+          *ngFor="let poke of storeAndPokesData.availablePokemons"
           [availablePokemonData]="poke"
           [storeId]="storeId"
+          (addPokemon)="onAddPokemon($event)"
         ></app-pokemon-card>
       </ng-container>
 
       <div fxLayout="row" fxLayoutAlign="center center" fxFlex="100">
-        <app-loading [asyncStatus]="storeAndPokes$.status"></app-loading>
+        <app-loading [asyncStatus]="status"></app-loading>
       </div>
     </div>
 

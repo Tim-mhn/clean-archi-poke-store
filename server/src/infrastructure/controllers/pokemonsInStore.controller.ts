@@ -12,6 +12,7 @@ import { CalculatePokemonPriceUseCase } from "../../domain/usecases/calculatePok
 import { StoreRepositoryProxy } from "../repositoryProxies/storeRepository.proxy";
 import { AbstractStoreRepository } from "../../domain/repositories/store.repository";
 import { GetAllStoresBasicInformationsUseCase } from "../../domain/usecases/getAllStoresBasicInformations.useCase";
+import { sleep } from "../utils/dev.util";
 
 @JsonController('/stores')
 @Service()
@@ -32,6 +33,7 @@ export class PokemonsInStoreController {
     @Get()
     public async getAllStores(@Res() response: Response) {
         try {
+            await sleep(1000);
             const allStores = await this.getAllStoresBasicInformationsUseCase.execute();
             const formattedAllStores = this.presenter.presentAllStores(allStores);
             return response.status(200).json(formattedAllStores);

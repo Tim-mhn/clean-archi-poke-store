@@ -23,6 +23,7 @@ import { FormsModule } from '@angular/forms';
 import { CheckoutComponent } from './pages/checkout/checkout.component';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from "@angular/material/form-field";
+import { CheckoutSuccessComponent } from './pages/checkout-success/checkout-success.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { MatFormFieldModule } from "@angular/material/form-field";
     PokemonCardComponent,
     CartSumupComponent,
     LoadingComponent,
-    CheckoutComponent
+    CheckoutComponent,
+    CheckoutSuccessComponent
   ],
   imports: [
     BrowserModule,

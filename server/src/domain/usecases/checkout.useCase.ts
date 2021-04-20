@@ -1,4 +1,5 @@
 import { Service } from "typedi";
+import { PokemonInCart } from "../entities/shoppingCart.entity";
 import { AbstractShoppingCartRepository } from "../repositories/shoppingCart.repository";
 import { AbstractStoreRepository } from "../repositories/store.repository";
 
@@ -11,9 +12,16 @@ export class CheckoutUseCase {
     }
 
     public async execute(shoppingCartId: string, cardOwner: string, cardNumber: string, cardCVV: string) {
-        const storeId = await this._checkIfPokemonsInStoreAndReturnStoreId(shoppingCartId);
+        const pokemonsInCart = await this._shoppingCartRepo.getShoppingCartDetails(shoppingCartId);
+        const storeId = await this._checkIfPokemonsInStoreAndReturnStoreId(shoppingCartId, pokemonsInCart);
         await this._validateCardCredentials(cardOwner, cardNumber, cardCVV);
-        return await this._updateStoreWithBoughtPokemons(storeId, shoppingCartId);
+        await this._updateStoreWithBoughtPokemons(storeId, shoppingCartId, pokemonsInCart);
+
+        return {
+            shoppingCartId,
+            storeId,
+            pokemonsInCart
+        }
 
     }
 
@@ -21,10 +29,7 @@ export class CheckoutUseCase {
         return true
     }
 
-    private async _checkIfPokemonsInStoreAndReturnStoreId(shoppingCartId): Promise<string> {
-        console.log(this._shoppingCartRepo);
-        console.log(typeof this._shoppingCartRepo);
-        const pokemonsInCart = await this._shoppingCartRepo.getShoppingCartDetails(shoppingCartId);
+    private async _checkIfPokemonsInStoreAndReturnStoreId(shoppingCartId: string, pokemonsInCart: PokemonInCart[]): Promise<string> {
         const storeId = await this._shoppingCartRepo.getShoppingCartStoreId(shoppingCartId);
         const availablePokemons = await this._storeRepo.getStoreById(storeId);
 
@@ -42,11 +47,9 @@ export class CheckoutUseCase {
 
         return storeId;
 
-
     }
 
-    private async _updateStoreWithBoughtPokemons(storeId: string, shoppingCartId: string) {
-        const pokemonsInCart = await this._shoppingCartRepo.getShoppingCartDetails(shoppingCartId);
+    private async _updateStoreWithBoughtPokemons(storeId: string, shoppingCartId: string, pokemonsInCart: PokemonInCart[]) {
         const mappedPokemonsInCart = pokemonsInCart.map(pokeInCart => {
             return {
                 id: pokeInCart.pokemon.id,
@@ -54,5 +57,6 @@ export class CheckoutUseCase {
             }
         })
         await this._storeRepo.removePokemonsFromStore(storeId, mappedPokemonsInCart);
+        
     }
 }

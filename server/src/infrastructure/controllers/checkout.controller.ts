@@ -2,6 +2,7 @@ import { Response } from "express";
 import "reflect-metadata" // Don't forget to import this for each Controller
 import { BodyParam, JsonController, Param, Post, Res } from "routing-controllers";
 import { Inject, Service } from "typedi";
+import { PokemonInCart } from "../../domain/entities/shoppingCart.entity";
 import { AbstractShoppingCartRepository } from "../../domain/repositories/shoppingCart.repository";
 import { AbstractStoreRepository } from "../../domain/repositories/store.repository";
 import { CheckoutUseCase } from "../../domain/usecases/checkout.useCase";
@@ -30,8 +31,8 @@ export class CheckoutController {
         @Res() response: Response
     ) {
         try {
-            await this.checkoutUseCase.execute(shoppingCartId, cardOwner, cardNumber, cardCVV);
-            return response.status(200).json({});
+            const checkoutResponse: { storeId, shoppingCartId, pokemonsInCart: PokemonInCart[]} = await this.checkoutUseCase.execute(shoppingCartId, cardOwner, cardNumber, cardCVV);
+            return response.status(200).json(checkoutResponse);
         } catch (e) {
             console.error(e);
             return response.status(500).json({ error: e.message })

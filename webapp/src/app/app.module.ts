@@ -24,6 +24,7 @@ import { CheckoutComponent } from './pages/checkout/checkout.component';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { CheckoutSuccessComponent } from './pages/checkout-success/checkout-success.component';
+import { LoginComponent } from './pages/login/login.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { CheckoutSuccessComponent } from './pages/checkout-success/checkout-succ
     CartSumupComponent,
     LoadingComponent,
     CheckoutComponent,
-    CheckoutSuccessComponent
+    CheckoutSuccessComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,

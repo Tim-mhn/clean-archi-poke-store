@@ -1,0 +1,57 @@
+<div fxLayout="row" fxLayoutAlign="center start" fxLayoutGap="10px">
+  <div fxLayout="column" fxFlex="65">
+    <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+      <div fxLayout="column" fxLayoutAlign="start stretch" fxFlexFill>
+        <mat-form-field appearance="outline">
+          <mat-label for="username">username</mat-label>
+          <input
+            matInput
+            type="text"
+            class="form-control"
+            id="username"
+            required
+            [(ngModel)]="formData.username"
+            name="username"
+            #username="ngModel"
+          />
+          <mat-error *ngIf="!username.valid || !username.pristine"
+            >username is required</mat-error
+          >
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label for="password">password</mat-label>
+          <input
+            matInput
+            type="text"
+            class="form-control"
+            id="password"
+            required
+            [(ngModel)]="formData.password"
+            name="password"
+            #password="ngModel"
+          />
+
+          <mat-error *ngIf="!password.valid || !password.pristine"
+            >password is required</mat-error
+          >
+        </mat-form-field>
+
+       
+
+        <button
+          mat-flat-button
+          color="primary"
+          type="submit"
+          [disabled]="!loginForm.valid"
+        >
+          Log In
+        </button>
+      </div>
+    </form>
+
+    <!-- <app-loading [asyncStatus]="checkout$.status"></app-loading> -->
+
+  </div>
+
+</div>

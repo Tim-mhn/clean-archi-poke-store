@@ -14,20 +14,12 @@ export class CartComponent implements OnInit {
   shoppingCart$: Observable<ShoppingCart>;
   storeId: string;
   displayedColumns: string[] = ['name', 'unitPrice', 'quantity'];
-  // private cartDetailsSub: Subscription;
   constructor(private _actRoute: ActivatedRoute,
     private _shoppingCartService: ShoppingCartService) { }
 
   ngOnInit(): void {
     this.storeId = this._actRoute.snapshot.params.storeId;
-    // this._shoppingCartService.storeIdToShoppingCartObs.subscribe(storeIdToShoppingCart => {
-    //   const cartDetails: ShoppingCart = storeIdToShoppingCart[this.storeId];
-    //   if (cartDetails) this.cartDetails = cartDetails;
-      
-    // });
     this.shoppingCart$ = this._shoppingCartService.getShoppingCartDetailsFromStoreId(this.storeId)
-
-
   }
 
 

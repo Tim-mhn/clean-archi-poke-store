@@ -5,6 +5,8 @@ import { ShoppingCart } from '../interfaces/shopping-cart.interface';
 import { map } from 'rxjs/operators';
 import { AvailablePokemon } from '../interfaces/available-pokemon.interface';
 import { ShoppingCartTotalEstimateService } from './shopping-cart-total-estimate.service';
+import { CreateShoppingCartOutputDTO } from '../api-dto/create-shopping-cart.dto';
+import { AddPokemonToCartOutputDTO } from '../api-dto/add-pokemon-to-cart.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -14,13 +16,14 @@ export class ShoppingCartService {
   private storeIdToCartId = {};
   private _storeIdToShoppingCartSubject: BehaviorSubject<Map<string, ShoppingCart>> = new BehaviorSubject(new Map());
   public storeIdToShoppingCartObs: Observable<Map<string, ShoppingCart>> = this._storeIdToShoppingCartSubject.asObservable();
+  
   constructor(private http: HttpClient,
     private _shoppingCartTotalEstimateService: ShoppingCartTotalEstimateService) {
   }
 
-  private _createShoppingCart(storeId: string): Promise<ShoppingCart> {
+  private _createShoppingCart(storeId: string) {
     const emptyBody = {};
-    return this.http.post<{ shoppingCart: ShoppingCart }>(`${this.SHOPPING_CART_URI}?storeId=${storeId}`, emptyBody)
+    return this.http.post<CreateShoppingCartOutputDTO>(`${this.SHOPPING_CART_URI}?storeId=${storeId}`, emptyBody)
       .pipe(map(({ shoppingCart }) => shoppingCart))
       .toPromise()
   }
@@ -33,17 +36,9 @@ export class ShoppingCartService {
       this.storeIdToCartId[storeId] = cartId;
     }
     this._shoppingCartTotalEstimateService.addPriceToTotal(storeId, pokemonToAdd.unitPrice);
-    await this.http.post<ShoppingCart>(`${this.SHOPPING_CART_URI}${cartId}/pokemon/${pokemonToAdd.pokemon.id}`, {}).toPromise();
+    await this.http.post<AddPokemonToCartOutputDTO>(`${this.SHOPPING_CART_URI}${cartId}/pokemon/${pokemonToAdd.pokemon.id}`, {}).toPromise();
 
   }
-
-  // async _updateShoppingCart(storeId: string) {
-  //   const storeShoppingCartDetails = await this._getShoppingCartDetailsFromStoreId(storeId);
-  //   this._storeIdToShoppingCartSubject.next({
-  //     ...this._storeIdToShoppingCartSubject.getValue(),
-  //     [storeId]: storeShoppingCartDetails
-  //   });
-  // }
 
 
   public getShoppingCartDetailsFromStoreId(storeId: string) {

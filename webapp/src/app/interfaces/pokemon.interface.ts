@@ -4,3 +4,4 @@ export interface Pokemon {
     type: string;
     weight: string;
 }
+

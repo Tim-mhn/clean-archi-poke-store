@@ -20,11 +20,7 @@ export class CartSumupComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this._sub = this._shoppingCartTotalEstimateService.storeIdToCartTotalEstimate$.subscribe(storeIdToTotal => {
-      try {
         this.totalEstimate = storeIdToTotal[this.storeId] ? storeIdToTotal[this.storeId] : 0;
-      } catch (e) {
-        this.totalEstimate = 0;
-      }
     })
   }
 

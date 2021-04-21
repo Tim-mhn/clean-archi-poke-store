@@ -31,6 +31,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { HighlightOnHoverDirective } from './directives/highlight-on-hover.directive';
 import { TooltipDirective } from './directives/tooltip.directive';
+import { RenderOrSpinnerDirective } from './directives/render-or-spinner.directive';
+import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +49,9 @@ import { TooltipDirective } from './directives/tooltip.directive';
     LoginComponent,
     HeaderComponent,
     HighlightOnHoverDirective,
-    TooltipDirective
+    TooltipDirective,
+    RenderOrSpinnerDirective,
+    LoadingSpinnerComponent
   ],
   imports: [
     BrowserModule,
@@ -69,6 +73,8 @@ import { TooltipDirective } from './directives/tooltip.directive';
     MatIconModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [LoadingSpinnerComponent],
+
 })
 export class AppModule { }

@@ -18,7 +18,7 @@
       fxLayoutGap="20px grid"
       fxFlex="90"
     >
-      <ng-container *ngIf="storeAndPokesData">
+      <ng-container *appRenderOrSpinner="storeAndPokesData">
         <app-pokemon-card
           fxFlex="22"
           *ngFor="let poke of storeAndPokesData.availablePokemons"
@@ -28,9 +28,9 @@
         ></app-pokemon-card>
       </ng-container>
 
-      <div fxLayout="row" fxLayoutAlign="center center" fxFlex="100">
+      <!-- <div fxLayout="row" fxLayoutAlign="center center" fxFlex="100">
         <app-loading [asyncStatus]="status"></app-loading>
-      </div>
+      </div> -->
     </div>
 
     <div fxLayout="row" fxFlex>

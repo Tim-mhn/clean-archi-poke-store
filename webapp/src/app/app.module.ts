@@ -29,6 +29,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HeaderComponent } from './components/header/header.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
+import { HighlightOnHoverDirective } from './directives/highlight-on-hover.directive';
+import { TooltipDirective } from './directives/tooltip.directive';
 
 @NgModule({
   declarations: [
@@ -43,7 +45,9 @@ import { MatIconModule } from '@angular/material/icon';
     CheckoutComponent,
     CheckoutSuccessComponent,
     LoginComponent,
-    HeaderComponent
+    HeaderComponent,
+    HighlightOnHoverDirective,
+    TooltipDirective
   ],
   imports: [
     BrowserModule,

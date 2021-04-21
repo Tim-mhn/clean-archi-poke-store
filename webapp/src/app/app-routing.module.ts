@@ -8,6 +8,7 @@ import { CheckoutComponent } from './pages/checkout/checkout.component';
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
 import { StoreComponent } from './pages/store/store.component';
+import { ShoppingCartDetailsResolverService } from './resolvers/shopping-cart-details-resolver.service';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -15,7 +16,9 @@ const routes: Routes = [
   { path: 'stores/:storeId', component: StoreComponent },
   { path: 'stores/:storeId/cart', component: CartComponent, canActivate: [IsLoggedInActivateGuard] },
   { path: 'stores/:storeId/checkout', component: CheckoutComponent, canActivate: [IsLoggedInActivateGuard], canDeactivate: [ConfirmDeactivateGuard] },
-  { path: 'stores/:storeId/checkout/:shoppingCartId/success', component: CheckoutSuccessComponent }
+  { path: 'stores/:storeId/checkout/:shoppingCartId/success', component: CheckoutSuccessComponent, resolve: {
+    shoppingCart: ShoppingCartDetailsResolverService
+  } }
 
 ];
 

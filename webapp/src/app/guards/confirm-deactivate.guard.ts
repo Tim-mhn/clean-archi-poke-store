@@ -11,7 +11,6 @@ export class ConfirmDeactivateGuard implements CanDeactivate<ConfirmDeactivatibl
     currentRoute: ActivatedRouteSnapshot,
     currentState: RouterStateSnapshot,
     nextState?: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    console.log((component as any).canDeactivate ? (component as any).canDeactivate() : '');
     const canDeactivate = component.canDeactivate ? component.canDeactivate(): false;
     return canDeactivate ? canDeactivate : window.confirm('Do you really want to exit page ?');
   }

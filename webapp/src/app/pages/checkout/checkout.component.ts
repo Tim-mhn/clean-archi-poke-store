@@ -33,12 +33,10 @@ export class CheckoutComponent implements OnInit, ConfirmDeactivatiblePage {
   ngOnInit(): void {
   }
 
-  log = (e) => console.log(e);
   onSubmit() {
     console.log(this.checkoutForm);
     this.loading = true;
     const checkoutInput = { ...this.checkoutForm.value, storeId: this.storeId };
-    console.log(checkoutInput);
     this._checkoutService.payShoppingCart(checkoutInput)
       .then(checkoutOutput => {
         this.submitted = true;
@@ -48,6 +46,7 @@ export class CheckoutComponent implements OnInit, ConfirmDeactivatiblePage {
       .finally(() => this.loading = false);
   }
 
+  // Can only exit with no confirmation if form has been submitted
   canDeactivate(): boolean | Observable<boolean> {
     return this.submitted;
   }

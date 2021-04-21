@@ -26,6 +26,9 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { CheckoutSuccessComponent } from './pages/checkout-success/checkout-success.component';
 import { LoginComponent } from './pages/login/login.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { HeaderComponent } from './components/header/header.component';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -39,7 +42,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     LoadingComponent,
     CheckoutComponent,
     CheckoutSuccessComponent,
-    LoginComponent
+    LoginComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,
@@ -56,7 +60,9 @@ import { ReactiveFormsModule } from '@angular/forms';
     FormsModule,
     MatFormFieldModule,
     MatInputModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatToolbarModule,
+    MatIconModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -23,7 +23,7 @@
           <mat-label for="password">password</mat-label>
           <input
             matInput
-            type="text"
+            type="password"
             class="form-control"
             id="password"
             required
@@ -37,8 +37,6 @@
           >
         </mat-form-field>
 
-       
-
         <button
           mat-flat-button
           color="primary"
@@ -47,11 +45,22 @@
         >
           Log In
         </button>
+
+        <mat-error *ngIf="error"
+          >Wrong credentials</mat-error
+        >
+
+        <div fxLayout="row" fxLayoutAlign="center center" fxFLexFill>
+          <mat-spinner
+            *ngIf="loading"
+            color="primary"
+            diameter="30"
+            mode="indeterminate"
+          ></mat-spinner>
+        </div>
       </div>
     </form>
 
     <!-- <app-loading [asyncStatus]="checkout$.status"></app-loading> -->
-
   </div>
-
 </div>

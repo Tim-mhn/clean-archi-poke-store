@@ -44,11 +44,15 @@ export class ShoppingCartService {
   public getShoppingCartDetailsFromStoreId(storeId: string) {
     const cartId = this.getCartIdFromStoreId(storeId);
     if (!cartId) return null;
-    const now = new Date();
-    return this.http.get<ShoppingCart>(`${this.SHOPPING_CART_URI}${cartId}?date=${now}`);
+    return this.getShoppingCartDetailsFromCartId(cartId);
   }
 
-  public getCartIdFromStoreId(storeId: string) {
+  public getShoppingCartDetailsFromCartId(shoppingCartId: string) {
+    const now = new Date();
+    return this.http.get<ShoppingCart>(`${this.SHOPPING_CART_URI}${shoppingCartId}?date=${now}`);
+  }
+
+  public getCartIdFromStoreId(storeId: string): string {
     return this.storeIdToCartId[storeId];
   }
 

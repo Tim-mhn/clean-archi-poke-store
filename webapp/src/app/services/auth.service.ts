@@ -1,21 +1,49 @@
 import { Injectable } from '@angular/core';
-import { from, of } from 'rxjs';
+import { BehaviorSubject, from, of } from 'rxjs';
 import { delay, tap } from 'rxjs/operators';
+import { User, UserRole } from '../interfaces/user.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private _loggedIn = false;
+  private _loggedIn = new BehaviorSubject(false);
+  public loggedIn$ = this._loggedIn.asObservable();
 
   constructor() { }
 
   public logIn(username: string, password: string) {
-    const logInsuccess = true;
-    return of(logInsuccess).pipe(delay(1000), tap((loggedIn) => this._loggedIn = loggedIn)).toPromise();
+    const user = FAKE_USERS.find(u => u.username == username);
+    const logInsuccess = user && user.password == password;
+
+    return of(logInsuccess)
+      .pipe(delay(1000), tap((loggedIn) => {
+        if (loggedIn) {
+          this._loggedIn.next(loggedIn);
+        } else {
+          throw new Error('Error login with crendentials')
+        }
+      }))
+      .toPromise();
   }
 
-  public isLoggedIn() {
-    return this._loggedIn;
-  }
 }
+
+
+const FAKE_USERS: User[] = [
+  {
+    username: "timhn",
+    password: "password",
+    role: UserRole.GUEST
+  },
+  {
+    username: "admin",
+    password: "password",
+    role: UserRole.ADMIN
+  },
+  {
+    username: "guest",
+    password: "password",
+    role: UserRole.GUEST
+  }
+]

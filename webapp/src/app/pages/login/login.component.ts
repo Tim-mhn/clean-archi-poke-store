@@ -15,23 +15,36 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
   private returnUrl = '';
   private _subs = new Subscription();
+  error = false;
+  loading = false;
+
   constructor(private _authService: AuthService,
-              private _activatedRoute: ActivatedRoute,
-              private router: Router,) { }
+    private _activatedRoute: ActivatedRoute,
+    private router: Router,) { }
 
   ngOnInit(): void {
-    this._subs.add(this._activatedRoute.queryParamMap.subscribe(params =>  {
+    this._subs.add(this._activatedRoute.queryParamMap.subscribe(params => {
       this.returnUrl = params.get('returnUrl');
     }))
   }
 
   onSubmit() {
-    this._authService.logIn(this.formData.username, this.formData.password).then(res => {
-      console.log(this.returnUrl);
-      const urlArrays = this.returnUrl.split('/');
-      console.log(urlArrays);
-      this.router.navigate(urlArrays.splice(1));
-    });
+    this.loading = true;
+    this._authService.logIn(this.formData.username, this.formData.password)
+      .then(res => {
+        try {
+          const urlArrays = this.returnUrl.split('/');
+          this.router.navigate(urlArrays.splice(1));
+        } catch (e) {
+          const defaultUrl = [''];
+          this.router.navigate(defaultUrl);
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        this.error = true;
+      })
+      .finally(() => this.loading = false);
   }
 
   ngOnDestroy() {

@@ -1,1 +1,16 @@
-<p>checkout-success works!</p>
+<div fxLayout="column" fxLayoutAlign="center center" fxFlexFill>
+
+    <div fxLayout="row">
+       Shopping Cart&nbsp;<strong> #{{ shoppingCart.shoppingCartId | uppercase}} </strong>&nbsp;has successfully been ordered.
+    </div>
+
+    <div fxLayout="row">
+       <p>It will be ready for pick up at <strong>{{shoppingCart.readyDate | date }}</strong>.</p>
+    </div>
+
+    <div fxLayout="row wrap" fxLayoutAlign="start start" fxFlexFill>
+        <div fxLayout="row" fxFlex="20" *ngFor="let pokeInCart of shoppingCart.pokemons">
+            {{ pokeInCart.quantity }}x {{ pokeInCart.pokemon.name }} 
+        </div>
+    </div>
+</div>

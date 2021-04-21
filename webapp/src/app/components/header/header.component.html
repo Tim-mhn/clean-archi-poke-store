@@ -1,0 +1,38 @@
+<mat-toolbar fxLayout="row">
+  <div fxLayout="row" fxFlex="50" fxLayoutAlign="start center">
+    <button
+      mat-icon-button
+      class="example-icon"
+      aria-label="Example icon-button with menu icon"
+    >
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span>Poke Store</span>
+  </div>
+
+  <div fxLayout="row" fxFlex="50" fxLayoutAlign="end center">
+    <div [ngSwitch]="loggedIn$ | async">
+      <ng-container *ngSwitchCase="true">
+        <ng-container *ngTemplateOutlet="loggedIn"></ng-container>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="false">
+        <ng-container *ngTemplateOutlet="notLoggedIn"></ng-container>
+      </ng-container>
+    </div>
+  </div>
+</mat-toolbar>
+
+<ng-template #loggedIn>
+  <button mat-icon-button aria-label="go to profile">
+    <mat-icon>person</mat-icon>
+  </button>
+</ng-template>
+
+<ng-template #notLoggedIn>
+  <a routerLink="login">
+    <button mat-icon-button aria-label="go to login page">
+      <mat-icon>login</mat-icon>
+    </button>
+  </a>
+</ng-template>

@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { of } from 'rxjs';
-import { CheckoutFormModel } from 'src/app/interfaces/checkout.interface';
+import { Observable, of } from 'rxjs';
+import { ConfirmDeactivatiblePage } from 'src/app/guards/confirm-deactivate.guard';
 import { Pending, Status } from 'src/app/interfaces/pending.interface';
 import { CheckoutService } from 'src/app/services/checkout.service';
 
@@ -10,24 +11,23 @@ import { CheckoutService } from 'src/app/services/checkout.service';
   templateUrl: './checkout.component.html',
   styleUrls: ['./checkout.component.scss']
 })
-export class CheckoutComponent implements OnInit {
-  formData: CheckoutFormModel = {
-    cardOwner: '',
-    cardNumber: '',
-    cardCVV: '',
-    storeId: ''
-  };
+export class CheckoutComponent implements OnInit, ConfirmDeactivatiblePage {
+
+  checkoutForm = this.fb.group({
+    cardOwner: ['', Validators.required],
+    cardNumber: ['', Validators.required],
+    cardCVV: ['', Validators.required],
+  });
+
   storeId: string;
-  public checkout$: Pending<any> = {
-    data: of(null),
-    status: of(Status.SUCCESS)
-  };
+  loading = false;
+  submitted = false;
 
   constructor(private _activatedRoute: ActivatedRoute,
     private router: Router,
+    private fb: FormBuilder,
     private _checkoutService: CheckoutService) {
     this.storeId = this._activatedRoute.snapshot.params.storeId;
-    this.formData.storeId = this.storeId;
   }
 
   ngOnInit(): void {
@@ -35,11 +35,21 @@ export class CheckoutComponent implements OnInit {
 
   log = (e) => console.log(e);
   onSubmit() {
-    console.log(this.formData);
-    this._checkoutService.payShoppingCart(this.formData).then(checkoutOutput => {
-      this.router.navigate([checkoutOutput.shoppingCartId, 'success'], { relativeTo: this._activatedRoute})
-    })
-      .catch(err => console.error(err));
+    console.log(this.checkoutForm);
+    this.loading = true;
+    const checkoutInput = { ...this.checkoutForm.value, storeId: this.storeId };
+    console.log(checkoutInput);
+    this._checkoutService.payShoppingCart(checkoutInput)
+      .then(checkoutOutput => {
+        this.submitted = true;
+        this.router.navigate([checkoutOutput.shoppingCartId, 'success'], { relativeTo: this._activatedRoute })
+      })
+      .catch(err => console.error(err))
+      .finally(() => this.loading = false);
+  }
+
+  canDeactivate(): boolean | Observable<boolean> {
+    return this.submitted;
   }
 
 }

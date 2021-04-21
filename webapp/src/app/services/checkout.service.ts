@@ -19,6 +19,8 @@ export class CheckoutService {
 
   payShoppingCart(checkoutFormData: CheckoutFormModel) {
     const shoppingCartId = this._shoppingCartService.getCartIdFromStoreId(checkoutFormData.storeId);
+
+    console.log('shopping cart id: ', shoppingCartId);
     const checkoutBody: CheckoutInputDTO = {
       cardCVV: checkoutFormData.cardCVV,
       cardNumber: checkoutFormData.cardNumber,

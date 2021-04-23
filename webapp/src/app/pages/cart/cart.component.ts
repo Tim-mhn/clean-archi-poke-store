@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
+import { shareReplay } from 'rxjs/operators';
 import { ShoppingCart } from 'src/app/interfaces/shopping-cart.interface';
 import { ShoppingCartService } from 'src/app/services/shopping-cart.service';
 
@@ -19,7 +20,10 @@ export class CartComponent implements OnInit {
 
   ngOnInit(): void {
     this.storeId = this._actRoute.snapshot.params.storeId;
-    this.shoppingCart$ = this._shoppingCartService.getShoppingCartDetailsFromStoreId(this.storeId)
+    this.shoppingCart$ = this._shoppingCartService
+    .getShoppingCartDetailsFromStoreId(this.storeId)
+    .pipe(shareReplay());
+
   }
 
 

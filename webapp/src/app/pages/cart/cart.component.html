@@ -8,6 +8,7 @@
       <div fxLayout="column" fxLayoutAlign="start start" fxFlex>
         <table
           mat-table
+          *asyncRender="shoppingCart$"
           [dataSource]="(shoppingCart$ | async).pokemons"
           class="mat-elevation-z8"
         >

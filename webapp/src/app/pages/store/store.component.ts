@@ -17,7 +17,6 @@ import { StoreService } from 'src/app/services/store.service';
 })
 export class StoreComponent implements OnInit {
   storeId: string;
-  public status: Observable<Status>;
   public storeAndPokes$: Observable<StoreWithAvailablePokemons>;
 
   constructor(

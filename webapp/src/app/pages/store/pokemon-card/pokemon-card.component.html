@@ -3,6 +3,7 @@
   fxLayoutAlign="start stretch"
   fxFlex="45"
   appHighlightOnHover="blue"
+  [ngStyle]="{'background-color': colorTheme === 'highlight' ? 'darkorange' : 'white'}"
 >
   <mat-card-title>{{ pokemonData.pokemon.name | titlecase }} </mat-card-title>
   <mat-card-content>

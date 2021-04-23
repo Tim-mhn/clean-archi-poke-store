@@ -10,6 +10,7 @@ import { ShoppingCartService } from 'src/app/services/shopping-cart.service';
 export class PokemonCardComponent implements OnInit {
   @Input("availablePokemonData") pokemonData: AvailablePokemon;
   @Input("storeId") storeId: string;
+  colorTheme: 'classic' | 'highlight' = 'classic';
   @Output() addPokemon = new EventEmitter<AvailablePokemon> ();
 
   constructor() { }

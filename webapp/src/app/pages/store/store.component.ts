@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, Component, Input, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, of, Subscription } from 'rxjs';
 import { shareReplay } from 'rxjs/operators';
@@ -7,13 +7,16 @@ import { StoreWithAvailablePokemons } from 'src/app/interfaces/store.interface';
 import { ShoppingCartService } from 'src/app/services/shopping-cart.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { StoreService } from 'src/app/services/store.service';
+import { PokemonCardComponent } from './pokemon-card/pokemon-card.component';
 
 @Component({
   selector: 'app-store',
   templateUrl: './store.component.html',
   styleUrls: ['./store.component.scss']
 })
-export class StoreComponent implements OnInit {
+export class StoreComponent implements OnInit, AfterViewInit, AfterViewChecked {
+
+  @ViewChildren(PokemonCardComponent) pokemonCards!: QueryList<PokemonCardComponent>;
   storeId: string;
   public storeAndPokes$: Observable<StoreWithAvailablePokemons>;
 
@@ -28,6 +31,20 @@ export class StoreComponent implements OnInit {
   ngOnInit(): void {
     this.storeId = this._actRoute.snapshot.params.storeId;
     this.storeAndPokes$ = this._storeService.getStoreAndAvailablePokemons(this.storeId).pipe(shareReplay());
+  }
+
+  ngAfterViewInit() {
+    // Highlight first and last card
+    this.pokemonCards.changes.subscribe((pokemonCardsList: QueryList<PokemonCardComponent>) => {
+      pokemonCardsList.first.colorTheme = 'highlight';
+      pokemonCardsList.last.colorTheme = 'highlight';
+
+    });
+
+  }
+  ngAfterViewChecked() {
+    // console.count('after view checked called');
+    // this.pokemonCards.toArray().forEach(pokemonCard => console.log(pokemonCard));
   }
 
 

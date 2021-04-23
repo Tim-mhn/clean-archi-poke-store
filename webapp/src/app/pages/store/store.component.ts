@@ -5,6 +5,7 @@ import { shareReplay } from 'rxjs/operators';
 import { AvailablePokemon } from 'src/app/interfaces/available-pokemon.interface';
 import { StoreWithAvailablePokemons } from 'src/app/interfaces/store.interface';
 import { ShoppingCartService } from 'src/app/services/shopping-cart.service';
+import { SnackbarService } from 'src/app/services/snackbar.service';
 import { StoreService } from 'src/app/services/store.service';
 
 @Component({
@@ -19,7 +20,8 @@ export class StoreComponent implements OnInit {
   constructor(
     private _storeService: StoreService,
     private _actRoute: ActivatedRoute,
-    private _shoppingCartService: ShoppingCartService) {
+    private _shoppingCartService: ShoppingCartService,
+    private _snackbarService: SnackbarService) {
   }
 
 
@@ -30,7 +32,18 @@ export class StoreComponent implements OnInit {
 
 
   onAddPokemon(pokemonToAdd: AvailablePokemon) {
-    this._shoppingCartService.addPokemonToShoppingCart(pokemonToAdd, this.storeId);
+    this._shoppingCartService.addPokemonToShoppingCart(pokemonToAdd, this.storeId)
+    .then(() => this._openSuccessSnackbar())
+    .catch(err => this._openErrorSnackbar());
+  }
+
+  _openSuccessSnackbar() {
+    this._snackbarService.openSuccessSnackbar('successfully added pokemon to cart !')
+
+  }
+
+  _openErrorSnackbar() {
+    this._snackbarService.openErrorSnackbar('error when adding pokemon to cart :(')
   }
 
 

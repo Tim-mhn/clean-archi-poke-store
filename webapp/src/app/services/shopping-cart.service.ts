@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ShoppingCart } from '../interfaces/shopping-cart.interface';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { AvailablePokemon } from '../interfaces/available-pokemon.interface';
 import { ShoppingCartTotalEstimateService } from './shopping-cart-total-estimate.service';
 import { CreateShoppingCartOutputDTO } from '../api-dto/create-shopping-cart.dto';
@@ -16,7 +16,7 @@ export class ShoppingCartService {
   private storeIdToCartId = {};
   private _storeIdToShoppingCartSubject: BehaviorSubject<Map<string, ShoppingCart>> = new BehaviorSubject(new Map());
   public storeIdToShoppingCartObs: Observable<Map<string, ShoppingCart>> = this._storeIdToShoppingCartSubject.asObservable();
-  
+
   constructor(private http: HttpClient,
     private _shoppingCartTotalEstimateService: ShoppingCartTotalEstimateService) {
   }
@@ -35,8 +35,12 @@ export class ShoppingCartService {
       cartId = emptyCart.shoppingCartId;
       this.storeIdToCartId[storeId] = cartId;
     }
-    this._shoppingCartTotalEstimateService.addPriceToTotal(storeId, pokemonToAdd.unitPrice);
-    await this.http.post<AddPokemonToCartOutputDTO>(`${this.SHOPPING_CART_URI}${cartId}/pokemon/${pokemonToAdd.pokemon.id}`, {}).toPromise();
+
+    return this.http.post<AddPokemonToCartOutputDTO>(`${this.SHOPPING_CART_URI}${cartId}/pokemon/${pokemonToAdd.pokemon.id}`, {})
+      .pipe(tap((shoppingCart) => {
+        this._shoppingCartTotalEstimateService.addPriceToTotal(storeId, pokemonToAdd.unitPrice);
+      }))
+      .toPromise();
 
   }
 

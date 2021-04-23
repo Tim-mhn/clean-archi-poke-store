@@ -33,6 +33,7 @@ import { TooltipDirective } from './directives/tooltip.directive';
 import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
 import { AsyncRenderDirective } from './directives/async-render.directive';
 import { ErrorMessageComponent } from './components/error-message/error-message.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -70,7 +71,8 @@ import { ErrorMessageComponent } from './components/error-message/error-message.
     MatInputModule,
     ReactiveFormsModule,
     MatToolbarModule,
-    MatIconModule
+    MatIconModule,
+    MatSnackBarModule
   ],
   providers: [],
   bootstrap: [AppComponent],

@@ -14,7 +14,8 @@ export class AuthService {
 
   public logIn(username: string, password: string) {
     const user = FAKE_USERS.find(u => u.username == username);
-    const logInsuccess = user && user.password == password;
+    const logInsuccess = Boolean(user && user.password == password);
+    console.log('log in called: ', logInsuccess);
 
     return of(logInsuccess)
       .pipe(delay(1000), tap((loggedIn) => {
@@ -33,17 +34,17 @@ export class AuthService {
 const FAKE_USERS: User[] = [
   {
     username: "timhn",
-    password: "password",
+    password: "pokestore",
     role: UserRole.GUEST
   },
   {
     username: "admin",
-    password: "password",
+    password: "pokestore",
     role: UserRole.ADMIN
   },
   {
     username: "guest",
-    password: "password",
+    password: "pokestore",
     role: UserRole.GUEST
   }
 ]

@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { ReplaySubject, Subscription } from 'rxjs';
+import { RequestStatus } from 'src/app/interfaces/request-status.interface';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -15,9 +16,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
   private returnUrl = '';
   private _subs = new Subscription();
-  error = false;
-  loading = false;
-
+  requestStatusEnum = RequestStatus;
+  requestStatus: RequestStatus = RequestStatus.NOT_CALLED;
   constructor(private _authService: AuthService,
     private _activatedRoute: ActivatedRoute,
     private router: Router,) { }
@@ -28,23 +28,23 @@ export class LoginComponent implements OnInit, OnDestroy {
     }))
   }
 
-  onSubmit() {
-    this.loading = true;
-    this._authService.logIn(this.formData.username, this.formData.password)
-      .then(res => {
-        try {
-          const urlArrays = this.returnUrl.split('/');
-          this.router.navigate(urlArrays.splice(1));
-        } catch (e) {
-          const defaultUrl = [''];
-          this.router.navigate(defaultUrl);
-        }
-      })
-      .catch(err => {
-        console.error(err);
-        this.error = true;
-      })
-      .finally(() => this.loading = false);
+  async onSubmit() {
+    this.requestStatus = RequestStatus.LOADING;
+    try {
+      await this._authService.logIn(this.formData.username, this.formData.password);
+      this.requestStatus = RequestStatus.SUCCESS;
+      try {
+        const urlArrays = this.returnUrl.split('/');
+        this.router.navigate(urlArrays.splice(1));
+      } catch (e) {
+        const defaultUrl = [''];
+        this.router.navigate(defaultUrl);
+      }
+    } catch (e) {
+
+      this.requestStatus = RequestStatus.ERROR;
+    }
+
   }
 
   ngOnDestroy() {

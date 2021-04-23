@@ -4,7 +4,6 @@ import { BehaviorSubject, defer, Observable, ReplaySubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Pending, Status } from '../interfaces/pending.interface';
 import { Store, StoreWithAvailablePokemons } from '../interfaces/store.interface';
-import { PendingService } from './pending.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,8 +11,7 @@ import { PendingService } from './pending.service';
 export class StoreService {
   private readonly STORES_URI = "http://localhost:4000/stores";
 
-  constructor(private http: HttpClient,
-              private _pendingService: PendingService) {
+  constructor(private http: HttpClient) {
 
   }
 
@@ -22,16 +20,13 @@ export class StoreService {
   }
 
   public getStoreAndAvailablePokemons(storeId: string) {
-    const storeWithAvailablePokemons$ = this.http.get<StoreWithAvailablePokemons>(`${this.STORES_URI}/${storeId}/pokemons`)
-    return this._pendingService.observableToPending(storeWithAvailablePokemons$);
+    return this.http.get<StoreWithAvailablePokemons>(`${this.STORES_URI}/${storeId}/pokemons`)
   }
 
 
 
   public getAllStores() {
-    const allStores$ =  this.http.get<Store[]>(this.STORES_URI);
-    return this._pendingService.observableToPending(allStores$);
-
+    return this.http.get<Store[]>(this.STORES_URI);
   }
 
 }

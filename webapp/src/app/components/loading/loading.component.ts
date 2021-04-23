@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { Status } from 'src/app/interfaces/pending.interface';
 
 @Component({
@@ -8,7 +8,7 @@ import { Status } from 'src/app/interfaces/pending.interface';
   styleUrls: ['./loading.component.scss']
 })
 export class LoadingComponent implements OnInit {
-  @Input("asyncStatus") asyncStatus$: Observable<Status>
+  @Input("asyncStatus") asyncStatus$: Observable<Status>;
   readonly Status = Status;
   constructor() { }
 

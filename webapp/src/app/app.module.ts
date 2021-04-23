@@ -31,8 +31,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { HighlightOnHoverDirective } from './directives/highlight-on-hover.directive';
 import { TooltipDirective } from './directives/tooltip.directive';
-import { RenderOrSpinnerDirective } from './directives/render-or-spinner.directive';
 import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
+import { AsyncRenderDirective } from './directives/async-render.directive';
 
 @NgModule({
   declarations: [
@@ -50,8 +50,8 @@ import { LoadingSpinnerComponent } from './components/loading-spinner/loading-sp
     HeaderComponent,
     HighlightOnHoverDirective,
     TooltipDirective,
-    RenderOrSpinnerDirective,
-    LoadingSpinnerComponent
+    LoadingSpinnerComponent,
+    AsyncRenderDirective
   ],
   imports: [
     BrowserModule,

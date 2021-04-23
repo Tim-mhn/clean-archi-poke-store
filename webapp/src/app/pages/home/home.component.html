@@ -15,18 +15,15 @@
     fxLayoutGap="20px"
     fxLayoutAlign="start center"
     fxFlexFill
+    *asyncRender="stores$; error: errorTemplate"
   >
     <app-store-card
       fxFlex="20"
-      *ngFor="let store of stores$.data | async"
+      *ngFor="let store of stores$ | async"
       [store]="store"
     ></app-store-card>
   </div>
-
-  <div
-    fxLayout="row"
-    fxLayoutAlign="center center"
-  >
-    <app-loading [asyncStatus]="stores$.status"></app-loading>
-  </div>
 </div>
+<ng-template #errorTemplate let-error>
+  <p>{{ error.message }}</p>
+</ng-template>

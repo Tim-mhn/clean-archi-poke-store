@@ -1,6 +1,7 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, of, Subscription } from 'rxjs';
+import { shareReplay } from 'rxjs/operators';
 import { CartSumupComponent } from 'src/app/components/cart-sumup/cart-sumup.component';
 import { AvailablePokemon } from 'src/app/interfaces/available-pokemon.interface';
 import { Pending, Status } from 'src/app/interfaces/pending.interface';
@@ -14,14 +15,10 @@ import { StoreService } from 'src/app/services/store.service';
   templateUrl: './store.component.html',
   styleUrls: ['./store.component.scss']
 })
-export class StoreComponent implements OnInit, OnDestroy {
-  @ViewChild(CartSumupComponent) private cartSumupComponent : CartSumupComponent;
-
+export class StoreComponent implements OnInit {
   storeId: string;
-  public storeAndPokesData: StoreWithAvailablePokemons;
   public status: Observable<Status>;
-
-  private _subs: Subscription = new Subscription();
+  public storeAndPokes$: Observable<StoreWithAvailablePokemons>;
 
   constructor(
     private _storeService: StoreService,
@@ -32,18 +29,9 @@ export class StoreComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.storeId = this._actRoute.snapshot.params.storeId;
-    const storeAndPokes$ = this._storeService.getStoreAndAvailablePokemons(this.storeId);
-    this._subs.add(storeAndPokes$.data.subscribe(data => {
-      this.storeAndPokesData = data;
-    }));
-    this._subs.add(storeAndPokes$.status.subscribe((status: Status) => {
-      this.status = of(status);
-    }));
+    this.storeAndPokes$ = this._storeService.getStoreAndAvailablePokemons(this.storeId).pipe(shareReplay());
   }
 
-  ngOnDestroy(): void {
-    this._subs.unsubscribe();
-  }
 
   onAddPokemon(pokemonToAdd: AvailablePokemon) {
     this._shoppingCartService.addPokemonToShoppingCart(pokemonToAdd, this.storeId);

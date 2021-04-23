@@ -46,21 +46,17 @@
           Log In
         </button>
 
-        <mat-error *ngIf="error"
-          >Wrong credentials</mat-error
-        >
+        <!-- Loading and error components after submitting -->
+        <ng-container [ngSwitch]="requestStatus">
+          <app-loading-spinner *ngSwitchCase="requestStatusEnum.LOADING">
+          </app-loading-spinner>
 
-        <div fxLayout="row" fxLayoutAlign="center center" fxFLexFill>
-          <mat-spinner
-            *ngIf="loading"
-            color="primary"
-            diameter="30"
-            mode="indeterminate"
-          ></mat-spinner>
-        </div>
+          <mat-error *ngSwitchCase="requestStatusEnum.ERROR">
+            Error when loggin in ...
+          </mat-error>
+
+        </ng-container>
       </div>
     </form>
-
-    <!-- <app-loading [asyncStatus]="checkout$.status"></app-loading> -->
   </div>
 </div>

@@ -1,8 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, defer, Observable, ReplaySubject } from 'rxjs';
-import { tap } from 'rxjs/operators';
-import { Pending, Status } from '../interfaces/pending.interface';
 import { Store, StoreWithAvailablePokemons } from '../interfaces/store.interface';
 
 @Injectable({

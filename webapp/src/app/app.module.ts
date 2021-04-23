@@ -32,6 +32,7 @@ import { HighlightOnHoverDirective } from './directives/highlight-on-hover.direc
 import { TooltipDirective } from './directives/tooltip.directive';
 import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
 import { AsyncRenderDirective } from './directives/async-render.directive';
+import { ErrorMessageComponent } from './components/error-message/error-message.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { AsyncRenderDirective } from './directives/async-render.directive';
     HighlightOnHoverDirective,
     TooltipDirective,
     LoadingSpinnerComponent,
-    AsyncRenderDirective
+    AsyncRenderDirective,
+    ErrorMessageComponent
   ],
   imports: [
     BrowserModule,
@@ -72,7 +74,7 @@ import { AsyncRenderDirective } from './directives/async-render.directive';
   ],
   providers: [],
   bootstrap: [AppComponent],
-  entryComponents: [LoadingSpinnerComponent],
+  entryComponents: [LoadingSpinnerComponent, ErrorMessageComponent],
 
 })
 export class AppModule { }

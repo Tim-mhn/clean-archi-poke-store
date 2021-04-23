@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { CheckoutInputDTO, CheckoutOutputDTO } from '../api-dto/checkout.dto';
-import { PendingService } from './pending.service';
 import { ShoppingCartService } from './shopping-cart.service';
 
 

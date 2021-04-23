@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, ComponentFactory, ComponentFactoryResolver, Directive, Input, OnDestroy, OnInit, Renderer2, TemplateRef, ViewContainerRef } from '@angular/core';
 import { AsyncSubject, Observable, Subject } from 'rxjs';
 import { concatMapTo, takeUntil } from 'rxjs/operators';
+import { ErrorMessageComponent } from '../components/error-message/error-message.component';
 import { LoadingSpinnerComponent } from '../components/loading-spinner/loading-spinner.component';
 
 export interface ObserveContext<T> {
@@ -21,6 +22,7 @@ export class AsyncRenderDirective<T> implements OnDestroy, OnInit {
   private unsubscribe = new Subject<boolean>();
   private init = new AsyncSubject<void>();
   private loadingComponentFactory: ComponentFactory<LoadingSpinnerComponent>;
+  private errorComponentFactory: ComponentFactory<ErrorMessageComponent>;
 
 
   constructor(
@@ -30,6 +32,8 @@ export class AsyncRenderDirective<T> implements OnDestroy, OnInit {
     private componentFactoryResolver: ComponentFactoryResolver
   ) { 
     this.loadingComponentFactory = this.componentFactoryResolver.resolveComponentFactory(LoadingSpinnerComponent);
+    this.errorComponentFactory = this.componentFactoryResolver.resolveComponentFactory(ErrorMessageComponent);
+
   }
 
   @Input()
@@ -47,11 +51,14 @@ export class AsyncRenderDirective<T> implements OnDestroy, OnInit {
       this.view.createEmbeddedView(this.nextRef, { $implicit: value, observe: value })
       this.changes.markForCheck()
     }, error => {
+      this.view.clear()
       if (this.errorRef) {
-        this.view.clear()
         this.view.createEmbeddedView(this.errorRef, { $implicit: error })
-        this.changes.markForCheck()
+      } else {
+        this.view.createComponent(this.errorComponentFactory);
       }
+      this.changes.markForCheck()
+
     })
   }
 

@@ -1,0 +1,8 @@
+<ng-container [ngSwitch]="requestStatus">
+  <app-loading-spinner *ngSwitchCase="requestStatusEnum.LOADING">
+  </app-loading-spinner>
+
+  <mat-error *ngSwitchCase="requestStatusEnum.ERROR">
+     {{ errorMessage }}
+  </mat-error>
+</ng-container>

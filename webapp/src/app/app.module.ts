@@ -34,6 +34,8 @@ import { LoadingSpinnerComponent } from './components/loading-spinner/loading-sp
 import { AsyncRenderDirective } from './directives/async-render.directive';
 import { ErrorMessageComponent } from './components/error-message/error-message.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { LoadingOrErrorComponent } from './components/loading-or-error/loading-or-error.component';
+import { AutofocusDirective } from './directives/autofocus.directive';
 
 @NgModule({
   declarations: [
@@ -52,7 +54,9 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     TooltipDirective,
     LoadingSpinnerComponent,
     AsyncRenderDirective,
-    ErrorMessageComponent
+    ErrorMessageComponent,
+    LoadingOrErrorComponent,
+    AutofocusDirective
   ],
   imports: [
     BrowserModule,

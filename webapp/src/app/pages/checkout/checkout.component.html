@@ -12,8 +12,13 @@
             required
             name="cardNumber"
             formControlName="cardNumber"
+            appAutofocus
           />
-          <mat-error *ngIf="!checkoutForm.controls.cardNumber.valid || !checkoutForm.controls.cardNumber.pristine"
+          <mat-error
+            *ngIf="
+              !checkoutForm.controls.cardNumber.valid ||
+              !checkoutForm.controls.cardNumber.pristine
+            "
             >Card Number is required</mat-error
           >
         </mat-form-field>
@@ -30,7 +35,11 @@
             formControlName="cardCVV"
           />
 
-          <mat-error *ngIf="!checkoutForm.controls.cardCVV.valid || !checkoutForm.controls.cardCVV.pristine"
+          <mat-error
+            *ngIf="
+              !checkoutForm.controls.cardCVV.valid ||
+              !checkoutForm.controls.cardCVV.pristine
+            "
             >Card CVV is required</mat-error
           >
         </mat-form-field>
@@ -47,7 +56,11 @@
             formControlName="cardOwner"
           />
 
-          <mat-error *ngIf="!checkoutForm.controls.cardOwner.valid || !checkoutForm.controls.cardOwner.pristine"
+          <mat-error
+            *ngIf="
+              !checkoutForm.controls.cardOwner.valid ||
+              !checkoutForm.controls.cardOwner.pristine
+            "
             >Card owner is required</mat-error
           >
         </mat-form-field>
@@ -60,9 +73,14 @@
         >
           Pay
         </button>
+
+        <!-- Loading and error components after submitting -->
+        <app-loading-or-error
+          [requestStatus]="requestStatus"
+          errorMessage="Error with checkout"
+        ></app-loading-or-error>
       </div>
     </form>
-
   </div>
 
   <div fxFlex>

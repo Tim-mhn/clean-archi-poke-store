@@ -13,7 +13,8 @@
             [(ngModel)]="formData.username"
             name="username"
             #username="ngModel"
-          />
+            appAutofocus          
+            />
           <mat-error *ngIf="!username.valid || !username.pristine"
             >username is required</mat-error
           >
@@ -47,15 +48,10 @@
         </button>
 
         <!-- Loading and error components after submitting -->
-        <ng-container [ngSwitch]="requestStatus">
-          <app-loading-spinner *ngSwitchCase="requestStatusEnum.LOADING">
-          </app-loading-spinner>
-
-          <mat-error *ngSwitchCase="requestStatusEnum.ERROR">
-            Error when loggin in ...
-          </mat-error>
-
-        </ng-container>
+        <app-loading-or-error
+          [requestStatus]="requestStatus"
+          errorMessage="Error with crendentials"
+        ></app-loading-or-error>
       </div>
     </form>
   </div>

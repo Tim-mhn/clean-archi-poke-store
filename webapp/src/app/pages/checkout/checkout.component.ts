@@ -3,6 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { ConfirmDeactivatiblePage } from 'src/app/guards/confirm-deactivate.guard';
+import { RequestStatus } from 'src/app/interfaces/request-status.interface';
 import { CheckoutService } from 'src/app/services/checkout.service';
 
 @Component({
@@ -21,7 +22,8 @@ export class CheckoutComponent implements OnInit, ConfirmDeactivatiblePage {
   storeId: string;
   loading = false;
   submitted = false;
-
+  requestStatus = RequestStatus.NOT_CALLED;
+  
   constructor(private _activatedRoute: ActivatedRoute,
     private router: Router,
     private fb: FormBuilder,
@@ -34,14 +36,15 @@ export class CheckoutComponent implements OnInit, ConfirmDeactivatiblePage {
 
   onSubmit() {
     console.log(this.checkoutForm);
-    this.loading = true;
+    this.requestStatus = RequestStatus.LOADING;
     const checkoutInput = { ...this.checkoutForm.value, storeId: this.storeId };
     this._checkoutService.payShoppingCart(checkoutInput)
       .then(checkoutOutput => {
         this.submitted = true;
+        this.requestStatus = RequestStatus.SUCCESS
         this.router.navigate([checkoutOutput.shoppingCartId, 'success'], { relativeTo: this._activatedRoute })
       })
-      .catch(err => console.error(err))
+      .catch(err => this.requestStatus = RequestStatus.ERROR)
       .finally(() => this.loading = false);
   }
 

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ReplaySubject, Subscription } from 'rxjs';
 import { RequestStatus } from 'src/app/interfaces/request-status.interface';
@@ -10,6 +10,7 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit, OnDestroy {
+  @ViewChild('usernameInput', {static: false}) usernameInput: ElementRef;
   formData = {
     username: '',
     password: ''
@@ -27,6 +28,11 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.returnUrl = params.get('returnUrl');
     }))
   }
+
+  // ngAfterViewInit() {
+  //   console.log('after view init called');
+  //   this.usernameInput.nativeElement.focus();
+  // }
 
   async onSubmit() {
     this.requestStatus = RequestStatus.LOADING;

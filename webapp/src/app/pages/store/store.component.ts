@@ -2,11 +2,8 @@ import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, of, Subscription } from 'rxjs';
 import { shareReplay } from 'rxjs/operators';
-import { CartSumupComponent } from 'src/app/components/cart-sumup/cart-sumup.component';
 import { AvailablePokemon } from 'src/app/interfaces/available-pokemon.interface';
-import { Pending, Status } from 'src/app/interfaces/pending.interface';
 import { StoreWithAvailablePokemons } from 'src/app/interfaces/store.interface';
-import { ShoppingCartTotalEstimateService } from 'src/app/services/shopping-cart-total-estimate.service';
 import { ShoppingCartService } from 'src/app/services/shopping-cart.service';
 import { StoreService } from 'src/app/services/store.service';
 

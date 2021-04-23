@@ -3,7 +3,6 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { ConfirmDeactivatiblePage } from 'src/app/guards/confirm-deactivate.guard';
-import { Pending, Status } from 'src/app/interfaces/pending.interface';
 import { CheckoutService } from 'src/app/services/checkout.service';
 
 @Component({

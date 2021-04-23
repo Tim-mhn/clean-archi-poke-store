@@ -38,6 +38,7 @@ import { ShoppingCartRepositoryProxy } from '../repositoryProxies/shoppingCartRe
 import { StoreRepositoryProxy } from '../repositoryProxies/storeRepository.proxy'
 import bodyParser = require('body-parser')
 import { CheckoutUseCase } from '../../domain/usecases/checkout.useCase'
+import { sleep } from '../utils/dev.util'
 
 @JsonController('/shopping-cart')
 @Service()
@@ -139,6 +140,8 @@ export class ShoppingCartController {
         @Res() response: Response
     ) {
         try {
+            await sleep(1000);
+
             const output: GetShoppingCartContentPriceAndReadyDateOutput = await this.getShoppingCartContentPriceAndReadyDateUseCase.execute(
                 { shoppingCartId, now: date }
             )

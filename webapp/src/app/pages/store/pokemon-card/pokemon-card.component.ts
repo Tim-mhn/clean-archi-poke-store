@@ -1,4 +1,6 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { interval, ReplaySubject, Subscription } from 'rxjs';
+import { throttle } from 'rxjs/operators';
 import { AvailablePokemon } from 'src/app/interfaces/available-pokemon.interface';
 import { ShoppingCartService } from 'src/app/services/shopping-cart.service';
 
@@ -7,21 +9,29 @@ import { ShoppingCartService } from 'src/app/services/shopping-cart.service';
   templateUrl: './pokemon-card.component.html',
   styleUrls: ['./pokemon-card.component.scss']
 })
-export class PokemonCardComponent implements OnInit {
+export class PokemonCardComponent implements OnInit, OnDestroy {
   @Input("availablePokemonData") pokemonData: AvailablePokemon;
   @Input("storeId") storeId: string;
   public colorTheme: 'classic' | 'highlight' = 'classic';
   public icon: string;
   @Output() addPokemon = new EventEmitter<AvailablePokemon>();
 
+  private _addPokemonClickSubject = new ReplaySubject<AvailablePokemon>();
+  private _addPokemonSub: Subscription;
+
+  private ADD_POKEMON_CLICK_THROTTLE = 1000;
+
   constructor() { }
 
   ngOnInit(): void {
     this._setTypeIcon(this.pokemonData.pokemon.type);
+    this._addPokemonSub = this._addPokemonClickSubject.asObservable()
+      .pipe(throttle(() => interval(this.ADD_POKEMON_CLICK_THROTTLE)))
+      .subscribe(pokemonToAdd => this.addPokemon.emit(pokemonToAdd))
   }
 
   emitAddPokemonEvent() {
-    this.addPokemon.emit(this.pokemonData);
+    this._addPokemonClickSubject.next(this.pokemonData);
   }
 
   setHighlightTheme() {
@@ -62,5 +72,10 @@ export class PokemonCardComponent implements OnInit {
 
     }
   }
+
+  ngOnDestroy(): void {
+    this._addPokemonSub.unsubscribe();
+  }
+
 
 }

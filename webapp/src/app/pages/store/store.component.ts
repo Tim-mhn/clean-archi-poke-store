@@ -35,9 +35,10 @@ export class StoreComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.storeId = this._actRoute.snapshot.params.storeId;
     this.storeAndPokes$ = this._storeService.getStoreAndAvailablePokemons(this.storeId).pipe(tap(storeWithPokes => {
-      
+
       let pokemonTypes = storeWithPokes.availablePokemons.reduce<string[]>((_types, poke) => _types.concat(poke.pokemon.type), []);
       this.pokemonTypes$ = of(new Array(...new Set(pokemonTypes)));
+      
 
       const minPrice = storeWithPokes.availablePokemons.reduce<number>((_min, poke) => _min <= poke.unitPrice ? _min : poke.unitPrice, Number.MAX_VALUE);
       const maxPrice = storeWithPokes.availablePokemons.reduce<number>((_max, poke) => _max >= poke.unitPrice ? _max : poke.unitPrice, 0);
@@ -53,6 +54,7 @@ export class StoreComponent implements OnInit, AfterViewInit {
       // pokemonCardsList.last.setHighlightTheme();
 
     });
+
 
   }
 

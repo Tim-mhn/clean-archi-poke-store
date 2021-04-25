@@ -18,7 +18,6 @@ export class TooltipDirective implements OnDestroy {
   }
 
   private _showTooltip() {
-    console.log('show tooltip called');
     this.elTooltip = this.renderer.createElement('span');
     const text = this.renderer.createText(this.tooltip);
     this.renderer.appendChild(this.elTooltip, text);

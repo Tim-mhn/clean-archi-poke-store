@@ -35,7 +35,6 @@ export class CheckoutComponent implements OnInit, ConfirmDeactivatiblePage {
   }
 
   onSubmit() {
-    console.log(this.checkoutForm);
     this.requestStatus = RequestStatus.LOADING;
     const checkoutInput = { ...this.checkoutForm.value, storeId: this.storeId };
     this._checkoutService.payShoppingCart(checkoutInput)

@@ -15,7 +15,6 @@ export class AuthService {
   public logIn(username: string, password: string) {
     const user = FAKE_USERS.find(u => u.username == username);
     const logInsuccess = Boolean(user && user.password == password);
-    console.log('log in called: ', logInsuccess);
 
     return of(logInsuccess)
       .pipe(delay(1000), tap((loggedIn) => {

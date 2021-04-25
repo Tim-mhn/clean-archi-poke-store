@@ -1,18 +1,28 @@
-<form [formGroup]="filterForm" onChange="logformchange($event)">
+<form [formGroup]="filterForm">
   <div fxLayout="row" fxLayoutAlign="space-between center" fxFlexFill>
-    <mat-checkbox formControlName="onlyAvailable"
-      >Only available pokemons</mat-checkbox
-    >
-    <mat-form-field>
-      <mat-select formControlName="types" placeholder="Types" multiple>
-        <mat-option *ngFor="let type of types" [value]="type">
-          {{ type | titlecase }}
-        </mat-option>
-      </mat-select>
+    <mat-form-field appearance="outline">
+      <mat-label>Name</mat-label>
+      <input formControlName="name" matInput placeholder="Name" />
     </mat-form-field>
-    <div fxFlex="30">
-      <ngx-slider [options]="options" formControlName="unitPrice"></ngx-slider>
-      {{ options.floor}} {{ options.ceil }}
-    </div>
+    <ng-container formGroupName="noDebounce">
+      <mat-checkbox formControlName="onlyAvailable"
+        >Only available pokemons</mat-checkbox
+      >
+      <mat-form-field appearance="outline">
+        <mat-select formControlName="types" placeholder="Types" multiple>
+          <mat-option *ngFor="let type of types" [value]="type">
+            {{ type | titlecase }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div fxFlex="20">
+        <ngx-slider
+          [options]="options"
+          formControlName="unitPrice"
+        ></ngx-slider>
+        {{ options.ceil }} {{ options.floor }}
+      </div>
+    </ng-container>
   </div>
 </form>

@@ -29,10 +29,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     }))
   }
 
-  // ngAfterViewInit() {
-  //   console.log('after view init called');
-  //   this.usernameInput.nativeElement.focus();
-  // }
 
   async onSubmit() {
     this.requestStatus = RequestStatus.LOADING;

@@ -42,7 +42,6 @@ import { PokeFilterPipe } from './pipes/poke-filter.pipe';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSliderModule } from '@angular/material/slider';
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
-
 @NgModule({
   declarations: [
     AppComponent,

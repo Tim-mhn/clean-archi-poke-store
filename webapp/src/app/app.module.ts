@@ -36,6 +36,12 @@ import { ErrorMessageComponent } from './components/error-message/error-message.
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { LoadingOrErrorComponent } from './components/loading-or-error/loading-or-error.component';
 import { AutofocusDirective } from './directives/autofocus.directive';
+import { FilterBarComponent } from './pages/store/filter-bar/filter-bar.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { PokeFilterPipe } from './pipes/poke-filter.pipe';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSliderModule } from '@angular/material/slider';
+import { NgxSliderModule } from '@angular-slider/ngx-slider';
 
 @NgModule({
   declarations: [
@@ -56,7 +62,9 @@ import { AutofocusDirective } from './directives/autofocus.directive';
     AsyncRenderDirective,
     ErrorMessageComponent,
     LoadingOrErrorComponent,
-    AutofocusDirective
+    AutofocusDirective,
+    FilterBarComponent,
+    PokeFilterPipe
   ],
   imports: [
     BrowserModule,
@@ -76,7 +84,11 @@ import { AutofocusDirective } from './directives/autofocus.directive';
     ReactiveFormsModule,
     MatToolbarModule,
     MatIconModule,
-    MatSnackBarModule
+    MatCheckboxModule,
+    MatSnackBarModule,
+    MatSelectModule,
+    MatSliderModule,
+    NgxSliderModule
   ],
   providers: [],
   bootstrap: [AppComponent],

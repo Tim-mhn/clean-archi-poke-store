@@ -11,6 +11,10 @@
     </div>
   </ng-container>
 
+  <div fxLayout="row" fxFlexFill>
+    <app-filter-bar (filterChange)="updatePokemonList($event)" [types]="pokemonTypes$ | async" [unitPriceBounds]="unitPriceBounds$ | async"></app-filter-bar>
+  </div>
+
   <div fxLayout="row" fxLayoutAlign="start start" fxFlexFill>
     <div
       fxLayout="row wrap"
@@ -21,7 +25,7 @@
     >
         <app-pokemon-card
           fxFlex="22"
-          *ngFor="let poke of (storeAndPokes$ | async).availablePokemons"
+          *ngFor="let poke of (storeAndPokes$ | async).availablePokemons | pokeFilter:pokemonFilter"
           [availablePokemonData]="poke"
           [storeId]="storeId"
           (addPokemon)="onAddPokemon($event)"

@@ -42,6 +42,8 @@ import { PokeFilterPipe } from './pipes/poke-filter.pipe';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSliderModule } from '@angular/material/slider';
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
+import { PokeSortPipe } from './pipes/poke-sort.pipe';
+import { SorterComponent } from './pages/store/sorter/sorter.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -63,7 +65,9 @@ import { NgxSliderModule } from '@angular-slider/ngx-slider';
     LoadingOrErrorComponent,
     AutofocusDirective,
     FilterBarComponent,
-    PokeFilterPipe
+    PokeFilterPipe,
+    PokeSortPipe,
+    SorterComponent
   ],
   imports: [
     BrowserModule,

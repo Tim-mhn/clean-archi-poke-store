@@ -4,6 +4,7 @@ import { from, Observable, of, Subscription } from 'rxjs';
 import { shareReplay, tap } from 'rxjs/operators';
 import { AvailablePokemon } from 'src/app/interfaces/available-pokemon.interface';
 import { PokemonFilter } from 'src/app/interfaces/filter.interface';
+import { Sorter } from 'src/app/interfaces/sort.interface';
 import { StoreWithAvailablePokemons } from 'src/app/interfaces/store.interface';
 import { ShoppingCartService } from 'src/app/services/shopping-cart.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
@@ -20,6 +21,7 @@ export class StoreComponent implements OnInit, AfterViewInit {
   @ViewChildren(PokemonCardComponent) pokemonCards!: QueryList<PokemonCardComponent>;
   storeId: string;
   pokemonFilter: PokemonFilter;
+  sorter: Sorter;
   pokemonTypes$: Observable<Iterable<string>>;
   unitPriceBounds$: Observable<Iterable<number>>;
   public storeAndPokes$: Observable<StoreWithAvailablePokemons>;
@@ -39,12 +41,12 @@ export class StoreComponent implements OnInit, AfterViewInit {
       let pokemonTypes = storeWithPokes.availablePokemons.reduce<string[]>((_types, poke) => _types.concat(poke.pokemon.type), []);
       this.pokemonTypes$ = of(new Array(...new Set(pokemonTypes)));
       
-
       const minPrice = storeWithPokes.availablePokemons.reduce<number>((_min, poke) => _min <= poke.unitPrice ? _min : poke.unitPrice, Number.MAX_VALUE);
       const maxPrice = storeWithPokes.availablePokemons.reduce<number>((_max, poke) => _max >= poke.unitPrice ? _max : poke.unitPrice, 0);
       this.unitPriceBounds$ = of([minPrice, maxPrice]);
     }),
     shareReplay());
+
   }
 
   ngAfterViewInit() {
@@ -56,12 +58,17 @@ export class StoreComponent implements OnInit, AfterViewInit {
     });
 
 
+
+
   }
 
   updatePokemonList(pokemonFilter: PokemonFilter) {
     this.pokemonFilter = pokemonFilter;
   }
 
+  getPokemonId(index: number, pokemon: AvailablePokemon) {
+    return pokemon.pokemon.id;
+  }
 
   onAddPokemon(pokemonToAdd: AvailablePokemon) {
     this._shoppingCartService.addPokemonToShoppingCart(pokemonToAdd, this.storeId)
@@ -77,6 +84,8 @@ export class StoreComponent implements OnInit, AfterViewInit {
   _openErrorSnackbar() {
     this._snackbarService.openErrorSnackbar('error when adding pokemon to cart :(')
   }
+
+  
 
 
 

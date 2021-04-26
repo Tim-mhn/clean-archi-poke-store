@@ -1,0 +1,21 @@
+<div fxLayout="row" fxLayoutAlign="end start" fxFlexFill>
+  <mat-form-field appearance="outline" fxFlex="60">
+    <mat-select
+      placeholder="Sort by"
+      [ngModel]="sortBy"
+      (ngModelChange)="sortByChange($event)"
+    >
+      <mat-option value="unitPrice">Unit Price</mat-option>
+      <mat-option value="weight">Weight</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <button
+    mat-icon-button
+    style="padding-top: 8px;"
+    aria-label="Ascending or descending sort button"
+    (click)="sortAscChange()"
+  >
+    <mat-icon>{{ sortAsc ? "north" : "south" }}</mat-icon>
+  </button>
+</div>

@@ -11,8 +11,15 @@
     </div>
   </ng-container>
 
-  <div fxLayout="row" fxFlexFill>
-    <app-filter-bar (filterChange)="updatePokemonList($event)" [types]="pokemonTypes$ | async" [unitPriceBounds]="unitPriceBounds$ | async"></app-filter-bar>
+  <div fxLayout="row" fxFlexFill fxLayoutAlign="space-around center">
+    <app-filter-bar
+      fxFlex="80"
+      (filterChange)="updatePokemonList($event)"
+      [types]="pokemonTypes$ | async"
+      [unitPriceBounds]="unitPriceBounds$ | async"
+    ></app-filter-bar>
+
+    <app-sorter (sorter)="sorter = $event" fxFlex="20"></app-sorter>
   </div>
 
   <div fxLayout="row" fxLayoutAlign="start start" fxFlexFill>
@@ -23,15 +30,18 @@
       fxFlex="90"
       *asyncRender="storeAndPokes$"
     >
-        <app-pokemon-card
-          fxFlex="22"
-          *ngFor="let poke of (storeAndPokes$ | async).availablePokemons | pokeFilter:pokemonFilter"
-          [availablePokemonData]="poke"
-          [storeId]="storeId"
-          (addPokemon)="onAddPokemon($event)"
-        ></app-pokemon-card>
-
-
+      <app-pokemon-card
+        fxFlex="22"
+        *ngFor="
+          let poke of (storeAndPokes$ | async).availablePokemons
+            | pokeFilter: pokemonFilter
+            | pokeSort: sorter;
+          trackBy: getPokemonId
+        "
+        [availablePokemonData]="poke"
+        [storeId]="storeId"
+        (addPokemon)="onAddPokemon($event)"
+      ></app-pokemon-card>
     </div>
 
     <div fxLayout="row" fxFlex>

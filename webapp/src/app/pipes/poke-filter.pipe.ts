@@ -8,7 +8,6 @@ import { PokemonFilter } from '../interfaces/filter.interface';
   name: 'pokeFilter'
 })
 export class PokeFilterPipe implements PipeTransform {
-  private pokes: Observable<any>;
   transform(pokemons: AvailablePokemon[], pokeFilter: PokemonFilter): AvailablePokemon[] {
 
     if (!pokeFilter) return pokemons;
